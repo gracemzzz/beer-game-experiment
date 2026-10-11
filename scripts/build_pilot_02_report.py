@@ -17,7 +17,7 @@ from docx.shared import Inches, Pt, RGBColor
 from audit_completed_game import ROOT, ROLES
 
 RUN = ROOT / 'data/runs/game_api_8236a9c840b29d36'
-OUT = ROOT / 'reports/pilot_02_game_api_8236a9c840b29d36'
+OUT = ROOT / 'reports/archive/20261005/pilot_02_game_api_8236a9c840b29d36'
 audit = json.loads((OUT / 'audit.json').read_text())
 manifest = json.loads((RUN / 'manifest.json').read_text())
 frame = pd.read_csv(RUN / 'rounds.csv')

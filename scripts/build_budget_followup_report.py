@@ -14,7 +14,7 @@ from openpyxl.styles import Font, PatternFill, Alignment
 
 from run_budget_followup import ROOT, CAMPAIGN, DIRECTORY, totals
 
-OUT=ROOT/'reports/budget_followup_20261005'
+OUT=ROOT/'reports/archive/20261005/budget_followup_20261005'
 
 def build():
     OUT.mkdir(parents=True,exist_ok=True)

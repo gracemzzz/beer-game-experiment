@@ -83,7 +83,7 @@ def audit():
         successful_saved_responses=len(success),other_saved_attempts=len(records)-len(success),
         observed_returned_models=sorted({r['response']['model'] for r in success}),
         no_paid_audit_calls=True,evidence_sha256={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in paths})
-    out=ROOT/'reports/budget_followup_20261005';out.mkdir(parents=True,exist_ok=True)
+    out=ROOT/'reports/archive/20261005/budget_followup_20261005';out.mkdir(parents=True,exist_ok=True)
     (out/'game_audit.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps({k:v for k,v in result.items() if k!='evidence_sha256'},indent=2))
 

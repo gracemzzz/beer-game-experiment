@@ -29,7 +29,7 @@ On 11 October 2026 an in-memory replay with the current unchanged physical simul
 | Original nano | 288 | 320 | 96 |
 | Clarified Luna | 576 | 640 | 192 |
 
-No files in either evidence directory were modified by this audit. Historical [nano audit](../reports/pilot_02_game_api_8236a9c840b29d36/audit.json) and [follow-up audit](../reports/budget_followup_20261005/game_audit.json) provide earlier verification records.
+No files in either evidence directory were modified by this audit. Historical [nano audit](../reports/archive/20261005/pilot_02_game_api_8236a9c840b29d36/audit.json) and [follow-up audit](../reports/archive/20261005/budget_followup_20261005/game_audit.json) provide earlier verification records.
 
 ## Evidence about the factory failure
 
