@@ -1,0 +1,61 @@
+{
+  "protocol": "budget-followup-factory-clarification-v2",
+  "config": {
+    "mode": "api",
+    "stage": "game",
+    "replicate_id": "budget-followup-20261005",
+    "model": "gpt-5.6-luna",
+    "groups_per_condition": 2,
+    "weeks": 40,
+    "warmup_weeks": 4,
+    "continuation_weeks": 12,
+    "short_tokens": 32,
+    "adequate_tokens": 240,
+    "final_tokens": 192,
+    "calibration_reference_tokens": 1024,
+    "calibration_run": "",
+    "calibration_method": "fixed",
+    "calibration_parent": "",
+    "budget_usd": 0.9,
+    "concurrency": 4,
+    "request_interval_s": 0.5,
+    "timeout_s": 90.0,
+    "transport_retries": 4,
+    "rules_attempts": 2,
+    "group_replacements": 0,
+    "collect_debriefs": false,
+    "seed": 20261004,
+    "emergency_order_limit": 100000,
+    "prompt_variant": "clarified",
+    "calibration_protocol": "24 mixed-scale states; fixed caps 32/240/480; new model/prompt; no percentile claim",
+    "cap_selection_reason": "Luna development memos were uncensored at 96 tokens; reduce the short candidate prospectively, before fresh calibration and games."
+  },
+  "rates": {
+    "input": 0.2,
+    "cached": 0.02,
+    "output": 1.2
+  },
+  "source_hashes": {
+    "budget_followup_study.py": "ff1eebc7306b9f7b7d6f269e48a3a8c1fb7b3a5f5ff64d1c096e01bed5d11f64",
+    "budget_model_screen.py": "6ee2c00910eb38ab90aa4ff9e683c9962a794e0e8116c877c7f076989d6ed5dd",
+    "game.py": "aee101c4e15beae840ab709865700f29696f535859d74e2b04c5488a11a91247",
+    "estimation.py": "a3b1c1996100f9bd3f00b980e2185ee42df11c36a2bdd5c5e61a0a00a3516a45"
+  },
+  "screen": "/Users/gracezhang/Desktop/Y3S1/Project/beer_game_experiment/data/development/model_screen_20261005",
+  "selection": {
+    "model": "gpt-5.6-luna",
+    "prompt": "clarified",
+    "eligible": true,
+    "quizzes_correct": 2,
+    "valid_decisions": 24,
+    "adequate_factory_shortage_zeros": 0,
+    "short_factory_shortage_zeros": 0,
+    "short_mean_tokens": 52.916666666666664,
+    "adequate_mean_tokens": 92.75,
+    "short_truncation": 0.0,
+    "adequate_truncation": 0.0
+  },
+  "primary_hypotheses": "H1 lower group beta; H2 higher team cost under short tokens. No outcome-driven changes.",
+  "prior_pilot_inclusion": false,
+  "decision_common": "You manage one position in a four-role Beer Game: retailer, wholesaler,\ndistributor and factory. Minimize total TEAM inventory holding plus backlog costs\nacross weeks. Each unit left in stock costs 0.50 per week; each unit still backlogged\ncosts 1.00 per week. There is no sales revenue, order-placement charge, bulk discount\nor reward for a large order. Shipments automatically fill owed demand when stock exists.\nYour only choice is the integer number of cases to order upstream (factory: produce).\nOrders must be nonnegative. Zero is a legitimate choice when justified by the state;\nit is not a default. No preferred order, target beta or expected treatment effect exists.\n\nThe current observation is AFTER deliveries and shipments and BEFORE your order.\nCurrent cost is already incurred; your order affects later weeks, not today's cost.\nUnfilled demand is backlogged rather than lost. Orders cannot be canceled. An order\ntravels upstream in one week, actual shipments take two weeks downstream, and factory\nproduction takes three weeks. Supplier shortages can further delay replenishment.\nInventory is available stock. Supply_line is all your previous orders not yet received,\nincluding goods in transit and orders waiting upstream; it is not immediately usable stock.\n\nAll roles share their current physical inventories, shown in shared_inventory. You know\nyour own demand, inventory, backlog, supply line and history. Other roles' orders,\nbacklogs and outstanding orders are not revealed. No inter-agent communication is allowed.\nInitial stock is 12 per role and initial flow 4 per week. First four weeks use fixed\norders of 4 for familiarization. Future customer demand and last decision week are unknown.\nAfter decisions stop, 12 automatically scored weeks carry all stock/backlog/pipeline\nforward; customer demand stays at its last value, and each role automatically orders\nits incoming demand. This continuation policy is only for terminal evaluation, not a\nrecommended strategy for your choices. Minimize team costs across both phases.\nRespond to the current task using the provided observations; do not imitate a human\nstereotype or try to create oscillations. No external tools are available.\nPhysical rules, applying in every round:\nDemand is the NEW incoming order processed this week. Backlog is the TOTAL still\nunfilled after this week's shipments, including any unfilled part of that demand.\nBacklog remains owed, even when next week's new demand is zero. It incurs cost\neach week until goods actually fill it. It is not canceled by a quiet week.\nFor the FACTORY, your order directly starts production now. There is no outside\nsupplier, raw-material constraint or production-capacity constraint. A production\norder q placed in week t becomes available factory stock in week t+3. It does not\nrequire an existing supply line to start, and no extra order-transmission or\ndownstream-shipping lag is added before that production becomes your own stock.\nFor the other roles, orders go to the immediate upstream role; stock shortages\nthere may delay shipment. Supply_line includes previous orders still unreceived;\nthese remain active commitments. Your action can affect future holding/backlog\ncosts even though it cannot change the already-processed current week.\nNo ordering formula or preferred quantity is supplied. Choose using the stated\nteam objective over future weeks as well as the automatic continuation.\n"
+}

@@ -1,0 +1,694 @@
+model,prompt,case_id,cap,role,factory_shortage,valid,order,memo_tokens,truncated,plan_text,final_text
+gpt-5.4-nano-2026-03-17,original,observed_short_factory_21,96,factory,True,True,0,96,True,"Order (factory → distributor): **0**
+
+Main estimates (current week 21, after deliveries/shipment):  
+- Demand: **54**; on-hand inv **0**; backlog **36** ⇒ total unmet **36 (owed)** + **54 (new)** if nothing arrives.  
+- Supply line (incoming to our factory): **0**; no pipeline.
+
+Risk summary: With **no upstream supply/pipeline**, any positive order would not be","{""order"":0,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,observed_short_factory_21,240,factory,True,True,0,137,False,"**Provisional order (factory, week 21): 0 cases**
+
+**Estimates (main numbers):** demand=54 now; on-hand inventory=0; backlog=36; current supply_line=0. If we order **0**, backlog should continue to rise by roughly **+54 per week** until upstream pipeline exists (it doesn’t currently).
+
+**Risk summary:** High risk of further backlog explosion (no pipeline/incoming replenishment indicated). Best available action given lack of info on upstream orders: **place 0** rather than an unfounded guess; if the simulator allows, increase in next decision once any incoming pipeline/supply_line appears.","{""order"":0,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,observed_short_factory_29,96,factory,True,True,276,96,True,"**Provisional order (factory): 276**
+
+**Main estimates (from current state):**
+- Incoming demand (this week): 312
+- On-hand inventory (usable): 0
+- Current backlog: 276
+- Pipeline/supply_line available: 0  
+So to cover the existing backlog plus the next replenishment needs, the minimum nonnegative order that meaningfully reduces backlog is **276**.
+
+**Risk summary:**
+- **High backlog","{""order"":276,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,observed_short_factory_29,240,factory,True,True,276,150,False,"**Provisional order (week 29): 276 cases**
+
+- **Main estimate:** order **276** (to fully cover current backlog).
+- **Key state:** on-hand **0**, backlog **276**, supply_line **0**; incoming shipments from our production will only start downstream after the 3-week production lead.
+- **Risk summary:** High risk of **continued backlog growth** if demand stays elevated (demand now 312). With zero pipeline, any under-order creates additional **$1/unit/week backlog** cost; any over-order mainly creates **$0.50/unit/week holding** later. Best tradeoff here is **minimize immediate backlog** by covering it exactly.
+
+**Decision:** **276**","{""order"":276,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,observed_short_factory_31,96,factory,True,True,588,96,True,"**Provisional order (factory): 588 cases**
+
+- **Main estimate:** backlog is **588** (demand 312 + backlog 588 − received/shipments 0). To avoid further backlog growth from *this week’s* **312** demand, order enough so the pipeline can be replenished after lead time: **order = current backlog + current demand = 588**.
+- **Resulting risk:** High backlog cost persists for ~2","{""order"":588,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,observed_short_factory_31,240,factory,True,True,312,167,False,"**Provisional order (this week): 312**
+
+**Main estimates (from current state, week 31):**
+- On-hand inventory: **0**
+- Backlog: **588**
+- Demand: **312**
+- Supply line (unreleased upstream orders): **0**
+- After ordering **312**, expect no immediate reduction; any fulfillment is only via new pipeline entering later weeks (lead time + potential delays).
+
+**Risk summary:**
+- High backlog (**588**) implies ongoing backlog cost (1.00/unit/week) regardless; under-ordering risks even larger escalation as demand stays **312** and pipeline remains empty.
+- Over-ordering increases holding cost (0.50/unit/week) but backlog dominates here; hence choose **order ≈ current demand** to restart pipeline without excessive speculative build.","{""order"":312,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,observed_adequate_factory_30,96,factory,False,True,0,96,True,"Provisional order (this week): **0 cases**
+
+Main estimates (week 30 → later): Inventory **110**, backlog **0**, supply_line **0**, demand **0**. With zero demand next, any positive order mainly creates extra holding cost (110 already held; extra units add +0.50/week each).
+
+Risk summary: Future demand is unknown; however, placing **0** now avoids adding pipeline/holding. If demand spikes soon, we","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,observed_adequate_factory_30,240,factory,False,True,40,177,False,"**Provisional order (factory): 40 cases**
+
+**Main numerical estimate:**  
+- Current factory inventory: **110**, backlog **0**, supply_line **0** (nothing outstanding from us)  
+- With demand at **0** this week, we should still place a **small, steady replenishment** upstream to avoid future pipeline gaps.
+
+**Risk summary:**  
+- If future demand spikes (likely in later unknown weeks), a too-small order can recreate the earlier pattern of **backlogs + large inventory swings** across the chain (higher backlog cost: $1/unit-week).  
+- If demand stays low, ordering too much increases **holding cost** ($0.50/unit-week), but that is typically less severe than backlog cascades.  
+
+**Best proposal:** **Order 40** (nonnegative, conservative to sustain pipeline without overbuilding).","{""order"":40,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,observed_adequate_factory_40,96,factory,False,True,0,96,True,"**Provisional order:** **0 cases**
+
+**Main estimate (why):** At week 40 (factory), inventory=0 and backlog=150; your supply_line=150 already represents the pipeline you’ve ordered/received upstream to cover future demand as it becomes reachable. Ordering more now is likely to add more future units to holding costs at other roles (they already show high pipeline), with no immediate ability to reduce today’s backlog (received=0).
+
+**","{""order"":0,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.4-nano-2026-03-17,original,observed_adequate_factory_40,240,factory,False,True,210,205,False,"**Provisional order (to wholesaler/distributor upstream, as factory production): 210 cases**
+
+- **State (week 40, before order):** inventory=0, backlog=150, supply_line=150 (no received this week); demand=70 at your downstream.
+- **Rationale:** backlog is large and you have only enough in the pipeline to cover ~150 units; with demand 70 today, more production is needed to prevent further growth. Ordering slightly below/around “backlog + near-term demand” reduces backlog-risk without excessive hoarding (inventory cost 0.50 vs backlog cost 1.00).
+- **Main estimate:** net backlog expected to be contained over the next few weeks with **~210** production.
+- **Risk summary:** other roles may under-order, causing delayed/unused pipeline (inventory buildup). Conversely, if they order aggressively, backlog can still expand—so 210 is a moderate “keep-up” bet rather than a max fill.","{""order"":210,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.4-nano-2026-03-17,original,observed_short_distributor_30,96,distributor,False,True,120,96,True,"**Provisional order (cases to upstream this week): 120**
+
+- **Main estimate:** With **backlog=312** and **supply_line=312** (not usable yet), demand=0 this week, the main risk is that pipeline will be insufficient once downstream demand resumes; ordering **~120** is a conservative add-on to prevent further backlog growth without massively overbuilding.
+- **Best proposal:** **Order = 120**
+- **Risk","{""order"":120,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.4-nano-2026-03-17,original,observed_short_distributor_30,240,distributor,False,True,0,185,False,"**Provisional order (upstream cases): 0**
+
+**Main estimates (from current_state):**
+- My role (distributor): inventory **0**, backlog **312**, supply_line **312**
+- My demand right now: **0** (so ordering will not be “used” immediately this week)
+- Next replenishment only matters if prior pipeline turns into arrivals; with demand=0, extra production will mostly accumulate downstream/backlog clearing later.
+
+**Risk summary:**
+- Biggest risk is **keeping backlog high if upstream can’t deliver on time**; however, since **current demand is 0**, placing an additional order now mainly **adds inventory/burden without near-term demand signal**.
+- Best action given the state is to **avoid adding more orders this week** and let the existing supply line clear as demand resumes.
+
+**Best available proposal:** **Order 0**.","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.4-nano-2026-03-17,original,observed_adequate_retailer_15,96,retailer,False,True,12,96,True,"**Provisional order:** 12 cases (integer).
+
+**State (week 15, after deliveries):** inventory 0, backlog 8, supply_line 14.  
+**Main estimate:** order **12** to restore pipeline faster and reduce expected backlog in weeks 16–17.
+
+**Risk summary:** Demand has been steady at 8; main risk is upstream delays/shortages (supply_line may not convert fully on time), which would keep","{""order"":12,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.4-nano-2026-03-17,original,observed_adequate_retailer_15,240,retailer,False,True,8,198,False,"**Provisional order (week 15): 8 cases**
+
+**Main estimate (based on current state):**
+- Demand = 8; I have **inventory = 0** and **backlog = 8**, so I’m effectively missing **8 units now** and need replenishment for the next weeks.
+- My upstream **supply_line = 14** (inbound/available from previous orders), but it is not yet usable stock for today.
+- Ordering **8** is the smallest “meaningful” push to reduce the backlog turnaround while avoiding over-accumulation given the long (2+3 week) lead times.
+
+**Risk summary:**
+- **If upstream is delayed/low**, backlog may persist and backlog costs can climb quickly (1.00/week/unit).
+- **If upstream is responsive**, 8 should arrive in time to prevent further runaway backlog without creating excessive on-hand inventory (0.50/week/unit) later.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.4-nano-2026-03-17,original,observed_adequate_wholesaler_24,96,wholesaler,False,True,30,96,True,"**Provisional order (this week): 30 cases**
+
+**Main estimate:** order **30** to reduce expected continuation backlog at your echelon (now inv=0, backlog=10) and to better absorb likely upstream delays from the large pipeline (supply_line=82).
+
+**Risk summary:** Demand is **0 this week**, but backlog is nontrivial and the system is in a strained high-backlog regime; ordering too low may keep backlog elevated","{""order"":30,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.4-nano-2026-03-17,original,observed_adequate_wholesaler_24,240,wholesaler,False,True,18,156,False,"Order (wholesaler): **18 cases**
+
+**Estimates (next 1–3 weeks):** likely keep backlog from exploding; inventory stays near **0** for a bit while pipeline catches up. If demand resumes to typical mid-teens, plan implies backlog roughly **~10 → ~8–12** over the next 2–3 weeks (sensitive to retailer/distributor orders).
+
+**Risk summary:** High backlog pressure (current backlog **10**) + large pipeline (**82**) means **ordering too low** risks further backlog growth; ordering **18** is a moderate catch-up without overbuilding (holding cost 0.50 vs backlog cost 1.00). Biggest risk is if downstream demand drops sharply, causing unnecessary holding later.","{""order"":18,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.4-nano-2026-03-17,original,new_factory_0_40,96,factory,True,True,0,96,True,"**Provisional order (factory): 0 cases.**
+
+Main estimates: backlog remains dominant (factory backlog = 40, inventory = 0); with pipeline unavailable (supply_line = 0) the marginal benefit of ordering is limited until upstream demand is re-established in the network.
+
+Risk summary: High risk of continued backlog carry because starting service is already infeasible (inventory 0, no usable pipeline). Ordering >0 would mainly add inventory later (likely","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,new_factory_0_40,240,factory,True,True,60,213,False,"**Provisional order (factory → wholesaler chain): 60 cases.**
+
+**Main estimates:**  
+- Current (after shipments, before ordering): factory inventory = 0, backlog = 40.  
+- With no supply pipeline in sight (`supply_line=0`) and the system still carries substantial downstream backlog, replenishment needs to cover at least the 40 already owed plus additional safety for continued demand (and potential upstream delays).  
+- Proposed order 60 aims to meaningfully reduce backlog over the next ~3+ weeks while limiting excessive long-run pipeline build.
+
+**Risk summary:**  
+- **Under-order risk:** backlog may persist/grow because lead time is long (3 weeks production + 2 weeks downstream shipment).  
+- **Over-order risk:** holding costs (0.50/unit/week) if demand stabilizes lower than expected, creating a large pipeline/inventory build.  
+Given backlog is already large (40) and pipeline is empty, **60** is the best balance to pull the system back toward service.","{""order"":60,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,new_factory_48_0,96,factory,False,True,0,96,True,"**Provisional order:** 0 cases
+
+**Estimates (week 12 → later impact):**  
+- On-hand stock at factory: **48**, backlog **0**  
+- Current demand seen by me: **0**  
+- Supply line: **0** (no pending orders from upstream to cover)
+
+**Risk summary:**  
+- Main risk is underproduction if upstream demand unexpectedly appears next weeks; however with **48** on-hand and no current","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,new_factory_48_0,240,factory,False,True,0,133,False,"**Provisional order:** 0
+
+**Main estimate:** With **factory inventory = 48**, **backlog = 0**, and **supply_line = 0** at **week 12**, there’s no immediate need for additional production right now. Your order only affects future weeks, and since upstream demand is unknown, placing a large order increases risk of excess inventory holding costs.
+
+**Risk summary:** Main risk is **underproduction** later if downstream demand spikes; mitigated by still having substantial on-hand stock. Holding-cost downside now is low relative to likely backlog-cost risk, so **0** is the safest provisional action.","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,original,new_distributor_0_16,96,distributor,False,True,6,96,True,"Order (this week): **6**
+
+Estimates: with inventory 0 and backlog 16, a **6-case** upstream order should help reduce later backlog once pipeline arrives (current supply_line 32), but some backlog will likely remain for a few weeks.
+
+Risk summary: **main risk is under-ordering** if demand stays near 8+ and downstream roles amplify; **over-ordering** risks building holding inventory once backlog clears. Given current severe backlog","{""order"":6,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.4-nano-2026-03-17,original,new_distributor_0_16,240,distributor,False,True,0,154,False,"**Provisional order:** **0** cases.
+
+**Main numerical estimates (week 12, distributor):**
+- On-hand inventory: **0**
+- Backlog: **16**
+- Supply line (already ordered/in transit upstream): **32**
+- New demand this week: **8**
+
+**Risk summary:**
+- Ordering now would mostly add to already-large pipeline (**32** vs. **16 backlog + 8 demand**), increasing likely future holding risk.
+- Main risk is **upstream delay/shortage** making the pipeline arrive later; but since your current physical position is already short and the backlog is fully covered by the existing supply line over the next weeks, **0** is the lowest-cost bet to avoid overstock.","{""order"":0,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.4-nano-2026-03-17,original,new_retailer_12_0,96,retailer,False,True,4,96,True,"**Provisional order (retailer): 4 cases**
+
+**Estimates / rationale:** With inventory 12, backlog 0, and supply line 8 already inbound, a steady order of **4** should cover the **current demand = 4** while avoiding excessive pipeline buildup.
+
+**Risk summary:** Main risk is demand staying above 4 or upstream delays causing temporary backlog; ordering more (e.g., 5–6) would reduce that risk but","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.4-nano-2026-03-17,original,new_retailer_12_0,240,retailer,False,True,4,98,False,"**Provisional order (retailer): 4 cases**
+
+**Main estimate:** With demand ≈ 4/week and backlog currently 0, ordering ~4 is expected to keep inventory near the starting level (supply line already ~8).  
+
+**Risk summary:** Moderate risk of understock if demand rises or upstream delays occur (but no backlog currently). Avoid large orders since overstock/backlog both carry holding costs and there’s no benefit to inflating pipeline.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.4-nano-2026-03-17,clarified,observed_short_factory_21,96,factory,True,True,54,96,True,"Order (factory this week): **q = 54**
+
+Estimates / intent: with **demand 54** and current **backlog 36** at the factory, ordering **54** should allow **~54 units to be produced available in week 24** (3-week lead), aiming to reduce/clear backlog after the delayed horizon while avoiding excessive overstock (holding cost 0.50/unit/week, backlog 1.00/unit/week).
+
+","{""order"":54,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,observed_short_factory_21,240,factory,True,True,80,225,False,"**Provisional order (week 21): 80 cases**
+
+**Main numerical estimates (factory view):**
+- Current week demand at our factory: **54**
+- Our on-hand inventory: **0**; unfilled backlog: **36**
+- With order **Q=80** this week, new factory stock arrives **in week 24** (3-week lead).  
+  *Net backlog reduction requires shipments downstream arriving after the 2-week transit.*
+
+**Risk summary (why 80, not higher/lower):**
+- We’re already paying **holding/backlog costs** with **backlog=36** and near-certain continued high downstream demand (history shows demand spikes).
+- Too small an order risks **backlog compounding** through weeks 22–23 before week-24 production can help.
+- Too large an order risks **excess pipeline/holding later**, but backlog cost (1.0/unit/week) dominates holding (0.5/unit/week), so bias upward to limit backlog growth.
+
+**Best available proposal:** **Order 80** (nonnegative integer).","{""order"":80,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,observed_short_factory_29,96,factory,True,True,312,96,True,"**Provisional order (factory, week 29):** **q = 300** cases.
+
+**Key numbers (now):** inventory **0**, backlog **276**, on-hand is insufficient for current demand **312**. Supply_line **0**.
+
+**Main estimates:**  
+- New backlog after shipments: roughly **276 + 312 − 0 ≈ 588** (since nothing is arriving this week for us).  
+- Our order **300","{""order"":312,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,observed_short_factory_29,240,factory,True,True,276,186,False,"**Provisional order (factory this week): 276 cases**
+
+**Main numerical estimates (from state at week 29):**
+- Current: inventory = 0; backlog = 276; supply_line = 0.
+- With 3-week production lead, an order of **276** starts filling this backlog starting **week 32** (and reduces backlog thereafter).
+- Expected immediate backlog cost continues: **276 units × $1/week** for weeks **29–31** (until first batch arrives).
+
+**Risk summary:**
+- Largest risk is further backlog growth if upstream demand spikes/flows keep arriving faster than shipments from our batch; however with **supply_line=0** we need a large corrective batch now to avoid compounding backlog costs in the coming weeks.
+- No downside to ordering **276** versus smaller quantities: smaller would only delay backlog relief (holding/backlog penalties increase).","{""order"":276,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,observed_short_factory_31,96,factory,True,True,588,96,True,"**Provisional order (factory, week 31): 588**
+
+**Main estimates:** Current state shows **backlog = 588** and **pipeline/supply_line = 0**, so to minimize future backlog/holding you should start replenishing enough to cover what’s already owed. Your factory production lead is 3 weeks, so this mainly reduces backlog cost from weeks **34 onward** (continuation phase may keep pressure).
+
+**Risk summary:** Demand spike","{""order"":588,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,observed_short_factory_31,240,factory,True,True,600,240,True,"**Provisional order (factory, week 31): 600 cases**
+
+**Main estimates (using given state/cost rates):**
+- Current backlog at my node: **588** units → already accrues **~588 * $1 = $588** this week (current cost already incurred).
+- With my order q, new factory stock becomes available at **week 34**; it will be shipped downstream over subsequent weeks (2-week lag at each downstream hop), so backlog reduction is **delayed by ~3+ weeks**.
+- A rough “fill backlog” target: backlog **588**; ordering **600** provides **some buffer** against pipeline dispersion/continued demand (retailer demand still volatile: last shown **312** at week 29).
+- If q=600, expected new factory stock at week 34: **600**, potentially cutting backlog by **~(up to 600)** once downstream can actually receive; otherwise it rolls into later weeks.
+
+**Risk summary (key uncertainties):**
+- **Demand surge propagation:** if retailer demand stays very high beyond week 31, backlog may continue to grow faster than our replenishment window.
+- **","{""order"":600,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,observed_adequate_factory_30,96,factory,False,True,0,96,True,"**Provisional factory order (this week): 0 cases**
+
+**Key estimates / rationale (factory, week 30):**
+- On-hand factory inventory: **110**
+- Current backlog: **0**
+- Supply line (outstanding upstream orders affecting us): **0** (so no extra pipeline needed)
+- Current demand to us this week: **0** (and ordering now only affects future weeks via +3 week production availability)
+
+Given large on-hand","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,observed_adequate_factory_30,240,factory,False,True,0,190,False,"**Provisional order (factory): 0 cases**
+
+**Main estimates / rationale (week 30 onward)**  
+- Current (after shipments, before order): **factory inv = 110**, **backlog = 0**, **supply_line = 0**.  
+- Customer demand for *me* (factory) is **0 this week**, so ordering now only affects later inventory costs.  
+- With **large on-hand** and no backlog risk, the near-term optimal is to **not add to pipeline** and avoid extra holding.
+
+**Risk summary**  
+- **Low near-term risk** (no backlog, high inventory).  
+- **Main risk**: future demand spikes could reintroduce backlog after inventory runs down; but ordering early would mainly add holding cost without evidence of an imminent spike.  
+
+**Best available proposal:** **0** (wait; if demand rises later, place orders then).","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,observed_adequate_factory_40,96,factory,False,True,120,96,True,"Order: **120 cases**
+
+Estimates (main numbers this week, t=40):
+- On-hand at factory: **0**
+- Backlog at factory: **150**
+- Supply line (incoming commitments from past orders): **150**
+- If I order **120**, new factory production becomes available in **week 43** (after 3-week lead); it will help reduce backlog in the continuation if demand stays high.
+
+Risk summary:
+- **Primary","{""order"":120,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.4-nano-2026-03-17,clarified,observed_adequate_factory_40,240,factory,False,True,150,204,False,"**Provisional order (factory): 150 cases**
+
+**Current key state (week 40, after shipments; before my order):**
+- My inventory: 0  
+- My backlog: 150 (thus already incurring backlog cost)
+- Supply line into me (from prior factory orders / commitments): 150
+
+**Main numerical estimates (impact horizon):**
+- Ordering **150** should bring **150 produced stock in week 43**, which can clear **up to 150 backlog**, reducing future backlog costs.
+- Producing less risks **backlog persisting beyond week 43**; producing more likely increases **weeks of holding cost** at 0.50/unit once demand stabilizes.
+
+**Risk summary:**
+- If upstream demand stays high and/or delays occur, some backlog may remain even after week 43; however with current backlog=150 and supply_line=150, **150** is the best “just-clear” move to minimize both holding and backlog going forward.","{""order"":150,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.4-nano-2026-03-17,clarified,observed_short_distributor_30,96,distributor,False,True,0,96,True,"Order (week 30): **0 cases**
+
+Main estimates (from current state):
+- My role (distributor) **inventory=0**, **backlog=312** units to be filled.
+- My **incoming supply_line=312** (pending upstream orders in the pipeline), and **current demand=0** this week.
+- Since shipments fill from pipeline when available, ordering more now risks **adding future holding cost** after a backlog is cleared; backlog","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.4-nano-2026-03-17,clarified,observed_short_distributor_30,240,distributor,False,True,0,240,False,"Provisional order (week 30, as **distributor**): **0 cases**
+
+**Main numerical estimate (from current state):**
+- On-hand inventory: **0**
+- Backlog at distributor: **312**
+- Supply_line (committed receipts upstream): **312**
+- Current demand: **0**  
+So **all near-term clearing capacity is already committed**; ordering now mainly risks adding more pipeline while backlog is already the dominant cost driver.
+
+**Risk summary:**
+- **Primary risk:** demand spikes in future weeks (backlog persists at cost $1/unit/week and can jump).
+- **Mitigation:** keeping order at **0** avoids further pipeline buildup/carry cost given we currently have **312** already in the pipeline; if demand returns, it should start getting filled without needing extra upstream commitment this week.
+- If future demand increases materially *before* those pipeline units arrive downstream, backlog will continue to accrue; but we’re already maximally exposed given **backlog 312** and **inventory 0**.
+
+**Best available proposal:** **Order 0** (wait for pipeline to arrive, then react once actual downstream receipts begin).","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.4-nano-2026-03-17,clarified,observed_adequate_retailer_15,96,retailer,False,True,0,96,True,"**Provisional order (retailer → wholesaler): 0 cases.**
+
+**Numerical estimate / rationale:**  
+- Current (week 15): inventory **0**, backlog **8**, supply_line **14**, and you already received **8** to cover **this week’s** demand (**8 shipped / 8 received**).  
+- With zero on-hand and backlog already **8**, the next relief depends on upstream receipts. Placing an additional order","{""order"":0,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.4-nano-2026-03-17,clarified,observed_adequate_retailer_15,240,retailer,False,True,8,189,False,"**Provisional order (retailer): 8 cases.**
+
+**Main estimates (impact from week 15 onward):**
+- Current (start of our decision): inventory **0**, backlog **8**, supply_line **14** (pipeline already committed/active).
+- With our **+8**, we create additional pipeline to potentially reduce/clear backlog over the next few weeks; this should avoid further backlog growth if upstream delivery doesn’t get delayed.
+
+**Risk summary:**
+- If upstream (wholesaler) shipments are further constrained/delayed, backlog may persist for multiple weeks and incur **$1/unit/week**.
+- If upstream already has enough inbound (supply_line **14**), ordering too much just increases holding (**$0.50/unit/week**) later; still, given backlog is already **8**, priority is preventing continued backlog.
+
+Best available proposal under incomplete info: **order 8**.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.4-nano-2026-03-17,clarified,observed_adequate_wholesaler_24,96,wholesaler,False,True,0,96,True,"**Provisional order (wholesaler → distributor): 0 cases**
+
+**Main estimates**
+- Current (after shipments): inventory **0**, backlog **10** (cost currently incurred already).
+- With **demand this week = 0**, placing a positive order mainly increases future pipeline/holding risk while backlog is already large and will not clear immediately anyway (our orders still need upstream + transit time).
+- **Order-up timing is poor:** any additional order","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.4-nano-2026-03-17,clarified,observed_adequate_wholesaler_24,240,wholesaler,False,True,0,240,True,"**Provisional order (this week, factory cases upstream by wholesaler): 0 cases**
+
+**Main estimates (based on current state at wholesaler, week 24 after shipments):**
+- Wholesaler: inventory = 0, backlog = 10 (cost already incurred this week), demand this week = 0
+- Supply line = 82 (large pipeline already committed upstream)
+- Next week’s demand is unknown, but with a big outstanding pipeline, ordering now is unlikely to reduce near-term backlog soon enough to offset added future holding risk once goods start arriving.
+- Incremental decision lever: since *inventory is currently zero* and pipeline is very full, the optimal risk posture is to **avoid further amplification**.
+
+**Risk summary**
+- **Main risk:** If next weeks’ demand jumps sharply and upstream shipments are delayed, backlog could keep growing for several weeks.
+- **Mitigation:** Pipeline is already very large (supply_line 82), so waiting should still allow backlog to clear without paying extra holding later.
+- **If demand spikes persistently:** reconsider with a larger order in the next decision week *after observing whether backlog is shrinking*.
+
+Best available","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.4-nano-2026-03-17,clarified,new_factory_0_40,96,factory,True,True,0,96,True,"**Provisional order:** 0
+
+**Main numerical estimates:**  
+- Current factory state (after shipments, before ordering): inventory = 0; backlog = 40; demand this week = 0; cost already incurred this week = 40.  
+- With an order arriving as **factory stock in +3 weeks**, additional production would only start reducing backlog from ~week 15 onward. Given future demand is unknown, ordering now risks **extra excess stock","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,new_factory_0_40,240,factory,True,True,40,221,False,"**Provisional order (factory→wholesaler): 40 cases**
+
+**Main numerical estimates (from current state):**
+- On-hand stock: **0**
+- Current backlog: **40** (cost already incurred this week; ordering affects future fulfillment)
+- With lead time, production ordered now becomes available in **week 15** (3-week factory lead), so new receipts will not materially reduce backlog until then.
+- Ordering **40** is the closest “cover the exact owed amount” action consistent with minimizing holding vs backlog, given we have **no usable supply_line** and backlog is already large.
+
+**Risk summary:**
+- **Timing risk:** backlog will likely persist for several weeks because production starts now but arrives only in week 15.
+- **Over/under-fulfillment risk:** if upstream demand stays >40 for weeks 12–15, backlog will continue; if demand is lower, excess finished goods may create holding costs (0.50/unit/week).  
+Best balance under uncertainty: **order 40** to directly target the current owed quantity.","{""order"":40,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,new_factory_48_0,96,factory,False,True,0,96,True,"Provisional order: **0 cases**
+
+Main estimates (week 12 onward):  
+- With **factory inventory = 48** and **backlog = 0**, holding cost rate is **0.50/unit/week** and there is **no current demand to justify production**.  
+- With **no supply-line constraints** at factory and production lead time **3 weeks**, ordering now would mainly increase future inventory (costly) unless downstream demand reappears","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,new_factory_48_0,240,factory,False,True,0,191,False,"Provisional order: **0 cases**.
+
+**Numerical estimates (from current state, before this week’s order impacts future weeks):**
+- Current factory inventory: **48**
+- Factory backlog: **0**
+- Supply line (outstanding): **0**
+- Current demand (already processed this week): **0**
+- Holding cost pressure seems low in the near term since there is **no backlog** and **substantial on-hand stock (48)**.
+
+**Risk summary:**
+- Main risk is that upstream roles may create demand spikes later (into weeks 13+). With **no supply_line**, any spike would have to be met by inventory until future production arrives (3-week lead).
+- Given **zero current demand + large inventory**, ordering now is unlikely to reduce backlog meaningfully, and would mainly increase future holding cost if demand doesn’t spike immediately.
+
+**Best available proposal:** **Order 0** now.","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-nano-2026-03-17,clarified,new_distributor_0_16,96,distributor,False,True,24,96,True,"**Provisional order:** 20 cases (distributor → wholesaler)
+
+**Main estimates:** With inventory=0 and backlog=16 after this week’s unmet demand (demand=8), we need to push enough upstream replenishment to prevent further backlog growth over the next few rounds. Ordering **20** should keep the pipeline from tightening further given supply_line=32 (32 already committed/active, but we’re still short).
+
+**Risk summary:** Main risk","{""order"":24,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.4-nano-2026-03-17,clarified,new_distributor_0_16,240,distributor,False,True,24,178,False,"**Provisional order:** 24 cases upstream (to wholesaler).
+
+**Numerical estimate (main):** With current distributor inventory = 0 and backlog = 16 after this week, we need replenishment to prevent further backlog build. Given supply_line = 32 already committed/in-transit, an order of **~24** should help ensure sustained incoming coverage over the next several weeks (reducing backlog while avoiding excessive inventory holding given we currently have none).
+
+**Risk summary:**  
+- **Under-order risk:** if a portion of supply_line is delayed/doesn’t reach in time, backlog can continue rising (costly at 1.0/week/unit).  
+- **Over-order risk:** excess inflow could create inventory holding (0.5/week/unit) after backlog clears, but with backlog currently large, the priority is to cover owed demand.","{""order"":24,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.4-nano-2026-03-17,clarified,new_retailer_12_0,96,retailer,False,True,0,96,True,"**Provisional order:** order **0** cases upstream.
+
+**Main estimates:** With on-hand **12** and **backlog 0**, current new demand is **4**; ordering now risks adding pipeline **without need**. Existing pipeline (**supply_line = 8**) should cover near-term replenishment needs, keeping both holding and any future backlog low.
+
+**Risk summary:** Main risk is a shortage if upstream delays/insufficient arrivals occur; however","{""order"":0,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.4-nano-2026-03-17,clarified,new_retailer_12_0,240,retailer,False,True,4,183,False,"Provisional order: **4 cases**
+
+Main numerical estimates (week 12 → onward):
+- Current status (retailer, post-delivery/shipments): **Inv 12**, **Backlog 0**, **Supply line 8**, **This week demand 4**.
+- Ordering **4** should keep downstream replenishment cadence aligned with the (known-so-far) flow of **4/week**, while avoiding unnecessary extra pipeline that would raise holding cost.
+
+Risk summary:
+- **If demand rises** above ~4 for multiple weeks, backlog could start growing; ordering a bit higher could reduce that risk, but increases holding/pipeline cost if demand stays flat.
+- **If demand stays low/flat**, larger orders would mainly add inventory/pipeline holding cost—so **4** is the safer cost-minimizing balance given **no current backlog** and substantial on-hand inventory.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.4-mini-2026-03-17,original,observed_short_factory_21,96,factory,True,True,54,80,False,"Order 54. Baseline demand is 54 and pipeline is empty; backlog 36 means you’re already short, but current cost is sunk. Best move is to cover incoming demand to prevent another backlog build. Risk: if upstream/future demand collapses, this may overproduce, but zero order now would likely deepen backlog and cost more.","{""order"":54,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,observed_short_factory_21,240,factory,True,True,24,95,False,"24. Key estimate: backlog 36 with zero inventory and empty pipeline, while incoming demand is 54. A modest restart order is preferable to zero because continuation auto-orders incoming demand and factory lead time is 3 weeks; this helps rebuild flow before terminal carry-forward. Risk: demand may stay high, so under-ordering prolongs backlog; over-ordering is costly only via holding, but current stock is nil. Best provisional action: 24.","{""order"":24,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,observed_short_factory_29,96,factory,True,True,312,65,False,Order 312. Current backlog 276 with zero pipeline; demand spike 312 and terminal continuation likely repeats high pull. Best move is to clear backlog and align production to incoming demand to avoid compounding 1.0 backlog/week; inventory risk is limited because excess only costs 0.5/week.,"{""order"":312,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,observed_short_factory_29,240,factory,True,True,276,103,False,"Order 276.
+
+Main estimate: backlog 276 with zero supply line and no inventory; current demand is very high (312) but today’s cost is sunk. For the factory, the only lever is production; with 3-week lead time, ordering below backlog likely extends heavy backlog through the continuation phase.
+
+Risk summary: demand may remain elevated or fall, but zero order is too risky given no pipeline and severe backlog. A full-backlog replenishment is the best hedge against prolonged penalty.","{""order"":276,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,observed_short_factory_31,96,factory,True,True,0,71,False,"0
+Factory backlog 588, inv 0, pipeline 0. Demand extremely high/uncertain; with 3-week production lag, any new order won’t help current cost and may arrive after terminal continuation. Best risk-minimizing choice is 0 now to avoid amplifying surplus if demand drops in the automatic phase.","{""order"":0,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,observed_short_factory_31,240,factory,True,True,0,169,False,"Provisional order: 0
+
+Main estimate: backlog is already very large (588) and shared upstream physical inventory is zero, with supply_line also zero. Since factory orders take 3 weeks and cannot reduce today’s cost, any new order mainly helps only if the horizon continues and upstream can actually replenish in time. Given the unknown stop week and the fact that downstream demand appears to be in a severe terminal spike/continuation phase, adding orders risks creating more pipeline cost without guaranteed benefit.
+
+Risk summary:  
+- If continuation persists, ordering now could help future service, but only after delay.  
+- If evaluation ends soon, extra order likely adds no value.  
+- With no visible upstream stock and extreme backlog, the safest cost-minimizing move is to avoid overcommitting.
+
+Best available proposal: 0","{""order"":0,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,observed_adequate_factory_30,96,factory,False,True,0,72,False,"Order 0.
+
+Inv 110, backlog 0, supply_line 0, demand 0 → ample buffer; holding cost 55/wk, no backlog risk from my node. Team risk is upstream congestion, so avoid adding pipeline. Best provisional: 0; if downstream demand reappears, existing stock covers near-term.","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,observed_adequate_factory_30,240,factory,False,True,0,148,False,"Provisional order: 0
+
+Factory is heavily long: inventory 110, backlog 0, supply line 0, current holding cost 55/week. With no revealed upstream shortage and no current demand, ordering now would only add future inventory risk and cannot help today. Best estimate is to wait and let the 12-week terminal policy drain stock if needed.
+
+Main numbers: net inv 110, cost now 55.0, backlog risk low, stockout risk low in the near term.
+
+Risk summary: primary risk is overhang/holding cost if demand stays weak; secondary risk is hidden future demand spike, but with no backlog and large stock cushion, a zero order is the safer team-cost choice.","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,observed_adequate_factory_40,96,factory,False,True,90,74,False,"Order 90.
+
+Est: backlog 150 dominates; pipeline 150 means near-term inflow is already committed but slow. A 90 order roughly matches recent high demand and limits further backlog growth without overcommitting too hard.
+
+Risk: too low keeps backlog expensive; too high adds holding later if demand drops. My best balance is 90.","{""order"":90,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.4-mini-2026-03-17,original,observed_adequate_factory_40,240,factory,False,True,60,111,False,"Order 60.
+
+Main estimates: backlog 150 dominates holding (0). With 3-week factory lead plus upstream congestion, a moderate catch-up order is safer than zero; 60 roughly matches the current customer demand rate and recent effective inflow without overcommitting into an already full pipeline.
+
+Risk summary: under-ordering keeps backlog expensive at 1/unit/week; over-ordering mostly adds delayed pipeline risk since shared inventories are already bloated upstream. Best balance is to start reducing the backlog while avoiding a larger bullwhip.","{""order"":60,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.4-mini-2026-03-17,original,observed_short_distributor_30,96,distributor,False,True,0,57,False,"Order: 0. Est. backlog 312 dominates; supply_line 312 implies incoming cover already queued, so added order likely increases tail costs. Risk: demand unknown, but with zero current demand and no usable inventory, best short-horizon move is hold.","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.4-mini-2026-03-17,original,observed_short_distributor_30,240,distributor,False,True,0,155,False,"Provisional order: **0**
+
+Main estimates: backlog is already **312**, with **312** still in the pipeline; current demand is **0**. Holding cost on any added arrival would be **0.50/week**, but backlog reduction is only possible when downstream inventory exists, so an upstream order now is unlikely to help the distributor’s near-term state. Given the terminal continuation, the safest low-regret choice is to avoid adding more pipeline burden.
+
+Risk summary:  
+- **Over-order risk:** high, because incoming supply may arrive too late to offset current backlog costs.  
+- **Under-order risk:** limited, since demand is currently zero and the system already carries a very large backlog/pipeline.  
+
+Best available proposal: **0**","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.4-mini-2026-03-17,original,observed_adequate_retailer_15,96,retailer,False,True,8,60,False,"Order 8.  
+Main: backlog 8, inventory 0, supply line 14; weekly demand 8 is stable.  
+Risk: ordering 0 extends backlog cost 1.0/unit-week; ordering 8 best balances recovery without overbuilding given upstream delay.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.4-mini-2026-03-17,original,observed_adequate_retailer_15,240,retailer,False,True,8,95,False,"Order 8.
+
+Main estimates: demand stays 8 in continuation; with backlog 8 and zero inventory, ordering 8 best matches current flow and avoids compounding backlog. Supply line 14 suggests replenishment is already queued, so 8 is enough to stabilize without adding excess stock.
+
+Risk: if upstream delays persist, backlog may remain for a few weeks; ordering more than 8 raises holding risk later, while ordering less directly increases backlog cost.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.4-mini-2026-03-17,original,observed_adequate_wholesaler_24,96,wholesaler,False,True,20,96,True,"Provisional order: 20
+
+Main estimates: backlog 10, inventory 0, supply line 82; near-term need is to clear backlog and rebuild a modest buffer while avoiding overreaction to the large pipeline. 20 keeps upstream flow aligned with recent high demand without excessive inventory risk.
+
+Risk summary: if upstream shortages persist, service delay may continue; if demand normalizes, 20 is slightly aggressive but safer than under-order","{""order"":20,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.4-mini-2026-03-17,original,observed_adequate_wholesaler_24,240,wholesaler,False,True,18,92,False,"Order 18.  
+Main estimate: backlog 10 and zero inventory, while supply line is very large (82) and shared upstream stock is visible at factory 26, so a moderate refill is justified without overreacting.  
+Risk: demand is currently 0 and future/customer continuation is uncertain; overly large orders can inflate the bullwhip and later holding costs. 18 is a cautious catch-up level, not a spike.","{""order"":18,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.4-mini-2026-03-17,original,new_factory_0_40,96,factory,True,True,28,83,False,"Order 28. Net need is heavy: backlog 40, zero inventory, no supply line, and demand/shipments are already backwardated. With 3-week production lead time and 12 future scored weeks, a moderate catch-up is better than starving the pipeline. Risk: over-ordering could raise holding cost if downstream demand softens, but factory holding is cheap relative to backlog.","{""order"":28,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,new_factory_0_40,240,factory,True,True,20,117,False,"Order: 20
+
+Factory: backlog 40, zero inventory, no pipeline; immediate issue is severe downstream shortage already reflected in shared inventory. A moderate catch-up order is best because production lead time is long and terminal scoring will continue with customer demand fixed.
+
+Estimate: 20 reduces expected factory backlog trajectory without overloading the pipeline in a likely short remaining horizon. If continuation is long, under-order risk remains; if short, larger orders mainly add holding cost later.
+
+Risk: high uncertainty on remaining weeks and upstream constraints; avoid zero because backlog is already dominant.","{""order"":20,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,new_factory_48_0,96,factory,False,True,0,59,False,"Order 0. Inventory 48, backlog 0, supply line 0, demand 0; holding cost 24/week. With no visible demand and high stock, best is to avoid adding pipeline; risk is only future unknown demand, but current buffer is ample.","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,new_factory_48_0,240,factory,False,True,0,102,False,"Order 0.
+
+Inventory is already high (48) with no backlog and no supply line, while current demand is 0. Holding cost is the only active cost, so adding production would only raise future holding risk. Best near-term action is to pause and let downstream demand reveal whether stock should be used up before reordering.
+
+Risk: if the post-decision continuation demand rises later, current stock provides substantial buffer; zero order is still the cost-minimizing move for this state.","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,original,new_distributor_0_16,96,distributor,False,True,16,82,False,"Order 16. Demand 8, inv 0, backlog 16, supply line 32; net position is very negative, but the long pipeline means over-ordering risks added holding later. Best estimate: cover current downstream pull and reduce backlog without creating a surge. Risk: if upstream delays persist, backlog continues; if replenishment arrives on time, 16 is near-balanced.","{""order"":16,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.4-mini-2026-03-17,original,new_distributor_0_16,240,distributor,False,True,20,129,False,"Order 20
+
+Net position: backlog 16, inventory 0, supply line 32, demand 8. With current downstream pressure and likely continued 8 demand under terminal carry, a moderate catch-up order is best.
+
+Estimate: 20 should start reducing backlog without overloading pipeline; 16 would merely hold, 24 risks excess once upstream flow normalizes. Terminal phase may auto-order demand, so avoid aggressive overshoot.
+
+Risk: supplier/lead-time delays mean actual relief is slow; if you under-order now, backlog persists. If future demand stays at 8, 20 is a balanced hedge.","{""order"":20,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.4-mini-2026-03-17,original,new_retailer_12_0,96,retailer,False,True,4,46,False,"Order 4. Inventory 12, backlog 0, demand 4, supply line 8. Covering steady 4/week keeps net inventory healthy; low risk of extra holding, no backlog pressure.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.4-mini-2026-03-17,original,new_retailer_12_0,240,retailer,False,True,4,74,False,"Order 4. Inventory is healthy (12), backlog is 0, demand is stable at 4, and supply line already covers 8. A smaller order avoids overbuilding while keeping the pipeline aligned with steady flow. Main risk: if upstream delay or future demand rise appears, backlog could start; otherwise extra ordering would just raise holding cost.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.4-mini-2026-03-17,clarified,observed_short_factory_21,96,factory,True,True,54,93,False,"Provisional order: 54
+
+Main estimates: backlog 36, zero inventory, no pipeline; incoming demand 54. Factory production lead is 3 weeks, so this order targets restoring flow before backlog compounds. Given terminal continuation, matching current demand is the safest hedge.
+
+Risk: if demand drops, this may create holding cost later; if demand persists, under-ordering is more expensive than modest overage.","{""order"":54,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,observed_short_factory_21,240,factory,True,True,36,131,False,"Provisional order: 36
+
+Main estimates: backlog=36, inv=0, supply_line=0, observed demand=54; recent incoming demand has been volatile, but post-spike continuation phase likely keeps demand nonzero for several weeks. As factory, q now enters stock in 3 weeks, so a moderate catch-up is useful but full 54 risks overstock if demand drops.
+
+Risk summary: downside is carrying excess if demand normalizes; upside is reducing the already-large backlog before terminal carry-forward weeks. Best balanced action is to restore current deficit plus some buffer without overcommitting.
+
+Best available proposal: 36","{""order"":36,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,observed_short_factory_29,96,factory,True,True,288,96,True,"Order: 288
+
+Main estimates: huge active backlog 276, no pipeline, demand spike 312. Factory order now arrives in 3 weeks; terminal auto-phase will keep ordering incoming demand, so clearing backlog quickly matters. 288 targets immediate catch-up plus near-term flow without overcommitting beyond the spike.
+
+Risk: demand may stay elevated/unknown, but under-ordering keeps 276 backlog costly at 1.0/week. Over-order risk is","{""order"":288,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,observed_short_factory_29,240,factory,True,True,312,122,False,"Provisional order: 312
+
+Main estimates: backlog 276, inventory 0, supply line 0; current demand spike is far above recent continuation baseline, and factory production lead time is 3 weeks, so an immediate full catch-up order is the safest way to reduce future backlog cost.
+
+Risk summary: ordering less leaves backlog carrying at $1/unit/week; ordering more mainly shifts cost to holding at $0.50/unit/week after receipt. With no capacity or order penalty, full 312 is the best hedge against ongoing high demand and the 12-week terminal scoring phase.","{""order"":312,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,observed_short_factory_31,96,factory,True,True,0,84,False,"Order 0
+
+Est.: no inventory, backlog already 588, supply_line 0. Factory order now would only arrive in 3 weeks, while current demand spike is likely already propagated; with continuation, automatic ordering may rebuild pipeline anyway.
+
+Risk: ordering positive now likely adds excess factory stock later if demand softens; holding cost 0.5/week. Best available proposal: 0.","{""order"":0,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,observed_short_factory_31,240,factory,True,True,312,125,False,"Provisional order: 312
+
+Main estimate: backlog is 588 and demand is still 312, with zero inventory and no supply line. For factory, an order now enters production and can convert to stock in 3 weeks; with the 12-week terminal continuation, ordering 312 is the best hedge to prevent compounding backlog while avoiding extra inventory beyond the current demand level.
+
+Risk summary: downside is overproduction if true demand drops after the current spike, but given no current stock and the continuation policy auto-orders incoming demand, under-ordering is more costly than carrying some production through the horizon.","{""order"":312,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,observed_adequate_factory_30,96,factory,False,True,0,84,False,"Order 0.
+
+Inv 110, backlog 0, supply line 0; current hold cost 55/wk. Team pipeline already large (wholesaler 114, distributor 16), so extra factory production likely raises holding without near-term backlog benefit. Risk: if hidden demand stays elevated through terminal auto-ordering, zero may under-serve later weeks; otherwise 0 is safest.","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,observed_adequate_factory_30,240,factory,False,True,0,97,False,"Provisional order: 0
+
+Estimates: inventory 110, backlog 0, supply line 0, current holding cost 55/week; 12-week continuation at demand 0 implies no upstream need from demand alone. Team risk is mostly overstock, not shortage.
+
+Risk summary: if terminal policy starts auto-ordering from other roles, some downstream replenishment may still propagate, but your factory stock is already ample. Best available proposal: 0.","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,observed_adequate_factory_40,96,factory,False,True,150,83,False,"Order 150.
+
+Main estimates: backlog 150, inv 0, supply line 150, demand 70. Factory production lead time is 3 weeks; after the 12-week continuation, persistent backlog is very costly vs holding. Risk: upstream demand may fall, but zero order risks prolonged 150 backlog and no immediate stock. Best balance is to clear current backlog and restore pipeline.","{""order"":150,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.4-mini-2026-03-17,clarified,observed_adequate_factory_40,240,factory,False,True,90,126,False,"Provisional order: 90
+
+Main estimate: backlog 150 is already large, supply line 150 means a big pipeline is in motion; factory has no stock now, but production order enters 3-week lead time. Demand has recently been 60–70, with prior surge to 90, so a moderate-high replenishment is safer than zero.
+
+Risk summary: ordering too low likely extends factory backlog and propagates team backlog costs; ordering too high mainly adds future holding cost once pipeline arrives. Given shared_inventory shows downstream stock is not abundant, 90 is a reasonable hedge against continued high demand.","{""order"":90,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.4-mini-2026-03-17,clarified,observed_short_distributor_30,96,distributor,False,True,0,96,True,"Provisional order: 0
+
+Main estimates: backlog is already 312 with no usable inventory and a very large supply line; near-term incoming flow is likely committed upstream, so extra ordering now mainly adds future pipeline risk without reducing today’s cost. Holding cost is zero at current stock, backlog cost dominates.
+
+Risk: if downstream demand revives, under-ordering could extend backlog longer; but with terminal continuation and existing large commitments, best expected-cost action is to","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.4-mini-2026-03-17,clarified,observed_short_distributor_30,240,distributor,False,True,0,111,False,"Provisional order: **0**
+
+Main estimates: backlog is already **312** with **0 inventory**; supply line **312** suggests a large inbound pipeline is already committed but not yet usable. With demand currently **0**, ordering more now would mainly add future pipeline risk without reducing today’s incurred cost.
+
+Risk summary: if the upstream chain resumes meaningful shipments, backlog should start clearing automatically; if not, additional orders from distributor may just increase holding/release mismatch. Best near-term cost control is to avoid inflating the pipeline.","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.4-mini-2026-03-17,clarified,observed_adequate_retailer_15,96,retailer,False,True,0,80,False,"Order 0.  
+Main estimates: backlog already 8; stock 0; supply line 14. A new order won’t affect today and may just deepen upstream congestion.  
+Risk: continuation likely auto-orders 8, so backlog may clear via pipeline without extra push; holding cost stays near zero, backlog cost remains the main exposure. Best available proposal: 0.","{""order"":0,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.4-mini-2026-03-17,clarified,observed_adequate_retailer_15,240,retailer,False,True,0,163,False,"Provisional order: **0**
+
+Main estimates: on-hand **0**, backlog **8**, supply line **14**, incoming demand **8**; shared inventories show upstream **0/0/0/20**. Near-term retailer demand already appears covered by the current pipeline, while backlog is costly but can only be reduced by arriving stock, not by a new order this week.
+
+Risk summary: **ordering now may add excess pipeline/holding cost without helping current backlog sooner**; **zero is defensible** if the pipeline to retailer is expected to replenish next week. If you want a hedge against continued 8-demand continuation, the next-best fallback would be a **small order (4–8)**, but my best available proposal is **0**.","{""order"":0,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.4-mini-2026-03-17,clarified,observed_adequate_wholesaler_24,96,wholesaler,False,True,18,96,True,"Order 18
+
+Est. effective pipeline is still very large (supply_line 82) and current backlog is 10 with zero inventory, so adding more than demand-smoothing risks extra holding later. Since downstream shared stock is already 8 at retailer and continuation auto-orders incoming demand, 18 is a cautious replenishment to help clear backlog without overloading the chain.
+
+Risk: demand may stay elevated or upstream delays may persist; if so, 18 may","{""order"":18,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.4-mini-2026-03-17,clarified,observed_adequate_wholesaler_24,240,wholesaler,False,True,20,173,False,"Provisional order: **20**
+
+Main estimates: backlog is **10** now, supply line is very large (**82**), and current demand is **0**. With no immediate customer pressure, the best move is a **moderate replenishment** rather than aggressive over-ordering. A 20 order should help clear the existing backlog as pipeline supply arrives and reduce risk of future shortage during the 12-week continuation, while limiting extra holding cost.
+
+Risk summary:  
+- **Downside of ordering too low:** backlog persists and costs 1.0/unit/week.  
+- **Downside of ordering too high:** inventory may accumulate and cost 0.5/unit/week.  
+- **Key uncertainty:** upstream timing and terminal continuation demand can still shift; a mid-range order is the safest balance.
+
+Best available proposal: **20**","{""order"":20,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.4-mini-2026-03-17,clarified,new_factory_0_40,96,factory,True,True,52,88,False,"Order 52.
+
+Need: clear 40 backlog now with immediate production lag; plus rebuild against 12-week terminal continuation where incoming demand/order flow likely persists near 4. Factory has 0 inventory and 40 backlog, so a moderate catch-up is needed but overordering risks 0.5/wk holding. Risk: demand/order uncertainty and 3-week lag; 52 balances service recovery with limited surplus.","{""order"":52,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,new_factory_0_40,240,factory,True,True,40,98,False,"Order: 40
+
+Main estimate: backlog is 40 with zero factory inventory and no supply line, so a full catch-up order best limits continued backlog cost and supports downstream recovery over the terminal scoring horizon. Factory production delay is 3 weeks, but starting now is still valuable for the 12-week continuation.
+
+Risk: if downstream demand is already falling, this may create residual stock later; however with current backlog this is the lower-risk choice versus under-ordering.","{""order"":40,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,new_factory_48_0,96,factory,False,True,0,75,False,"Order 0.
+
+Inventory 48, backlog 0, supply line 0; no incoming demand now. Holding cost is already high, so adding production would only raise future inventory unless demand reappears. Risk: possible future continuation demand, but with 12 auto-scored weeks and no current demand signal, best expected cost is to stay flat.","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,new_factory_48_0,240,factory,False,True,0,130,False,"Provisional order: 0
+
+Estimates: current factory stock 48, backlog 0, supply line 0, incoming demand 0, net inventory 48. Holding cost now is already low-risk; any production would only add future inventory unless upstream demand reappears. With no observed demand and continuation weeks already likely to auto-order incoming demand, best near-term action is to avoid overproduction.
+
+Risk: main downside is unseen future demand or terminal continuation needing replenishment, but current buffer is ample. If demand resumes sharply, existing stock covers several weeks; zero order is the safest cost-minimizing choice now.","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.4-mini-2026-03-17,clarified,new_distributor_0_16,96,distributor,False,True,24,78,False,"Order 24.  
+Demand 8, inv 0, backlog 16, supply line 32.  
+Need to clear backlog and rebuild modest buffer; 24 keeps pressure on upstream without overloading too hard.  
+Risk: upstream delay/surge may keep backlog elevated next week; if supplier is weaker than expected, carrying excess orders can add inventory cost later.","{""order"":24,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.4-mini-2026-03-17,clarified,new_distributor_0_16,240,distributor,False,True,12,121,False,"Order 12
+
+Main estimates: inventory 0, backlog 16, demand 8, supply line 32. With zero stock and large backlog, a moderate replenishment is justified; 12 is the smallest practical catch-up order that helps offset persistent underfill without overcommitting.
+
+Risk summary: downstream backlog is expensive (1.0/unit-week) vs holding (0.5/unit-week), so bias toward clearing backlog, but supply line is already substantial and later auto-ordering can add more flow. If upstream is constrained, this order is still safe and nonnegative.","{""order"":12,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.4-mini-2026-03-17,clarified,new_retailer_12_0,96,retailer,False,True,4,65,False,"Order 4.  
+Inv 12, backlog 0, demand 4, supply line 8. Net after demand/hold is ample; keeping pace with steady 4 flow avoids backlog. Risk: upstream lag can raise future shortage if demand jumps, but current state supports a modest replenishment.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.4-mini-2026-03-17,clarified,new_retailer_12_0,240,retailer,False,True,4,120,False,"Order: 4
+
+Main estimates: demand is steady at 4, inventory is healthy at 12, backlog is 0, and supply line is only 8 with no current receipt. A match-to-demand order of 4 keeps the chain aligned without adding unnecessary inventory risk. Holding cost is low but persistent, so avoiding over-ordering is preferable.
+
+Risk summary: low near-term stockout risk; moderate risk of upstream delay if the 8 on the line is slower than expected, but a larger order would mainly raise holding cost. Best available proposal: 4.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.6-luna,original,observed_short_factory_21,96,factory,True,True,54,36,False,"Order 54. Backlog 36 plus demand 54; no pipeline or stock. Risk: ongoing high demand, but avoid overproduction if demand falls.","{""order"":54,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.6-luna,original,observed_short_factory_21,240,factory,True,True,54,89,False,"Provisional order: **54 cases**.
+
+Current factory backlog is 36, with zero stock and pipeline; current demand is 54. Ordering 54 replenishes this week’s demand while avoiding additional backlog, though production arrives with a three-week delay. Risk: demand may fall after the apparent spike, creating later holding cost (0.50/unit/week), but backlog costs 1/unit/week and downstream inventories are empty.","{""order"":54,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.6-luna,original,observed_short_factory_29,96,factory,True,True,312,52,False,"Provisional order: 312 cases. Backlog 276; demand 312; inventory/pipeline 0. Produce enough to cover current owed demand; risk is severe backlog versus holding, though unknown future demand argues against additional speculative production.","{""order"":312,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.6-luna,original,observed_short_factory_29,240,factory,True,True,312,93,False,"Order **312 cases**.
+
+Demand is 312, with 276 backlogged and zero inventory/pipeline; 36 cases shipped this week. Ordering 312 matches current demand plus backlog, limiting further backlog while avoiding speculative excess. Main risk is the three-week production lead time and unknown future demand; however, zero ordering would prolong costly backlog (1/unit/week), while excess stock costs only 0.50 but may persist through terminal continuation.","{""order"":312,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.6-luna,original,observed_short_factory_31,96,factory,True,True,588,61,False,"Provisional order: 588 cases. Backlog 588; inventory/pipeline 0. Demand 312 last week, but unknown future demand and 3-week production delay make underordering costly. Risk: substantial overproduction if demand collapses; prioritize clearing backlog, then taper.","{""order"":588,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.6-luna,original,observed_short_factory_31,240,factory,True,True,588,123,False,"**Provisional order: 588 cases.**
+
+Estimate: factory backlog is 588 (276 carried forward plus current 312); inventory and supply line are zero. Ordering 588 best matches known owed demand and avoids another week of backlog cost (≈588), though production/shipments require multiple weeks. Retailer holds 38, while wholesaler/distributor hold 0, so downstream replenishment may be delayed and shortages may persist. Main risk is demand uncertainty after week 31 and potential overproduction during the 12-week continuation; nonetheless, zero or partial ordering leaves substantial certain backlog.","{""order"":588,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.6-luna,original,observed_adequate_factory_30,96,factory,False,True,0,44,False,"Order 0. Factory inventory 110, pipeline 0, demand 0; team stock 252, no backlog. Risk: severe overstock and uncertain terminal demand; avoid production until depletion.","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.6-luna,original,observed_adequate_factory_30,240,factory,False,True,0,93,False,"Provisional order: **0 cases**.
+
+Estimates: factory inventory 110, backlog 0, supply line 0; shared stock is 252 cases, while current demand is 0. Existing upstream/downstream pipeline and large wholesaler stock already provide substantial coverage.
+
+Risk: ordering now adds avoidable holding cost and may amplify the evident oversupply. Reassess next week; increase only if demand resumes and shared inventories materially decline.","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.6-luna,original,observed_adequate_factory_40,96,factory,False,True,150,43,False,"Order 150. Backlog 150, pipeline 150; demand 70, zero stock. Risk: shortages/lead times and persistent backlog; avoid further amplification, but match owed demand.","{""order"":150,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.6-luna,original,observed_adequate_factory_40,240,factory,False,True,70,85,False,"Order **70** cases.
+
+Estimates: backlog 150, pipeline 150, zero stock; current demand 70, with recent demand 60–70. Maintain roughly 70/week production to serve backlog and ongoing demand. Main risk is severe upstream/downstream delay causing backlog costs; ordering above 70 could worsen eventual excess inventory if demand falls, while ordering below 70 prolongs costly backlog.","{""order"":70,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.6-luna,original,observed_short_distributor_30,96,distributor,False,True,0,34,False,"Order 0. Backlog 312, pipeline 312; no current demand, but severe service risk. Avoid adding excess before delayed supply arrives.","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.6-luna,original,observed_short_distributor_30,240,distributor,False,True,0,82,False,"Order 0.
+
+Backlog is 312; pipeline already 312, so further ordering would compound excess after delayed arrivals. Demand is currently 0, while retailer stock is 10 and factory/wholesaler stocks are 0. Existing pipeline should eventually restore service, though timing is uncertain; supplier congestion creates shortage risk. Hold zero until receipts materially reduce backlog or new demand emerges.","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.6-luna,original,observed_adequate_retailer_15,96,retailer,False,True,8,48,False,"Order 8. Demand likely remains 8; backlog 8, zero stock, pipeline 14. Maintain flow without worsening upstream bullwhip; shortage risk remains due to two-week delivery and hidden upstream backlogs.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.6-luna,original,observed_adequate_retailer_15,240,retailer,False,True,8,84,False,"Provisional order: **8 cases**
+
+Estimates: demand likely remains 8; backlog is 8, with 14 cases already in the pipeline. Effective position is −22, but replenishment is delayed and downstream shortages are evident.
+
+Risk: ordering above 8 may amplify team inventory once transit arrives; ordering below 8 prolongs costly backlog. Maintain flow matching demand while existing pipeline clears.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.6-luna,original,observed_adequate_wholesaler_24,96,wholesaler,False,True,10,68,False,"Provisional order: 10 cases. Backlog 10, zero stock, pipeline 82; received/shipped 18 recently. Demand is volatile (last 14, prior 20), while retailer holds 8 and factory 26. Avoid worsening backlog, but cap amplification; moderate order limits excess pipeline risk.","{""order"":10,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.6-luna,original,observed_adequate_wholesaler_24,240,wholesaler,False,True,18,104,False,"Provisional order: **18 cases**.
+
+Estimate: backlog 10, zero usable inventory, and pipeline 82; current demand is 0, but downstream replenishment remains delayed. Order 18 maintains roughly recent demand while avoiding further amplification. Main risk is excess pipeline if demand stays near zero; offsetting risk is severe backlog persistence and unknown upstream shortages. Reassess next week using receipts, backlog, and demand signal; reduce toward 0 if the zero-demand spell continues and backlog clears.","{""order"":18,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.6-luna,original,new_factory_0_40,96,factory,True,True,40,47,False,"Provisional order: 40 cases. Factory backlog 40, no pipeline or stock; produce aggressively to clear backlog. Risk: downstream shortages and uncertain demand may create excess, but zero ordering prolongs costly backlog.","{""order"":40,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.6-luna,original,new_factory_0_40,240,factory,True,True,40,88,False,"Provisional order: **40 cases**.
+
+Estimates: factory backlog is 40, with zero inventory and zero pipeline; immediate production should prioritize clearing the backlog. Demand is currently 0, so avoid ordering beyond backlog until incoming demand is observed. Main risk is production/transport delay extending backlog costs; secondary risk is overproduction if demand remains zero. Reassess next week using received orders and updated downstream inventories.","{""order"":40,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.6-luna,original,new_factory_48_0,96,factory,False,True,4,48,False,"Order 4 cases. Factory has 48 stock, zero backlog/pipeline, and no current demand; avoid unnecessary production while preserving ample buffer. Main risk is hidden downstream demand and two-to-three-week replenishment lag.","{""order"":4,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.6-luna,original,new_factory_48_0,240,factory,False,True,0,97,False,"Provisional order: **4 cases**.
+
+Estimates: factory stock is 48, backlog and pipeline are zero, and current demand is 0. Ordering 4 maintains the established 4-case flow while preserving ample buffer; expected near-term factory holding cost is about 24 per week if unchanged. Main risk is overproduction if demand remains zero; counter-risk is insufficient production if demand resumes abruptly. Reassess next week using incoming demand and downstream inventory.","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.6-luna,original,new_distributor_0_16,96,distributor,False,True,8,56,False,"Provisional order: 8 cases. Inventory 0, backlog 16, demand 8, pipeline 32; current shortage is severe but pipeline is substantial. Avoid amplification: order near incoming demand, with backlog-clearance risk if upstream supply is delayed.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.6-luna,original,new_distributor_0_16,240,distributor,False,True,24,96,False,"Provisional order: **24 cases**.
+
+State estimate: inventory 0, backlog 16, demand 8/week, pipeline 32 (not immediately usable). Current shortage is severe; near-term receipts are uncertain due to upstream congestion and two-week delivery lag. Order 24 balances backlog recovery against avoiding excessive pipeline if demand remains near 8. Reassess next week using actual receipts and backlog; increase only if shortages persist, otherwise taper toward demand.","{""order"":24,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.6-luna,original,new_retailer_12_0,96,retailer,False,True,4,52,False,"Order 4 cases. Demand is 4, inventory 12, backlog 0, pipeline 8; expected near-term supply is adequate. Risk: demand may rise, but excess ordering creates holding cost and possible team bullwhip.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.6-luna,original,new_retailer_12_0,240,retailer,False,True,4,97,False,"Provisional order: **4 cases** upstream.
+
+Estimates: on-hand stock 12, backlog 0, pipeline 8, and demand currently 4/week. This provides roughly five weeks of total coverage if demand remains stable, while maintaining the established flow without adding excess inventory.
+
+Risk: replenishment is delayed and upstream shortages are unobserved, so a sustained demand increase could create backlog; ordering above 4 risks team-wide overstock and holding cost.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.6-luna,clarified,observed_short_factory_21,96,factory,True,True,90,40,False,Order 54. Factory backlog 36 plus new demand 54; no inventory/pipeline. This replenishes downstream after the three-week production lag; underordering risks escalating backlog.,"{""order"":90,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,observed_short_factory_21,240,factory,True,True,54,93,False,"Provisional order: **54 cases**.
+
+Backlog is 36, with 54 new demand; factory has zero stock and no pipeline. Production arrives in three weeks, so ordering 54 now best prevents compounding backlog, while avoiding speculative excess if demand falls. Risk: demand may revert to zero, leaving inventory after backlog clears; however backlog costs 1/unit-week versus 0.50 holding, and continuation lasts 12 weeks.","{""order"":54,""observed_demand"":54,""observed_inventory"":0,""observed_backlog"":36,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,observed_short_factory_29,96,factory,True,True,312,67,False,"Provisional order: 312 cases. Backlog 276; no stock/pipeline. Produce at least 276 to clear owed demand, plus 36 for current incoming demand; factory lag is 3 weeks. Risk: demand may be transient, but backlog costs $1/week versus $0.50 holding.","{""order"":312,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,observed_short_factory_29,240,factory,True,True,312,115,False,"Provisional order: **312 cases**.
+
+Current backlog is 276, with zero stock/pipeline; producing only 276 would leave no buffer for incoming demand. The latest demand is unusually high (312), so 312 clears existing backlog while covering one comparable demand cycle. Factory production arrives in three weeks; under continuation, avoiding prolonged backlog costs (1/unit-week) strongly outweighs moderate holding cost (0.50). Main risk is demand collapsing, creating excess stock; mitigate by reassessing next week and ordering zero unless backlog or credible demand persists.","{""order"":312,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":276,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,observed_short_factory_31,96,factory,True,True,588,56,False,"Provisional order: **588 cases**. Backlog is 588, factory stock/pipeline zero; immediate production is essential. Risk: demand may be transient, but backlog costs 1/week versus 0.50 holding, so prioritize clearing owed demand.","{""order"":588,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,observed_short_factory_31,240,factory,True,True,588,91,False,"Provisional order: **588 cases**.
+
+Backlog is 588, with zero factory inventory or pipeline; demand is exceptionally high (312 last week and 312 current), so production is essential. Factory production arrives in three weeks; ordering 588 targets immediate backlog clearance, though ongoing demand may require additional orders. Main risk is persistent/high demand causing further backlog; overproduction risk is limited by existing shortage and 12-week continuation.","{""order"":588,""observed_demand"":312,""observed_inventory"":0,""observed_backlog"":588,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,observed_adequate_factory_30,96,factory,False,True,0,54,False,"Provisional order: 0 cases. Estimates: factory stock 110, no backlog/pipeline; team stock 252, demand currently 0. Risk: substantial downstream inventory and uncertain continuation demand; producing now adds holding cost and may amplify surplus.","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,observed_adequate_factory_30,240,factory,False,True,0,90,False,"Provisional order: **0 cases**.
+
+Factory stock is 110, with zero backlog and zero pipeline; current demand is zero. Ordering adds no benefit and risks substantial holding cost. Shared stock is also ample (retailer 12, wholesaler 114, distributor 16), while recent demand was highly volatile but has just fallen to zero. Maintain zero production until demand or downstream depletion becomes evident; reassess next week.","{""order"":0,""observed_demand"":0,""observed_inventory"":110,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,observed_adequate_factory_40,96,factory,False,True,150,45,False,"Order 150. Factory backlog 150, pipeline 150; produce 150 now. Risk: downstream backlog/demand uncertainty, but zero risks prolonged backlog at 1/week; avoid additional speculative production.","{""order"":150,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.6-luna,clarified,observed_adequate_factory_40,240,factory,False,True,150,88,False,"Provisional order: **150 cases**.
+
+Backlog is 150 with no factory stock; existing pipeline is 150, but replenishment arrives after production delay. Demand rose 60→70 and may persist, so produce enough to cover owed demand while avoiding excessive speculative stock. Main risk is another surge causing backlog; downside is holding cost if demand collapses. Reassess next week using realized demand and pipeline.","{""order"":150,""observed_demand"":70,""observed_inventory"":0,""observed_backlog"":150,""observed_supply_line"":150}"
+gpt-5.6-luna,clarified,observed_short_distributor_30,96,distributor,False,True,0,44,False,"Order 0. Backlog 312, pipeline 312 fully committed; avoid duplicating inventory. Risk: upstream shortages may delay receipt, but immediate over-ordering worsens holding after backlog clears.","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.6-luna,clarified,observed_short_distributor_30,240,distributor,False,True,0,81,False,"Provisional order: **0 cases**.
+
+Backlog is 312, but an equal 312-case order is already outstanding; usable replenishment is delayed by upstream and downstream lags. Ordering more risks severe excess inventory once the existing pipeline arrives, especially with current demand zero. Maintain zero while monitoring receipts and incoming demand; resume ordering only if the pipeline proves insufficient for backlog clearance.","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":312,""observed_supply_line"":312}"
+gpt-5.6-luna,clarified,observed_adequate_retailer_15,96,retailer,False,True,8,53,False,"Provisional order: 8 cases. Backlog 8, zero stock, pipeline 14; demand remains 8, so matching demand limits further backlog while avoiding excess inventory. Risk: upstream shortages may delay receipts; reassess next week.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.6-luna,clarified,observed_adequate_retailer_15,240,retailer,False,True,8,87,False,"Provisional order: **8 cases**.
+
+Current backlog is 8 with zero stock; supply line 14 is already committed. Ordering 8 best matches continuing demand of 8, avoids worsening backlog without excessive pipeline. Main risk is upstream delay: backlog may persist, costing 1 per case-week; excess demand falling would create holding cost at 0.50 per case-week. Reassess next week.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":8,""observed_supply_line"":14}"
+gpt-5.6-luna,clarified,observed_adequate_wholesaler_24,96,wholesaler,False,True,0,57,False,"Provisional order: 0 cases. Backlog 10, pipeline 82, received/shipped 18; shared stock retailer 8, factory 26. Avoid amplifying severe pipeline; reassess next week. Risk: persistent backlog if upstream shortages continue.","{""order"":0,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.6-luna,clarified,observed_adequate_wholesaler_24,240,wholesaler,False,True,10,102,False,"Provisional order: **10 cases upstream**.
+
+Backlog is 10, with zero stock and supply line 82; received 18 this week fully shipped, leaving backlog. Demand just fell to zero, while retailer holds 8 and factory 26, so avoid amplifying the prior surge. A 10-case order preserves replenishment against persistent downstream backlog without materially worsening pipeline/holding risk. Reassess next week; reduce toward zero if backlog clears and incoming supply remains strong.","{""order"":10,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":10,""observed_supply_line"":82}"
+gpt-5.6-luna,clarified,new_factory_0_40,96,factory,True,True,40,54,False,"Provisional order: **40 cases**. Factory backlog is 40, no pipeline, and production arrives in three weeks; produce enough to clear current obligations. Risk: demand is currently zero, so avoid additional speculative production; reassess next week.","{""order"":40,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,new_factory_0_40,240,factory,True,True,40,109,False,"Provisional order: **40 cases** production now.
+
+Main estimates: factory backlog is 40 with zero pipeline; production arrives in 3 weeks, so ordering less leaves backlog costing **40/week** (team cost at least this exposure, plus downstream effects). Ordering 40 restores owed demand without creating excess factory stock if demand remains near zero. Risk: downstream inventories total 36, so replenishing all backlog may later create surplus if demand does not recover; however backlog is already outstanding and terminal continuation lasts 12 weeks.","{""order"":40,""observed_demand"":0,""observed_inventory"":0,""observed_backlog"":40,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,new_factory_48_0,96,factory,False,True,0,58,False,"Provisional order: 0 cases. Factory stock 48, backlog 0, demand 0, pipeline 0; holding cost is $24/week, so avoid production. Risk: unknown future demand and three-week lead time; reassess immediately when demand appears.","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,new_factory_48_0,240,factory,False,True,0,74,False,"Provisional order: **0 cases**.
+
+Factory stock is 48, with zero backlog, zero current demand, and no pipeline. Ordering now would add production after a three-week lag, creating holding cost unless demand returns. Main risk is an unexpected demand increase; reassess next week and produce promptly if incoming demand or downstream replenishment signals rise.","{""order"":0,""observed_demand"":0,""observed_inventory"":48,""observed_backlog"":0,""observed_supply_line"":0}"
+gpt-5.6-luna,clarified,new_distributor_0_16,96,distributor,False,True,16,49,False,"Provisional order: **16 cases**. Backlog 16, demand 8, inventory 0, pipeline 32; shortages risk further delay. Order above demand to recover backlog while avoiding excessive pipeline and holding costs.","{""order"":16,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.6-luna,clarified,new_distributor_0_16,240,distributor,False,True,8,100,False,"Provisional order: **8 cases upstream**.
+
+Estimates: current backlog is 16, with 32 cases already in the supply line; demand is currently 8/week. Assuming pipeline arrivals are timely, this order maintains replenishment near demand while avoiding excessive inventory. Main risk is upstream delay: backlog may persist, costing 16/week, but ordering substantially above 8 could create costly excess stock if the pipeline arrives. Reassess next week using actual receipts and backlog.","{""order"":8,""observed_demand"":8,""observed_inventory"":0,""observed_backlog"":16,""observed_supply_line"":32}"
+gpt-5.6-luna,clarified,new_retailer_12_0,96,retailer,False,True,4,58,False,"Provisional order: **4 cases**.  
+State: inventory 12, backlog 0, pipeline 8, demand 4; ample coverage. Order 4 maintains flow while avoiding excess holding. Main risk is delayed upstream replenishment; reassess next week.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"
+gpt-5.6-luna,clarified,new_retailer_12_0,240,retailer,False,True,4,83,False,"Provisional order: **4 cases**.
+
+Estimates: demand is stable at 4; retailer has 12 available stock (about 3 weeks’ demand), 8 cases already in the pipeline, and no backlog. Ordering 4 maintains the established flow without unnecessary accumulation. Main risk is upstream delay or a demand increase; reassess next week using inventory, backlog, and actual receipts.","{""order"":4,""observed_demand"":4,""observed_inventory"":12,""observed_backlog"":0,""observed_supply_line"":8}"

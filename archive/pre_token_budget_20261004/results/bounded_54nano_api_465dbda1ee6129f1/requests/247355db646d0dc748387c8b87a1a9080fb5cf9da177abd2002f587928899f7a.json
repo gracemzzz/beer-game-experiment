@@ -1,0 +1,199 @@
+{
+  "identity": {
+    "group": "b000_trained_medium",
+    "role": "factory",
+    "week": 1,
+    "kind": "game",
+    "attempt": 1
+  },
+  "condition": {
+    "trained": true,
+    "effort": "medium"
+  },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You manage one role in a four-role beer supply chain: retailer,\nwholesaler, distributor, factory. Minimize total team holding and backlog costs\nacross repeated weeks. Holding costs 0.5 per unit per week; backlog costs 1 per\nunfilled unit per week. Total weekly local cost is 0.5 * inventory + backlog.\nOnly your local state and your own past rounds are available. No communication\nwith other roles. Orders take one week upstream, shipping takes two weeks\ndownstream, and factory production takes three weeks. This version limits each role to\none new order of 0 through 40 units per week; physical production and\nshipment processing have no additional capacity limit. This is an order-entry\nlimit, not a target. All roles and experimental conditions use the same limit.\nOrders cannot be canceled. Inventory is available stock; backlog is unfilled\ncustomer demand; net inventory = inventory - backlog. Supply line is everything\npreviously ordered but not yet received. The state is AFTER this week's receipts\nand shipments, BEFORE your new order. Future demand and the last agent-controlled\nweek are unknown. After agent decisions end, the same physical game continues for\n36 automatically scored weeks. Customer demand then stays at its last\nobserved level. During that continuation only, each role automatically orders its\nincoming demand (within the same limit). That automatic rule is not a recommended\nstrategy for your decisions. Your objective includes ALL team holding/backlog costs\nin both phases. Final agent orders still arrive and incur consequences; inventory,\nbacklog and outstanding orders are carried forward, never reset at the handover.\nThere is no revenue, reward for ordering more, or charge merely for placing an order.\nThis week's displayed cost is already incurred. A new order cannot change it or\nfill today's backlog immediately; it affects later receipts and later costs.\nChoose the number of physical units to order this week, between 0 and 40.\nThe objective is to minimize accumulated holding and backlog costs, not to minimize\nordering activity itself. Unfilled demand remains backlogged and continues to incur\ncost. An unnecessarily large order can create inventory and continuing holding costs.\nZero is permitted when justified by your observations; it is not a default action.\nThe maximum is permitted but is not a recommendation. Decide from your local state. There is no\nrequired ordering strategy or target order. Return the requested structured fields.\nFor game_decision tasks, task.current_state is the authoritative current observation.\nThe history contains completed earlier weeks only; its values are not current.\nFirst copy demand, inventory, backlog and supply_line from task.current_state\ninto the matching observed_* fields. Copy a value of 0 as 0; it is not missing.\nDo not recompute these four readbacks, use a prior week's values, or include the\nnew order in them. Then choose your order. Readbacks do not prescribe an order.\nFor a rules_check task, answer each named question in its matching response field.\nReturn only the required structured fields, with no explanation.\n\nPreparation lesson: delayed replenishment.\nGoods already ordered can be in transit, production, or waiting at a supplier.\nThey remain outstanding until received. A delay alone does not erase an order.\nEvaluate available stock, unfilled demand, and outstanding replenishment together.\nExample: 10 units were outstanding and 3 arrive. Before another order, 7 remain\noutstanding. Those 7 are not available for immediate shipment, but may arrive later.\nPractice example with feedback: 18 outstanding units, 6 received, then 4 newly\nordered means 16 outstanding afterward: 18 - 6 + 4. Counting the old order as\nlost would overstate the replenishment needed. Conversely, goods still pending\ncannot fill today's backlog immediately. Consider both timing and quantities.\nThis lesson does not prescribe an order rule. Choose orders using the game goal."
+    },
+    {
+      "role": "user",
+      "content": "{\"your_past_rounds\":[],\"task\":{\"kind\":\"game_decision\",\"current_state\":{\"week\":1,\"role\":\"factory\",\"demand\":4,\"received\":4,\"shipped\":4,\"inventory\":12,\"backlog\":0,\"net_inventory\":12,\"supply_line\":8,\"cost\":6.0}}}"
+    }
+  ],
+  "status": "ok",
+  "answer": {
+    "observed_demand": 4,
+    "observed_inventory": 12,
+    "observed_backlog": 0,
+    "observed_supply_line": 8,
+    "order": 0
+  },
+  "elapsed_s": 6.947953791999993,
+  "usage": {
+    "input_tokens": 1034,
+    "output_tokens": 1125,
+    "cached_input_tokens": 0,
+    "reasoning_tokens": 1084
+  },
+  "budget_charge_usd": 0.00161305,
+  "request_key": "247355db646d0dc748387c8b87a1a9080fb5cf9da177abd2002f587928899f7a",
+  "response": {
+    "id": "resp_09869098fdd058b7016ab9fea1ac5c87d291db35945c7a8b7e",
+    "created_at": 1790574241.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-5.4-nano-2026-03-17",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_09869098fdd058b7016ab9fea1f43487d2a0716f42a641d59a",
+        "summary": [],
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABquf6oqm1_ftQQ-8iiVjJPgs3-2HhZ9ajOvEwe7bgdYU4DZtZ8Vy7Fm2AHNIyNQYoAYEohnc5W9MSGMYOyagm-3S6CfEoi_LVv1KHHIz_LPcGF46M0tlIEhd3ObTLdhRPBnEmnH7fSRL7qfZ568WIrlza7YuMvwqzZo0R1oBAYOhJWApsVKA1k0FAOFNzWLcMX08cG57ueoy3YdA_FiQL8BxJayN435celDEYtUHSz0R6xk7nbZ81u4AFUAmVnl0GcF4l9ZbsMXzDaeoJ2PqsBMBbWz9oJeED13lR33PkOmPrxj4XoXZP6EnY-67PxYLUg4J8gPQQFIFe8vrIdrye9BsDbkl8k7Rso_cFyaweFaH65RariK6EKWbIg1wHHrrmsEJjRhi74dUrvLyu8PzDnsIC6UIsMuDo-_fn_jOI1eDMi3cA4A4bF6WA3SpbBhcnlD9GdEzfYBr_kBm9XO6wd0muUY3CBIyYEPGpQ9iTLQpw0x-3OJWmC_6HafqxAVaUzsPUBTR0eD5Om9VNJpEQ4Mlmzto2XwuXNMHWXC7FMh2mzL3upHiqOS7_apZ7-lWEE82Z98aLcqlFrx9Yd_98Rl_F0KWjLIEDV-enFyQsgMXCegs1xTII0OVeCFlY7uih1gNsqKUdQ3YTtnt3PwI1n1lS3rNBB60DRHJCLrUv2ZbFMLDBtIsy3LAZhORk8S0HhVS8WEQpBMLwMhEQiRWaXecWV9pqNRz3kZ5xYhVqUusE3LT8dGEsO8Z_10BO2Vd2WS4m6rb7_T2Zklq0pHutY26AqKTcyD_WVuNBkF-JFRhVtGoLgnM-j5lv159Jn8GuwCCTQ7iLxKrU0JZDlG4cOPp8SYdZt4XNeTZ8-tYnd5b9YEoUMqy81hrtsAMTUPLEpv15m0vUtpM5ojt75bxGwsDDgXPD59wsLoU3lfwouR-OHiK_9KX8KpZen5PIs-iN5EsrnuTjng7NPA5K_UIiC4iM-V2gfsfBD_dI2-iZYL1_mrOEZ6J5Ogy6BrkDWIKje5H9wej2t3eQiNt99r4HlKBSIl2yCA9oI_U0-fPv_pLP_jXgKbUmecoaytKU7GllF1OBTd_rxEbJ0R89axrLk89xnBeos4o0LGqqlyTmtxLNQ3ek7pxK1hH4b2UVSng4c9VirilC6sP2c1lsS_XQnvdRWBB90zCmQTG9Lebr5LYdf7Vae1pN8mQZ0Sf81Xv6ULRBHJ9UwVzNiag8xbgvZf2VPxLfR5SWJ07WbH4aXSrT8e94IivWNgJOGOilQvyqW056yga3UyodihgobTLdDPL2CKsfqri0kcJ9iRT2ih8kOmu0fyNSkNpcerN-SfLg5xZJpvLPHqNgmRUgJpO1WoPyKJ9KjTzoL5TwVRvciFZiIxGCAfJa-gGMOb5bOozU7uBkPRFvjmZ81W7Br14sHaNtGA5GbZWCKblM-giwOOUWRO1Dc2NaipCUO0ZiA1og55sAyts2CUwexEPyuSF9yE9TbU8HliBkT3UmiSUOBvWb771Ul8KYgp_hXyg-i6xFhNbTzDZMiBM_1Vuh3zs-CVBOIk0belS5XIaby-TUtfg_yJMMRphuyxzSD7ukvQv_kKAc4UplthSl8_4gnYc7hDroQq5NdNnHGdpyVLOdSrFb117_JcfXut5UMkHnrGcNq8CyUCYzIdmRaUnPtOffH4xjZVBQZnpyhCw4upBYf7zZZGaIwQ631mrV54xAwOCztqTGla8WWvNq6qcEbQtmjVScXbH0DbtiLJJ89W1YK0u8yewBx1K55CaeH3REvVKqRKpliuGayiXw205dSlywonn2dhSFklF2Sd0b6guYEhjpqcrOJLSsDiRoXPgPmpMhClhmgDZyr0QpQVIvhcA0MVva_a92zDy5-kVGj42CoSZeN5ZPGv4L50HCvKKOQPhM6IoiXFJr_5K8aW24n8CK-qSgBjL4YLhZ0v1wiusyyM4-osWeF_XHxkNmBo8bdgwAl5gcaCFv8kyqbu33QOv_fwM8JqhPVfefO6kABzRoRBOL2uDlcfc3j2nC86IUZuEUhYOIfxztoQJ48lojJ8rhQ4ja7UG5B5Z26VO1pzCf7nMYaJYG2y0wb4Za8KTl84_YIeuQufwW8sjGSZ13g-dysa9hZVF4i0fh1RLBwgWKRzfg9eBNgvv67j11Mg8HspAqh1KgMJmnu5EinXGUtxSgteB8JgRQM8LD95LPitZuhbRGBmt_eLNxVaRHZLHY8I6DbGJ8GiDQXetpyr4S2PdDhKMMlUQIzFUwPU2KYUuuQuNS4o3QobA52RKVQcnVX2q_F2r18_za-2ILNr6OSWh_PIZsmEbW29u45DUqBxAeTedcYNPtFK8c8TWfK44bFqoVKvq4XuFJ1P8SKl8rOnvo-9Y8_hgvNIhCiRGjlpmG4err2yokQy6hmohwfs67CbuGp4CoZgYRC7rTUeJUVTtRY-rhlPA-IWaHsX9zIAuUzOj3zMqsiyfoGV5peiudW-fqrypiFMoh1TH0PdSAb_cokgoJqu9-AGHVqVl6UxMAD8eMxhB-Ay4SR0oE5Ef8l8leidBl1C1HXqZHS32dnvTZF1G5XPHVqBpWY_8il4GpuQlJrZw2fUrFaTXy2MVMjRI8Y5lnhjo0Pj4l2wDCGEsOjulns-kJ50vm7fHBDIQr0P_D1hmOXW5sqoiYKsSjYTiq0F-Eb3W8TvLeiLDRoeei5TEaUo1rp5IVzchum74rgLk__pFsTz56j0ueppZ-gE3FnKFhSJhPMsEyzpjf0bvl_Eho_vYTyYct4Fu0eCnPC4o2MlsrQ_xaA0TI4Xf44aenbl5hc4CH_v_BMHW5EZ6zCAtE4PMCLUZmT5ToLhMCoFphte_Dwc7T5i8ijRddCBtTBpMc3wvtrntHcGv1eFcOFUOR-47zgnn5a4akJ3AHN9ix9LYVOCx4kJgdpjWCNouKZMqaQEPX6AxXNe3ZuXKXhgwRyyVoK_2LZVQ7rIiLKO8MnH-NLABuNLp303n4eF2sfzIB4g44bJVQAVcC0Bw2FIFEi_BbUDJ8o58kpNqs5BEjjLmryv5DmqqXjlqZ7TPbSc_NSiuUlblzFh5mgBdJZHrQara5eA1_zAex5Wq449WcIXK4IUgGlaFS7UxFEFiv3MHStKpzo5Xc51Hniwx7bwfCG4fXg5UeIeOl_l817IuSVlJS4eq_LSpydTPtgELU4UY0kCIY0mQKzlCtRDxIXlezrMgOTXyEry7x3QTbtF8m_7sVBETltGgEwD7sYFscq4IOUgNrIboGzttX_FSbIJ7jXR4QYBA4sL-0a1AOn8DFoSWirW0A-EnR9babiTAuHAh5sDTVHZxQNVDTbiPVc35zgXESkegGSbLGbEyp3z1pEw2PPTF63tQeKF3ZFptXPgVqwYijFTpip7oOZVpht2oT4oB3Pr1SUKfz-TahP0rAIfAfYS-OtD4QmXVEH7iEUO5Zr3nE4izPd1qbyQl9j7tjZC_fX5uC3O-thtqch2LQc-kdnWW0nCTJMAkF9PpJyS4WsqlX2GpmaScZq9K7RYymD-SHaQRLtql3Q56zeaaVmo8VivHNaNVtc_95F5WYhQ-xMH7ZvuLm-30TWGtLG4XYxIuWsF6XaiJ6MLagZKQR27paCoyEBJ3ZiD2InWlOeSCtvryyT1Qla2HF51EQFxOhJQYU8_CwxQzzesN8tTH-rYbpxiXVeL1gKPhOFL8VogH8bdlmFiHPjO1qyFnFcb-ejV5LaL2pL9QO_uDpzrumQ5cydMTi84U6eHYy73aNnIHVmNBopY5GqrUBTdcN-wd6Y0ItEMswVvD-FcHSUnpRnomFsFG4THcftdYS47RBJvIF23jGKy01nDc29UDgPZR82kjPz4pk-MaStlFNZ-TAaXAoWeHDrF3CmqQ1J1r54nNbYOJPaYbGLzb3zEUgkHWFN2HgPcsaVlMl7eQU2rFWy-vybvJEEdPa93-ShVObAwkgynYfK_2qbx_4yNZpGCBXP_zaA82W4i98cZcTo6wn64YcYxUiBqFDnkOwtY2s_aWnw7GY64e2NBYNEPWZDfp7PQkA4_SjrLFnaJIX7sh95HYAXM7LwWzWLT4DBWPCrSa1IsnPSj8u74q8kW4igvf9Dd4R3-E-eWXMD2eWmNjLpzsZTzwZL9NHjrf4htIiX67WO4S8FwtsEd6XnzucW5geXhWVaGObLRVsFWKH6amtapb_1u4spN6f0Mdd-h8nixsGLy7xtN3uRl492mE45Xy8Ros9gFScibHcCMP6dS7ytBEJpd-edrANqnROUmHT0WnRBP7otahC_O5Fx1Dcwt5uWKeWrt4ho7DKt7P54zOk7tRgLQVb6zJBoqZ43qlNbr8-sWrD8pRm26XLWScdVvGhqfCe09P_mUFnvxsDKJ4E8rAwaOtbSuilRSGe-40W3PS5gpa-a7C6_bZVZj0FVQhlNZDwAFq5TrbsAoEse5zpWjL8JZMjOYNjKhjTv_sw14yP8xgqFfeM1rIxSc_XLsHIKlv4IIordFdxaKTb4Dmfkb-ntg0aQd9nU1IqoMwveeWwO5IP1zzlRE0Ezw2dVQXSKbukP59C8ePg-aZDkT0LlYzLMTlntLGcrRmknB56IegiPcwPaMycV_lGdv5AUi0biQxu2fdf9oRt9LS6hvrl28IxeWcnq2cE8NEVIbFJ-RaTljZ-Wzy8QvlmKTuY9twWOx3i6iai09RTe82L1o1wyVgfV3QyQ4IPNOqOINnogYWz-HlWnoCknL7_sMDJgaUpwXwDIxz4D7BrxXuopUAHoWZsSlm6hj8Cl3yBTxJRRh7MKOzVbKXUWRZh0pF7dLdWz1fO5bb9qJnNFha_98Y16u7qScHGdu9JkiBxtnhQXfRQaa_7bAU98bLgOC_EBDKbzSwjiuBotVUnw9-kcnqlR4ffMHRLpYCYzj4gsAP0yD_46Ey2hOPNe83Wctecf4FefLw4byze2SS0r7TfuQxBzgmNTZgJLqfNeueA6-rw48XI2rl4w7_5CReV3rNTMLYA2DXv7DS5swZzCCbYq7vJz3jS2MLtfszZvsnQntBolnuIaotOQRxGJwb4sBhLLmi2nW7QwOhOeLmqBeCZLHJhYuxBT3P2Qd6JflsOb5yf6LRzJ37YUCK5CcSEfoly_HRLyqbHri1MLZagjAvRqWRpDPgkzZNFk8SZTCNt6tMDW08_bFnwy0E0jonQHKigYlDpgXUahdPCCTHXIMZkS05Imqc_hvk3YENqf4Tq7s87PJLRWJh77yvhL5_aZY82pYE61tWJHwwluDTSRcHjwwZ6m4k-hVmnAEVlWtAOAbwihzJEahQDrS0oXOMdN3ZDXMkStg_C1-aEGOWADCci74anvNhR321h4_Fuh6IcRijGTdNBwNZ0qK94x7AU23oQDcSdv8vk6CpRXmoiLA36UtiqJa3sgyFL5DZxE7KOyIy0Cz1fk9gggcJ1b11qfEGjJKVzbjoa4ZUEfusHgMZIz8h3SJKg2Q3UYPoUE_Ib0I-OoHVjjV70bIWSAkPzHG4ZYDIMNEGNuX-KEJpYAG0i5mc1_TpaqKdPAR5VoSbYwrj5tIGIVAh-bhUDIYzcLwfzS_AhKq27Vj9CivO75R9dh8G7HaUFu3IjoI7qxIpSu5t9bmIBoLremgDdIQ3zXzvSvAlEoKubAdMD-YDSc7XrBN_7cxFG5DdX6xrGbh4szIIguyLo3qOzo8W8EN5srh3IzhZubPUW3TPBhQvziGjBVobRASRLcMYqFET8pE4NCg_TGq-J-NB2dCcyvTu0OReJ5i2fdQ2SlTqW3Cd_lBa2r8iTSE3WeX-GYcZKSW-X5Y5pHt6HN5h92oi9bcQyBYPR3Lf4nbBT9klLizyqMiTCKHibtZEt-QD31EQlCTDFYfFajAbFOKs6kZ7_ZP9GctmSs14Rg_4QIhkmKhs9Uso0egF5-Qibq8GecRurQgX0lWUFDP77CZD9xHvuEA6cdq4HthPrti0mq2bfiqqDQ9RIQAW8tPVsL50Mrxd0oLyB1Tae-MmjRZQC2X1jJlTpI-aOxHibnJNpy-RT1j-DpnE9EAxTjkU3caYS4W2ZMl4xOMyxeqvtEEG-5g_OypLNt31sChvXShXPKaSIl125kEYp9y7-ErtpjerEdJbOI2RMEyWwxi9lQoL-U81-74ia7-io1JIVGNKs-KhdPwh16KachSsToeIHhHd-UL4DwQmWSbn0XUJhQpp-oFr0VNVRMPl6yMOFJ6JlVDfl1AVkBMP7PXFpLffERfnM0mCPdzA7sP9V5dJtto5QfGZBhiobykMYZS0ROqAT2j6tPAf7KF3Cv0QSAkpcfEShDS9VkPY8x_z-Ep9vC38XHbPcTb9xQwVSiSxuDTJ1Dni_ft3-NINWiz01DUb0RhBk-GX7B7ovSvUgK9GJ02k-HdnHzLqGW4Ix0-7eLb1i-nCt7L1hFh0CQOor0ldtyYI_FtrrfiDoo-t2GRvxqF0svAhwoqzco211GH2eweeoa-10SY9lSC-pQCCptWmQZv75QolXDlGxAS_XwN3dmZfvbt3eff4HA29JSv_svH-TSeP5IRs3BPVbvIpHmdm_CwgMnsyTIisi7ulDANfVD1dEWvkNuMUglUUkwnZfwt_CUtklyPteX-rAUiwDEpyb_2y6-VvFhQHd_1MTytDMWYq0_fn0dGLgEllbCr3A9a2Je8WB2OphjIf6SyCarv0TXdwVQG3Tp3AMIeUr7VIuvUhVGw3BFbJICFgi1whglmtuw1mGEMNwc9-vvfzB5dQwRikrVeFGekNXlFGNOinIjI7SMNnSsEnP90HnfY-ZTbZFGqZVcC8iJqLDMasDrfQAb_5imZFnqzTc8bR2xjlhUgfnl1KMpqNP4AyknbRGWRrAU9epQEpDGk2K45VlofOCVKfcgWUiCsZLB97tVuRBt4n7rDCzLrWf9t189P5DNjQBTlNfiW9WD-Zg8qjrldQf9RlfpVxBMhnd7W98yxEIHYQrmcRRY5IpPjQH9rTMU5irv41WNgBjIjmqidrqqfHhHkngMNF0Z4WpPPKpDLepAwRnqrT9auG0pSV1uG3kVcT5p-ZD38PcqWOtDxPPACz_Jyfla-1MMf1SVmgzjIHEVFoDmx82ssFvCSOkGec94hLQgcKdAcDH_wWm1r3fhssy8u97w-X_UKDd8kzCFgwvs1XegZUgf0myRMMx2dzfQdzHN0_vJqu9ksxGb9Uh08VCffJPeiRpeoCB2PTopR2mMjxCxhMTmxivICPcyYlnRvmO011NYrKn794VLWvCP_jdPVDokZ67B4oRQ6JNV0YMioSyXSliF8gF4Kx2zOcWWbAzLc1zBjs5o0dtl7U0K1vmQFfNLNtyYJOGN92HUcYWqzsSmdVv9Jy7Bx3VPt4SKQ6-CEENAoKwJJtT-xyeL8MF3YMcGz_ecm8JuXrxXPU_X4Av40vqqBNQTvmzGPwg5Jz66S59vGlWm4_aSuywl0hN-nbHIYjymFCufwqRkn5px6SNXFPBlIrqd_rnmzF6wjn4pDOmPzYatb_SR9LRlwc-W-rAabUqOLNWSQGt9VdY_NrFBQtRTQJ9AHO8rjZD0G0bGDxnFxpWUo74CDQqMF2P_3VvLzl5m361ZZEG1osuSMcRsEhzyX1WIh4WQsfqGlrQpzFUTC9pbuVPTf142DzMQNnqHTzntw6qclOPjke5c3dxIIXoeB5cc2_0WMzOFRO_q5kBejluB9-KWXIFBOH7HNXG-3ck8UVmSyJE6NRr-HgRapfgmL0TgCXQqOygdRO1_a9AlAI7_IimoIye7NatEMsdAYK3_STNpdGDqBogPl4USM0SReP0umlRiZl_Obt1NQ71sEZg6_y_9T8jkLtemfCH7AABea9zG3C2aWuuKt4KNKWZEr1xWd3G6vVAIaO4lv-r-AeH0nMAYFMNTAw5XQ6uPT7LaK2gowV-O2Swym1CGe9atZW3inZa7GyTEKXYbBlsCHrsQnElsRsYHoTJIKrDGQjceA7Pt1UiW-wbap7VcguugGc1oX6UXpTbdR-52owssdJvLb00VPzgWEncSsFVaxnmaKl6mkzZJszEI",
+        "status": null
+      },
+      {
+        "id": "msg_09869098fdd058b7016ab9fea7f2e887d29e836ce3c2b1b1f8",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\"observed_demand\":4,\"observed_inventory\":12,\"observed_backlog\":0,\"observed_supply_line\":8,\"order\":0}",
+            "type": "output_text",
+            "logprobs": [],
+            "parsed": {
+              "observed_demand": 4,
+              "observed_inventory": 12,
+              "observed_backlog": 0,
+              "observed_supply_line": 8,
+              "order": 0
+            }
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": "final_answer"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 1.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 0.98,
+    "background": false,
+    "completed_at": 1790574248.0,
+    "conversation": null,
+    "max_output_tokens": 8192,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "current_turn",
+      "effort": "medium",
+      "generate_summary": null,
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "Decision",
+        "schema_": {
+          "additionalProperties": false,
+          "properties": {
+            "observed_demand": {
+              "description": "Copy task.current_state.demand exactly, including zero.",
+              "title": "Observed Demand",
+              "type": "integer"
+            },
+            "observed_inventory": {
+              "description": "Copy task.current_state.inventory exactly, including zero.",
+              "title": "Observed Inventory",
+              "type": "integer"
+            },
+            "observed_backlog": {
+              "description": "Copy task.current_state.backlog exactly, including zero.",
+              "title": "Observed Backlog",
+              "type": "integer"
+            },
+            "observed_supply_line": {
+              "description": "Copy task.current_state.supply_line exactly, including zero; not a past or predicted value.",
+              "title": "Observed Supply Line",
+              "type": "integer"
+            },
+            "order": {
+              "description": "Your chosen new order for this week.",
+              "maximum": 40,
+              "minimum": 0,
+              "title": "Order",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "observed_demand",
+            "observed_inventory",
+            "observed_backlog",
+            "observed_supply_line",
+            "order"
+          ],
+          "title": "Decision",
+          "type": "object"
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 1034,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 1125,
+      "output_tokens_details": {
+        "reasoning_tokens": 1084
+      },
+      "total_tokens": 2159
+    },
+    "user": null,
+    "access_programs": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "presence_penalty": 0.0,
+    "store": false,
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    }
+  },
+  "response_model": "gpt-5.4-nano-2026-03-17"
+}

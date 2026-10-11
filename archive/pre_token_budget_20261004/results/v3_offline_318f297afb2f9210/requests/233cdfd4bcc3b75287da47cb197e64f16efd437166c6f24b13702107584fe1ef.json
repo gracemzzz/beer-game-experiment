@@ -1,0 +1,33 @@
+{
+  "identity": {
+    "group": "b005_trained_low",
+    "role": "retailer",
+    "kind": "rules"
+  },
+  "condition": {
+    "trained": true,
+    "effort": "low"
+  },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You manage one role in a four-role beer supply chain: retailer,\nwholesaler, distributor, factory. Maximize total TEAM profit over repeated weeks.\nTeam profit = actual customer sales revenue - committed factory production cost\n- inventory holding cost at every role - backlog penalties at every role.\nEach unit actually delivered by the retailer to an external customer earns\n10.0 revenue. Merely receiving an order earns no revenue.\nEach new factory production order commits 2.0 per unit\nimmediately, even if delivery is later. Internal transfers create no team revenue\nand no additional purchase cost. Holding costs 0.25 per unit\nper week; unfilled demand costs 2.0 per unit per week.\nUnfilled demand is backlogged, not lost; late delivery earns revenue when delivered\nbut backlog penalties already incurred remain. Initial stocks and initial pipeline\nare sunk endowments. No terminal salvage value is credited to surplus stock or pipeline.\nDemand continues across weeks and may change. Orders support future deliveries;\nordering nothing repeatedly can cause shortages, delayed sales, and penalties.\nOrdering too much can waste production and holding costs. Choose economically\njustified orders; there is no minimum order or prescribed strategy.\nOnly your local state and your own past rounds are available. No communication\nwith other roles. Orders take one week upstream, shipping takes two weeks\ndownstream, and factory production takes three weeks. Capacity is unlimited.\nOrders cannot be canceled. Inventory is available stock; backlog is unfilled\ncustomer demand; net inventory = inventory - backlog. Supply line is everything\npreviously ordered but not yet received. The state is AFTER this week's receipts\nand shipments, BEFORE your new order. Future demand and the final week are unknown.\nReturn a nonnegative integer order and the requested structured fields.\nThe observed_* fields must copy the current observations, not predictions.\nFor a rules-check task, answer the questions instead of placing an order.\n\nPreparation lesson: delayed replenishment.\nGoods already ordered can be in transit, production, or waiting at a supplier.\nThey remain outstanding until received. A delay alone does not erase an order.\nEvaluate available stock, unfilled demand, and outstanding replenishment together.\nExample: 10 units were outstanding and 3 arrive. Before another order, 7 remain\noutstanding. Those 7 are not available for immediate shipment, but may arrive later.\nPractice example with feedback: 18 outstanding units, 6 received, then 4 newly\nordered means 16 outstanding afterward: 18 - 6 + 4. Counting the old order as\nlost would overstate the replenishment needed. Conversely, goods still pending\ncannot fill today's backlog immediately. Consider both timing and quantities.\nThis lesson does not prescribe an order rule. Choose orders using the game goal."
+    },
+    {
+      "role": "user",
+      "content": "{\"task\": {\"questions\": [\"What is net inventory when inventory is 9 and backlog is 3?\", \"What is the one-week holding cost for 8 units (ignore backlog)?\", \"How many weeks does downstream shipping take?\", \"How many weeks does factory production take?\", \"If the retailer delivers 3 units, the factory orders 4 units, total holding cost is 2 and total backlog cost is 6, what is team profit for the week?\"], \"task\": \"rules_check\"}, \"your_past_rounds\": []}"
+    }
+  ],
+  "status": "synthetic",
+  "answer": {
+    "net_inventory": 6,
+    "holding_cost": 2.0,
+    "shipping_weeks": 2,
+    "production_weeks": 3,
+    "team_profit": 14.0
+  },
+  "elapsed_s": 0.0,
+  "usage": {},
+  "budget_charge_usd": 0.0,
+  "request_key": "233cdfd4bcc3b75287da47cb197e64f16efd437166c6f24b13702107584fe1ef"
+}
