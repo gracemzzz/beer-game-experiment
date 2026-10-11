@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/'src'))
 from beergame_study.economy_protocol import EconomyConfig
-from beergame_study.economy_study import run_study
+from beergame_study.shared_budget import run_economy_study as run_study
 from beergame_study.operational_io import install_windows_file_retry
 
 

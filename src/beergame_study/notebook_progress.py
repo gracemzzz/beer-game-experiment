@@ -21,7 +21,7 @@ class NotebookProgress:
             bar_label = 'calibration decisions'
         elif stage == 'onboarding':
             done = int(state.get('onboarding_completed', 0))
-            total = max(1, int(state.get('planned_groups', 0))*4)
+            total = max(1, int(state.get('onboarding_expected', int(state.get('planned_groups', 0))*4)))
             bar_label = 'rules checks'
         else:
             done, total = overall_done, overall_total

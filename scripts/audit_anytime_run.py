@@ -34,6 +34,10 @@ def audit(directory):
         from beergame_study.economy_report import analyze as run_analyze
         from beergame_study.economy_protocol import EconomyConfig as run_config, manipulation_screen as run_screen
         from beergame_study.economy_study import load_calibration as rebuild
+    elif protocol == 'student-high-claude-revision-v4':
+        from beergame_study.claude_report import analyze as run_analyze
+        from beergame_study.claude_protocol import ClaudeConfig as run_config, manipulation_screen as run_screen
+        from beergame_study.claude_study import load_calibration as rebuild
     result = run_analyze(directory)
     manifest, progress, records = result['manifest'], result['progress'], result['records']
     if progress['phase'] not in ('stopped', 'complete'):
@@ -50,6 +54,24 @@ def audit(directory):
             assert 0 <= cached <= incoming and 0 <= usage['reasoning_tokens'] <= outgoing
             expected = ((incoming-cached)*rates['input'] + cached*rates['cached']
                         + outgoing*rates['output']) / 1e6
+            if protocol == 'student-high-claude-revision-v4':
+                short_write, long_write = usage['cache_write_5m_tokens'], usage['cache_write_1h_tokens']
+                ordinary = incoming - cached - short_write - long_write
+                assert ordinary >= 0
+                expected = (ordinary*rates['input'] + cached*rates['cached']
+                            + short_write*rates['cache_write_5m'] + long_write*rates['cache_write_1h']
+                            + outgoing*rates['output'])/1e6
+                if incoming > 100000:
+                    expected *= 5
+                raw_usage = record['response']['usage']
+                assert ordinary == raw_usage['input_tokens']
+                assert cached == (raw_usage.get('cache_read_input_tokens') or 0)
+                assert short_write+long_write == (raw_usage.get('cache_creation_input_tokens') or 0)
+                assert usage['reasoning_tokens'] == raw_usage['output_tokens_details']['thinking_tokens']
+                if raw_usage.get('inference_geo') == 'us':
+                    expected *= 1.1
+                if record.get('returned_service_tier') != 'standard':
+                    expected = max(expected, record['reserved_usd'])
             if protocol == 'student-high-economy-revision-v3' and record.get('returned_service_tier') != 'flex':
                 expected *= 2
             assert math.isclose(expected, record['charge_usd'], abs_tol=1e-12)
@@ -70,7 +92,8 @@ def audit(directory):
         pd.testing.assert_frame_equal(table, exported, check_dtype=False, check_index_type=False,
                                       check_column_type=False)
     from docx import Document
-    word_name = 'Economy_Study_Report.docx' if protocol == 'student-high-economy-revision-v3' else 'Anytime_Study_Report.docx'
+    word_name = {'student-high-economy-revision-v3':'Economy_Study_Report.docx',
+                 'student-high-claude-revision-v4':'Claude_Study_Report.docx'}.get(protocol, 'Anytime_Study_Report.docx')
     word = Document(report / word_name)
     assert word.tables and (report / 'REPORT.md').is_file()
     export_manifest = json.loads((report / 'analysis_manifest.json').read_text(encoding='utf-8'))

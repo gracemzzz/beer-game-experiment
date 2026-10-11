@@ -1,10 +1,22 @@
 # Beer Game reports
 
-The active under-$3 version is **GPT-6 Luna Flex, fixed high effort (v3)**; see [the cost amendment](../docs/ECONOMY_PROTOCOL_20261011.md). Its new run cap is $2.20 (fresh calibration capped at $0.18), with a shared cap on redesign spending. New reports use `economy_<mode>_<fingerprint>/` and `LATEST_ECONOMY_REPORT.json`.
+The new under-$3 replication is **Claude Haiku 5.5, fixed high effort (v4), direct Anthropic**; see [the prospective amendment](../docs/CLAUDE_PROTOCOL_20261011.md) and [notebook 05](../notebooks/05_claude_deliberation_study.ipynb). Its new-run cap is $2.15 (fresh calibration capped at $0.18), with a $2.95 shared redesign guard counting previous Mini/Luna spending. New reports use `claude_<mode>_<fingerprint>/` and `LATEST_CLAUDE_REPORT.json`. The target is eight paired blocks conditional on calibration and cost eligibility; software checks are not empirical evidence.
 
-The latest paid pilot is **[economy_api_a80275c58f2c07e0](economy_api_a80275c58f2c07e0/FINDINGS.md)**. Both chains completed, with 160 model orders, zero fallbacks, passed calibration and passed actual-token separation (495 versus 871 median tokens). The Luna run cost an estimated **$0.0679134225**; redesign spending including Mini is **$0.7877313225**. One pair remains descriptive: H2/H3 point in the predicted direction, while revised H1 points in the opposite direction. Both customer-referenced variance ratios are below 1, and most of the cost contrast comes from the artificial continuation. Read the findings before interpreting the tables.
+The separately completed **GPT-6 Luna Flex v3** study remains in notebook 04; see [its cost amendment](../docs/ECONOMY_PROTOCOL_20261011.md). Its reports use `economy_<mode>_<fingerprint>/` and `LATEST_ECONOMY_REPORT.json`.
 
-| Current pilot file | Contents |
+The latest paid study is **[Claude, eight paired blocks](claude_api_fd5533fef5828d96/FINDINGS.md)**: all 16 chains finished, 1,280 model orders, zero fallbacks, all 2,060 responses completed and both computation checks passed (506 versus 1,121 median generated tokens). Revised H1 has evidence in the predicted direction (Holm p=0.015987); H2 and primary H3 remain inconclusive (both Holm p=0.327260), with opposite-direction point estimates. The original structural-beta hypothesis remains unresolved. Claude cost **$1.065919405**; total redesign spending including earlier Mini/Luna calls is **$1.8536507275**. Every chain-average customer-referenced bullwhip ratio was below 1, and the automatic continuation reverses the model-week cost contrast. These limitations are explicit in the findings.
+
+| Current Claude file | Contents |
+| --- | --- |
+| [FINDINGS.md](claude_api_fd5533fef5828d96/FINDINGS.md) / [Pilot_Findings.docx](claude_api_fd5533fef5828d96/Pilot_Findings.docx) | Conclusions, uncertainty, order behavior, cost phases, paired-difference plot and notebook instructions |
+| [REPORT.md](claude_api_fd5533fef5828d96/REPORT.md) / [Claude_Study_Report.docx](claude_api_fd5533fef5828d96/Claude_Study_Report.docx) | Full hypothesis analysis, calibration, role results, beta diagnostics and provenance |
+| [DETAILS.xlsx](claude_api_fd5533fef5828d96/DETAILS.xlsx) | Numerical tables |
+| [Paired contrasts PDF](claude_api_fd5533fef5828d96/paired_contrasts.pdf) | Every independent paired difference and eligible marginal intervals |
+| [Evidence audit](software_checks/claude_api_fd5533fef5828d96_audit.json) / [independent statistics/export check](software_checks/claude_final_findings_20261011.json) | 2,304 replayed states, 1,408 verified choices, 2,082 unchanged raw files, independently checked tests/intervals/Holm |
+
+The earlier paid pilot is **[economy_api_a80275c58f2c07e0](economy_api_a80275c58f2c07e0/FINDINGS.md)**. Both chains completed, with 160 model orders, zero fallbacks, passed calibration and passed actual-token separation (495 versus 871 median tokens). The Luna run cost an estimated **$0.0679134225**; redesign spending at that time including Mini was **$0.7877313225**. One pair remains descriptive: H2/H3 point in the predicted direction, while revised H1 points in the opposite direction. Both customer-referenced variance ratios are below 1, and most of the cost contrast comes from the artificial continuation. Read the findings before interpreting the tables. Do not pool it with Claude or interpret the unequal samples as a model-by-treatment test.
+
+| Earlier Luna pilot file | Contents |
 | --- | --- |
 | [FINDINGS.md](economy_api_a80275c58f2c07e0/FINDINGS.md) / [Pilot_Findings.docx](economy_api_a80275c58f2c07e0/Pilot_Findings.docx) | Readable results, interpretation, cost breakdown, order plot, notebook run instructions |
 | [REPORT.md](economy_api_a80275c58f2c07e0/REPORT.md) / [Economy_Study_Report.docx](economy_api_a80275c58f2c07e0/Economy_Study_Report.docx) | Full hypotheses, calibration, role results, profiles, beta diagnostics and provenance |
