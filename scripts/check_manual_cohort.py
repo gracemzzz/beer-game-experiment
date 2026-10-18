@@ -61,6 +61,7 @@ def main():
         with tempfile.TemporaryDirectory() as temporary,redirect_stdout(log),patch('IPython.display.display'):
             for index,source in enumerate(cells):
                 if index==1:
+                    source = '\n'.join('EXISTING_RUN = None' if line.startswith('EXISTING_RUN =') else line for line in source.splitlines())
                     # Keep test data out of the operator's real plan. No on-disk notebook edit.
                     real_prepare=prepare
                     def test_prepare(config):

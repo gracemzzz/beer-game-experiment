@@ -9,6 +9,8 @@ cells=[md('''# Beer Game: generate a student cohort by copy and paste
 
 **No API key and no API calls.** Generate prompts here, send them to your chosen chat model, and paste its JSON response back. Python replays the physical game and calculates H1, H2 and H3.
 
+**Completed collection, 18 October 2026:** all 10 GPT-6 / Pro responses are saved. [Read the final findings](../reports/manual_cohort_975b76e63e5b4882/FINDINGS.md) or [full report and plots](../reports/manual_cohort_975b76e63e5b4882/REPORT.md). Every revision retained its initial orders and probes; all three descriptive contrasts are zero. This does not establish an absence of human time-pressure effects. Leave the current plan selected and use **Run All** to reproduce the report and explore all 125 chains; no more responses are needed for this collection.
+
 Default: **500 fictional student identities**, 125 four-role chains, five batches of 100 identities. Each chain has an initial and a reconsidered trajectory: 1,000 role trajectories in total, not 1,000 independent students. Each batch needs two responses, so the default plan needs **10 copy/paste exchanges**. Set `BATCH_STUDENTS=500` before starting if you want one full-cohort response per pass; that output is much longer and may truncate.
 
 This new protocol revises **whole trajectories**. It preserves the physical rules and outcome formulas, but does **not** preserve the API experiment's per-week thinking intervention or information isolation. Results describe generated data. Student-level p-values would create false precision, so this notebook shows directions and distributions without such tests. [Full protocol](../docs/MANUAL_COHORT_PROTOCOL_20261017.md).
@@ -30,9 +32,11 @@ try:
 except ImportError:
     widgets = None
     print('For the paste form: install requirements.txt in this notebook kernel. File import below still works.')
-print('No model connection is made by this notebook.')'''),md('''## 2. Freeze the plan before generating results
+print('No model connection is made by this notebook.')'''),md('''## 2. Open the current plan or prepare a new one
 
-Keep the same model and **high** reasoning setting in every chat. Record the exact displayed model name below. My suggested starting model is **GPT-6 Astra**, if available in your account: OpenAI currently describes it as its most capable model. This is a capability recommendation, not validation of student realism. Chat availability and controls can differ from the API. [Official model guidance](https://developers.openai.com/api/docs/models/gpt-6-astra).
+**Current collection: GPT-6 / Pro, as reported by the user on 18 October.** The notebook opens the latest saved manual run and reads its settings. Keep that selection in every fresh chat. [Settings amendment](../docs/MANUAL_CHAT_SETTINGS_20261018.md).
+
+The controls below apply only when you explicitly set `EXISTING_RUN=None` to create a new v1 plan. That original protocol requires the same model and **high** reasoning setting in every chat. Record the exact displayed model name below. My suggested starting model is **GPT-6 Astra**, if available in your account: OpenAI currently describes it as its most capable model. This is a capability recommendation, not validation of student realism. Chat availability and controls can differ from the API. [Official model guidance](https://developers.openai.com/api/docs/models/gpt-6-astra).
 
 Use a fresh chat for each prompt, with memory/personalization disabled where available and no prior results or hypothesis directions supplied. Do not request a favorable pattern or select the best-looking generation. Hidden reasoning tokens and actual per-student effort are unobserved here. If the chat interface cannot expose high effort, record that limitation and choose a separate protocol before collection.
 
@@ -45,7 +49,9 @@ SEED = 20261017
 STUDY_LABEL = 'cohort-500-first-plan'
 MODEL_LABEL = 'GPT-6 Astra'    # exact label YOU select in the chat interface
 EFFORT_LABEL = 'high'
-EXISTING_RUN = None           # or ROOT / 'data/runs/manual_cohort_...'
+LATEST_POINTER = ROOT / 'reports/LATEST_MANUAL_COHORT_REPORT.json'
+EXISTING_RUN = Path(read(LATEST_POINTER)['run']) if LATEST_POINTER.exists() else None
+# Set EXISTING_RUN = None explicitly only when preparing a new plan.
 
 if EXISTING_RUN is None:
     RUN = prepare(CohortConfig(students=N_STUDENTS, batch_students=BATCH_STUDENTS,
@@ -53,10 +59,16 @@ if EXISTING_RUN is None:
         model_label=MODEL_LABEL, effort_label=EFFORT_LABEL))
 else:
     RUN = Path(EXISTING_RUN)
-    frozen = read(RUN / 'manifest.json')['config']
+    manifest = read(RUN / 'manifest.json')
+    if manifest['protocol'] == 'manual-cohort-chat-settings-v2':
+        from beergame_study.manual_cohort_chat import progress, next_task, import_response
+        from beergame_study.manual_response_formatting import build_report
+        from beergame_study.manual_cohort_chat_report import trajectory_figure
+    frozen = manifest['config']
     MODEL_LABEL, EFFORT_LABEL = frozen['model_label'], frozen['effort_label']
 PLAN = read(RUN / 'plan.json')
 print('Saved plan:', RUN)
+print('Recorded chat settings:', MODEL_LABEL, '/', EFFORT_LABEL)
 print(f"{PLAN['fictional_identities']:,} identities; {len(PLAN['chains']):,} paired chains; "
       f"{len(PLAN['batches'])} batches; {PLAN['expected_responses']} responses required.")
 print('Each response contains weekly orders plus matched-state choices. No summary statistics are accepted.')'''),md('''## 3. Progress
@@ -71,7 +83,7 @@ The bar counts **accepted pasted responses**, not remote model activity. All ini
     display(table)
 show_progress()'''),md('''## 4. Copy the next prompt
 
-Run this cell. Click inside the text box, select all and copy. Send the entire prompt in a **fresh chat** using the fixed model and high effort. Save its response exactly as returned. The prompt file is also available for download.
+Run this cell. Click inside the text box, select all and copy. Send the entire prompt in a **fresh chat** using the model and UI setting recorded in the current plan (**GPT-6 / Pro** for the active collection). Save its response exactly as returned. The prompt file is also available for download.
 
 The next prompt advances only after a response passes validation. The JSON arrays contain weekly orders in `[retailer, wholesaler, distributor, factory]` order. Do not replace them with model-written statistics or code.
 '''),code('''TASK = next_task(RUN)
@@ -97,7 +109,7 @@ else:
                                    layout=widgets.Layout(width='100%', height='300px'))
     session_box = widgets.Text(description='Chat label:', placeholder='e.g. astra-chat-01',
                                layout=widgets.Layout(width='80%'))
-    confirm_box = widgets.Checkbox(description='I sent the full prompt with this model and high effort', indent=False)
+    confirm_box = widgets.Checkbox(description=f'I sent the full prompt with {MODEL_LABEL} / {EFFORT_LABEL}', indent=False)
     save_button = widgets.Button(description='Validate and save', button_style='primary')
     save_output = widgets.Output()
     def save_paste(_):
