@@ -1,3 +1,32 @@
+# Manual cohort generation by copy and paste
+
+**17 October 2026:** [Notebook 06](notebooks/06_manual_cohort_simulation.ipynb) prepares prompts for a chat model to generate weekly Beer Game orders for an entire fictional cohort. It needs **no API key and makes no API calls**. See [the separate manual-cohort protocol](docs/MANUAL_COHORT_PROTOCOL_20261017.md). The completed API experiments below remain separate and unchanged.
+
+The default plan has **500 fictional student identities**, 125 four-role chains and five batches of 100 identities. Each batch supplies an initial trajectory and one reconsidered trajectory, requiring **10 responses** in total. Set `BATCH_STUDENTS=500` before collecting anything to request the full cohort in one response per pass; long output may truncate. The 500 identities appear in both conditions, producing 1,000 role trajectories; they are not independent human observations.
+
+The ready-to-use plan is `manual_cohort_47982790c9de87be`: [all five initial prompt boxes](reports/manual_cohort_47982790c9de87be/PROMPTS.md), [start with batch 1](reports/manual_cohort_47982790c9de87be/prompts/b0001_INITIAL.md), and [waiting-for-data report](reports/manual_cohort_47982790c9de87be/REPORT.md). It contains **zero imported model responses**. Revision prompts are created after their corresponding initial outputs are accepted.
+
+In notebook 06, freeze the model/size/seed controls, copy the next prompt, paste the model's JSON into the form, and click **Validate and save**. Repeat the prompt/import cells, then run the analysis cells. A progress bar counts accepted responses. File import is available for long replies. Install the updated `requirements.txt` in the notebook kernel for `ipywidgets`. The same model and high effort must be selected throughout; the suggested starting model is GPT-6 Astra if available, with the exact displayed model label recorded by the user. Model guidance and citations are in the protocol.
+
+The local simulator computes every inventory/backlog state and cost. Analysis produces H1/H2/H3 direction comparisons, bullwhip by role, cost phases and cumulative cost, pipeline-response scatterplots, an order heatmap, an interactive chain selector, CSV/Excel tables and PNG/PDF figures. Raw attempts, exact prompts, metadata and frozen sources stay under `data/runs/manual_cohort_<fingerprint>/`; readable outputs and prompt boxes use `reports/manual_cohort_<fingerprint>/`. `reports/LATEST_MANUAL_COHORT_REPORT.json` is a separate pointer. Accepted responses are immutable; no missing orders are filled in or clipped. All initial batches are imported before revisions. Rejected attempts remain recorded.
+
+**Material design change:** this is whole-trajectory reconsideration. The generator sees complete demand paths and the output horizon, and individual students' reasoning tokens are unobserved. Its generated students/chains share a response. H1/H2/H3 outcomes retain their formulas, but no student-row p-values or confidence intervals are produced, and these outputs cannot verify/disprove human time-pressure effects or be pooled with the API protocol. Reports show descriptive directions, completeness, duplicates, zero orders and undefined denominators. No empirical result exists until model output is actually pasted.
+
+Reproduce preparation and checks without paid calls:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -X utf8 scripts/prepare_manual_cohort.py
+.\.venv\Scripts\python.exe -X utf8 -m unittest discover -s tests -p test_manual_cohort.py -v
+.\.venv\Scripts\python.exe -X utf8 scripts/check_manual_cohort.py
+```
+
+`scripts/build_manual_cohort_notebook.py` reproduces notebook 06. The checker runs explicitly synthetic data through all 500 identities, verifies the paste callbacks and notebook code cells with both providers' API constructors blocked, and writes [software evidence](reports/software_checks/manual_cohort_20261017.json). Synthetic reports remain labeled as software tests and never supply model decisions to a real plan. The source hashes, scientific configuration and fixed cohort plan determine a new fingerprint; future scientific changes require a new plan. Earlier reports and raw evidence are preserved.
+
+**Checks completed:** [19 offline tests](reports/software_checks/manual_cohort_tests_20261017.log), a full 500-identity software replay (20,000 weekly orders and 36,000 scored role-states), all eight notebook code cells, both paste-button callbacks, and six PNG/PDF figure exports. The checker confirmed all **2,363** completed Claude/GPT raw files unchanged. Plot layout was inspected; these controls establish software operation, not model or human behavior.
+
+---
+
 # Claude replication under the existing $3 redesign cap
 
 **11 October 2026, new user request:** A separate Claude version is implemented in [notebook 05](notebooks/05_claude_deliberation_study.ipynb), protocol `student-high-claude-revision-v4`. Read the [prospective amendment](docs/CLAUDE_PROTOCOL_20261011.md). It uses **Claude Haiku 5.5, adaptive thinking, fixed high effort**, with the same prompts, profiles, physical game, token ceilings and hypotheses as the completed GPT revision pilot. The user confirmed **direct Anthropic** access. No Claude empirical result is claimed from software checks.
@@ -9,6 +38,10 @@ Run `python scripts/run_claude_study.py --mode offline --pairs 1` for a free sof
 **Software checks before key entry:** all **163 tests passed in 119.426 seconds**, including 28 Claude tests ([log](reports/software_checks/claude_full_tests_20261011.log)). Both notebooks executed all eight code cells with OpenAI and Anthropic client construction forbidden: [notebook 05](reports/software_checks/notebook05_cross_provider_20261011.json), [notebook 04](reports/software_checks/notebook04_cross_provider_20261011.json). The free Claude check completed eight paired blocks (16 chains). The [artifact audit](reports/software_checks/claude_artifacts_20261011.json) verified its raw evidence, full Word/workbook exports and readable findings, and rechecked the paid Luna evidence/source hashes unchanged. These checks validate software, not actual Claude behavior.
 
 ### Completed Claude replication, 11 October 2026
+
+**17 October 2026 — two readable prompt files:** [CLAUDE_API_PROMPTS.md](reports/claude_api_fd5533fef5828d96/CLAUDE_API_PROMPTS.md) and [GPT_API_PROMPTS.md](reports/economy_api_a80275c58f2c07e0/GPT_API_PROMPTS.md) separately collect the completed Claude and GPT-6 Luna runs. Each has short explanations and one box per system prompt, personality profile or user-message form. Saved JSON is indented for readability; wording and values are unchanged. A small usage table identifies calibration, rules checks, probes and weekly games. The previous detailed Claude catalog is preserved under `reports/archive/prompt_catalogs_20261017/`.
+
+Regenerate both for free with `.\.venv\Scripts\python.exe -X utf8 scripts/export_api_prompts.py --both`; use `--run data/runs/<run_id>` for one. The earlier `export_claude_prompts.py` command remains a compatibility entry point. The exporter reconstructs all **2,060 Claude** and **260 GPT** saved prompts, verifies their **14/13** frozen source/profile hashes and checks **2,082/281** raw files against the completed findings audits. Native Claude payloads are also compared exactly. Both notebooks' code cells and all raw evidence remain unchanged; report and notebook links point to the two readable files. These documents show every fixed prompt form with actual examples, not every weekly inventory/history value; full dynamic messages remain in the linked raw requests. No API calls, experimental changes or new human validation are involved.
 
 **All eight paired blocks completed:** 16 chains, each with four practice weeks, 20 model weeks and 12 automatic scoring weeks. Start with the [findings](reports/claude_api_fd5533fef5828d96/FINDINGS.md), [findings Word document](reports/claude_api_fd5533fef5828d96/Pilot_Findings.docx), [full report](reports/claude_api_fd5533fef5828d96/REPORT.md), [full Word report](reports/claude_api_fd5533fef5828d96/Claude_Study_Report.docx), [workbook](reports/claude_api_fd5533fef5828d96/DETAILS.xlsx), or [paired-contrast figure (PDF)](reports/claude_api_fd5533fef5828d96/paired_contrasts.pdf).
 
@@ -68,6 +101,8 @@ V3 adds a **four-state quick check**, a **$0.18 fresh-calibration cap**, and imm
 The final **135 offline/mocked tests passed in 107.097 seconds** ([log](reports/software_checks/economy_flex_full_tests_20261011.log)), including 25 focused economy tests: positive, negative and null statistical controls, an exact bullwhip-variance control, current-state retention, prior-spend aggregation, calibration spending stops, Flex-only capacity retries, unexpected-tier accounting and a complete mocked paired game. All **eight notebook cells** executed with API-client construction forbidden ([audit](reports/software_checks/notebook04_economy_flex_20261011.json)). The full offline game and [saved-evidence audit](reports/software_checks/economy_offline_a6a67fe37918f5ba_audit.json) passed. Reproduce the notebook check with `python scripts/check_personality_notebook.py`. Standard-tier development reports are archived under `reports/archive/software_development_20261011/standard_tier_v3/`. No tests use paid calls. A small pilot can establish operation and measured computation separation. It cannot guarantee a conclusive hypothesis result or actual-student fidelity; evidence and uncertainty must be reported in either direction.
 
 ## Completed Luna pilot, 11 October 2026
+
+The separately organized [GPT_API_PROMPTS.md](reports/economy_api_a80275c58f2c07e0/GPT_API_PROMPTS.md) contains this run's exact prompt wording and saved examples in readable boxes. Regenerate it with `python scripts/export_api_prompts.py --run data/runs/economy_api_a80275c58f2c07e0`; no API key or paid calls are needed.
 
 **The live pilot completed and passed its computation checks.** Start with the readable [findings](reports/economy_api_a80275c58f2c07e0/FINDINGS.md) or [findings Word document](reports/economy_api_a80275c58f2c07e0/Pilot_Findings.docx). The [full report](reports/economy_api_a80275c58f2c07e0/REPORT.md), [full Word report](reports/economy_api_a80275c58f2c07e0/Economy_Study_Report.docx), [workbook](reports/economy_api_a80275c58f2c07e0/DETAILS.xlsx), and [independent saved-evidence audit](reports/software_checks/economy_api_a80275c58f2c07e0_audit.json) are all under `reports/`.
 

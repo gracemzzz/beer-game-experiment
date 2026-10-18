@@ -1,5 +1,9 @@
 # Beer Game reports
 
+**17 October 2026: manual cohort workflow.** [Notebook 06](../notebooks/06_manual_cohort_simulation.ipynb) accepts copied chat-model output for many fictional students at once. [Protocol and interpretation](../docs/MANUAL_COHORT_PROTOCOL_20261017.md). New prompts, descriptive reports, Excel/CSV tables and PNG/PDF plots use `manual_cohort_<fingerprint>/`; [LATEST_MANUAL_COHORT_REPORT.json](LATEST_MANUAL_COHORT_REPORT.json) identifies the current prepared/imported run. [Software checks](software_checks/manual_cohort_20261017.json) use synthetic data only. No manual model output has been collected as part of implementation. Whole-trajectory revision differs from the API experiment; generated students do not supply independent-human hypothesis tests. API results below remain separate.
+
+Prepared 500-identity run: [prompt index](manual_cohort_47982790c9de87be/PROMPTS.md), [first copy-and-paste prompt](manual_cohort_47982790c9de87be/prompts/b0001_INITIAL.md), [waiting-for-data report](manual_cohort_47982790c9de87be/REPORT.md). The two-pass workflow needs ten responses at the default batch size; none have yet been collected.
+
 The new under-$3 replication is **Claude Haiku 5.5, fixed high effort (v4), direct Anthropic**; see [the prospective amendment](../docs/CLAUDE_PROTOCOL_20261011.md) and [notebook 05](../notebooks/05_claude_deliberation_study.ipynb). Its new-run cap is $2.15 (fresh calibration capped at $0.18), with a $2.95 shared redesign guard counting previous Mini/Luna spending. New reports use `claude_<mode>_<fingerprint>/` and `LATEST_CLAUDE_REPORT.json`. The target is eight paired blocks conditional on calibration and cost eligibility; software checks are not empirical evidence.
 
 The separately completed **GPT-6 Luna Flex v3** study remains in notebook 04; see [its cost amendment](../docs/ECONOMY_PROTOCOL_20261011.md). Its reports use `economy_<mode>_<fingerprint>/` and `LATEST_ECONOMY_REPORT.json`.
@@ -8,6 +12,7 @@ The latest paid study is **[Claude, eight paired blocks](claude_api_fd5533fef582
 
 | Current Claude file | Contents |
 | --- | --- |
+| [CLAUDE_API_PROMPTS.md](claude_api_fd5533fef5828d96/CLAUDE_API_PROMPTS.md) | Readable boxes for the system prompt, four profiles, rules questions, initial choice and revision, with short stage explanations; checked against all 2,060 Claude requests |
 | [FINDINGS.md](claude_api_fd5533fef5828d96/FINDINGS.md) / [Pilot_Findings.docx](claude_api_fd5533fef5828d96/Pilot_Findings.docx) | Conclusions, uncertainty, order behavior, cost phases, paired-difference plot and notebook instructions |
 | [REPORT.md](claude_api_fd5533fef5828d96/REPORT.md) / [Claude_Study_Report.docx](claude_api_fd5533fef5828d96/Claude_Study_Report.docx) | Full hypothesis analysis, calibration, role results, beta diagnostics and provenance |
 | [DETAILS.xlsx](claude_api_fd5533fef5828d96/DETAILS.xlsx) | Numerical tables |
@@ -18,6 +23,7 @@ The earlier paid pilot is **[economy_api_a80275c58f2c07e0](economy_api_a80275c58
 
 | Earlier Luna pilot file | Contents |
 | --- | --- |
+| [GPT_API_PROMPTS.md](economy_api_a80275c58f2c07e0/GPT_API_PROMPTS.md) | Separate GPT prompt file in the same simple format; checked against all 260 GPT requests |
 | [FINDINGS.md](economy_api_a80275c58f2c07e0/FINDINGS.md) / [Pilot_Findings.docx](economy_api_a80275c58f2c07e0/Pilot_Findings.docx) | Readable results, interpretation, cost breakdown, order plot, notebook run instructions |
 | [REPORT.md](economy_api_a80275c58f2c07e0/REPORT.md) / [Economy_Study_Report.docx](economy_api_a80275c58f2c07e0/Economy_Study_Report.docx) | Full hypotheses, calibration, role results, profiles, beta diagnostics and provenance |
 | [DETAILS.xlsx](economy_api_a80275c58f2c07e0/DETAILS.xlsx) | Full numerical tables |
