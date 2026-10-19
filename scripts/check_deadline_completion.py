@@ -32,11 +32,22 @@ def main():
     for name, digest in before['run_files'].items():
         assert current[name] == digest, name
     for name, digest in before['previous_report_pointers'].items():
-        assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name
+        path=root/name
+        if hashlib.sha256(path.read_bytes()).hexdigest()!=digest:
+            original=root/'reports/archive/navigation_before_H1_H4'/path.name
+            assert hashlib.sha256(original.read_bytes()).hexdigest()==digest,name
+            old_pointer=read(original);new_pointer=read(path)
+            def undo_archive(value):
+                if isinstance(value,str):
+                    return value.replace('reports\\archive\\studies\\','reports\\').replace('reports/archive/studies/','reports/')
+                if isinstance(value,dict):return {k:undo_archive(v) for k,v in value.items()}
+                if isinstance(value,list):return [undo_archive(v) for v in value]
+                return value
+            assert undo_archive(new_pointer)==old_pointer,name
 
     record = read(root / 'reports/software_checks' / (run.name + '_audit.json'))
     assert record['complete'] and record['status'] == 'passed'
-    folder = Path(record['report']).parent
+    folder = Path(record.get('source_report', record['report'])).parent
     assert read(folder / 'provenance.json')['inputs_sha256'] == {
         k: v for k, v in current.items() if 'inbox' not in Path(k).parts}
     old = folder.parent / before['prior_analysis']
@@ -96,7 +107,7 @@ def main():
     differences = [m + '_difference' for m in metrics]
     output = dict(status='passed', run=str(run), report=str(folder / 'REPORT.md'),
         accepted_responses=len(entries), prior_files_preserved=len(before['run_files']),
-        raw_files_unchanged=len(current), prior_pointers_unchanged=True,
+        raw_files_unchanged=len(current), prior_pointer_targets_preserved=True,
         first_generation_tables_unchanged=True, exact_new_attachments=len(before['attachments']),
         direct_order_comparisons=len(changes), repeat_metric_rows=len(repeats),
         generation_mean_differences=contrasts.groupby('generation')[differences].mean().to_dict('index'),

@@ -2,6 +2,10 @@
 
 Prepared 18 October 2026. Share this file **with the project source code**. The final-results ZIP alone cannot run a new experiment. Do not share API keys, `.env` files or the old `.venv` folder.
 
+## Current research question
+
+The owner now specifies four hypotheses: decision-time effects on underweighting and cost (H1/H2), and causal-education effects under binding time (H3/H4). [Exact hypotheses and required design](HYPOTHESES_H1_H4.md). The existing API/manual recipes below describe the historical protocols: they did not collect education/control lecture groups or validate the manual deadline as binding. A new study for all four hypotheses must add those design elements prospectively; do not treat the old bullwhip outcome as education H3.
+
 ## 1. Choose the workflow
 
 | | API workflow | Manual copy/paste workflow |
@@ -166,7 +170,7 @@ results/             Excel, CSVs, column guide and provenance
 
 Also provide a ZIP. Preserve raw evidence separately under `data/runs/`. For manual data, export a model-only weekly-order CSV; do not label practice/automatic actions as model choices. For API data, retain every actual system/user/provider request, including revisions and calibration, with the request-to-decision mapping.
 
-Use [our final package](../reports/deadline_cohort_2800524c9b2e0729/final/README.md) as a layout example. Its exporter is intentionally pinned to our completed run; the new user's agent must prepare a corresponding exporter for their own run. Do not overwrite our final package or run the historical completion checker with an unrelated snapshot.
+Use [our current package](../reports/CURRENT_BEER_GAME/README.md) as a layout example. Its publisher is intentionally pinned to our completed run and post-collection H1-H4 assessment; the new user's agent must prepare a corresponding publisher for their own run. Do not overwrite our final package or run the historical completion checker with an unrelated snapshot.
 
 ## 6. Copy this instruction to your agent
 

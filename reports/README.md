@@ -1,33 +1,20 @@
-# Beer Game reports
+# Reports
 
-## Current completed experiment
+## Current report
 
-**Deadline-framed generated cohorts, 18 October 2026:** 20/20 replies, 500 fictional identities, GPT-6 / Pro as reported by the user.
+**[CURRENT_BEER_GAME/REPORT.md](CURRENT_BEER_GAME/REPORT.md)** is the only current reader-facing report.
 
-- [README](deadline_cohort_2800524c9b2e0729/final/README.md)
-- [Report with all six plots](deadline_cohort_2800524c9b2e0729/final/REPORT.md)
-- [All 20 exact prompts](deadline_cohort_2800524c9b2e0729/final/EXACT_PROMPTS.md)
-- [Extracted results and field guide](deadline_cohort_2800524c9b2e0729/final/results/README.md)
-- [Complete ZIP](deadline_cohort_2800524c9b2e0729/Beer_Game_Deadline_20261018.zip)
+- [README](CURRENT_BEER_GAME/README.md)
+- [Report and six plots](CURRENT_BEER_GAME/REPORT.md)
+- [Exact prompts](CURRENT_BEER_GAME/EXACT_PROMPTS.md)
+- [Excel results](CURRENT_BEER_GAME/results/RESULTS.xlsx)
+- [40,000 weekly orders](CURRENT_BEER_GAME/results/weekly_orders.csv)
+- [Complete ZIP](CURRENT_BEER_GAME/Beer_Game_H1_H4.zip)
 
-H1 follows its prediction in both rounds. H2 points the other way. H3 reverses between rounds and is opposite overall. These descriptive results concern fictional deadline wording, not enforced model or human thinking time. No new collection is needed for this completed plan.
+It uses the user's four hypotheses. H1/H2 have exploratory evidence; H3/H4 lack education/control groups. Binding time was not verified, so a new design is needed for the literal hypotheses.
 
-## Earlier work: kept separate
+## Archived and operational files
 
-| Study | Read |
-| --- | --- |
-| Deadline assistant pilot | [Findings](deadline_cohort_8ec04e524ad81927/FINDINGS.md) |
-| Original manual initial/revision study | [Findings](manual_cohort_975b76e63e5b4882/FINDINGS.md) |
-| Pressure-prompt development | [Findings](pressure_prompt_development_20261018/FINDINGS.md) |
-| Claude API replication | [Findings](claude_api_fd5533fef5828d96/FINDINGS.md), [exact prompts](claude_api_fd5533fef5828d96/CLAUDE_API_PROMPTS.md) |
-| GPT API pilot | [Findings](economy_api_a80275c58f2c07e0/FINDINGS.md), [exact prompts](economy_api_a80275c58f2c07e0/GPT_API_PROMPTS.md) |
-| Initial paid student pilot | [Report](student_pilot_20261011/REPORT.md) |
-| Literature and design review | [Review](revised_design_20261011/REPORT.md) |
+[Archive index](archive/README.md): all older study reports and the superseded three-outcome package. They are historical evidence, not the current report. `logs/` and `software_checks/` retain operational records. `LATEST_*.json` files are machine-readable pointers, not alternative reports.
 
-Do not pool incompatible studies or interpret software-test outputs as model/human observations. Older preparation, software-check and intermediate-analysis folders remain in place for reproducibility.
-
-## Storage and history
-
-Human-readable reports belong here; raw evidence belongs in `data/`. Superseded documentation is under `archive/`, operational logs under `logs/`, and checks under `software_checks/`. The `LATEST_*.json` files retain each workflow's canonical report selection. The current package is a readable copy of analysis `daa53a7e838a`, not a new experiment.
-
-**18 October 2026 cleanup:** replaced the long running report history with this index and created the final package. All prior study files and report pointers were preserved. [Earlier README snapshots](archive/repository_cleanup_20261018/README.md) retain the complete history. [Package checks](software_checks/deadline_cohort_2800524c9b2e0729_package.json) and [cleanup checks](software_checks/deadline_repository_cleanup_20261018.json).
+18 October 2026: active outputs were consolidated into CURRENT_BEER_GAME and older report folders were archived. Accepted raw data and frozen scientific sources remain under `data/`. [Verification](software_checks/hypothesis_alignment_20261018.json).

@@ -6,9 +6,9 @@ ROOT=Path(__file__).resolve().parents[1]
 md=nbf.v4.new_markdown_cell;code=nbf.v4.new_code_cell
 cells=[md('''# Beer Game rerun: separate deadline scenarios
 
-[Final package: README, report/plots, exact prompts and extracted results](../reports/deadline_cohort_2800524c9b2e0729/final/README.md).
+[Current report: your H1-H4, plots, exact prompts and results](../reports/CURRENT_BEER_GAME/README.md).
 
-**Completed website collection (18 October 2026): 20/20 responses.** [Read the short findings](../reports/deadline_cohort_2800524c9b2e0729/FINDINGS.md). Run sections 1–4 to load the saved data and show completion, then sections 7–8 for plots and interactive team charts. No further replies are needed for this fixed plan. The instructions below describe the collection workflow.
+**Completed website collection: 20/20 responses.** The four-hypothesis assessment is post-collection. H1/H2 have exploratory evidence; H3/H4 lack education/control groups, and binding time was not verified. A new experiment is required to test all four as written. Run sections 1–4, then 7–8 to inspect existing data. The collection instructions below are historical.
 
 Use this notebook for the **new** study. Notebook 06 and its original results are preserved.
 Each fresh chat simulates students with either **10 seconds** or **180 seconds** to decide.
@@ -28,7 +28,8 @@ if not (ROOT/'src/beergame_study').exists(): raise RuntimeError('Open from the p
 sys.path.insert(0,str(ROOT/'src')) if str(ROOT/'src') not in sys.path else None
 from IPython.display import display,HTML,FileLink,Image,clear_output
 from beergame_study.deadline_cohort import DeadlineConfig,prepare,read,progress,next_task,import_response,audit
-from beergame_study.deadline_cohort_report import build_report,trajectory_figure
+from beergame_study.hypothesis_alignment import build_report
+from beergame_study.deadline_cohort_report import trajectory_figure
 try:
     import ipywidgets as widgets
 except ImportError:
@@ -102,9 +103,9 @@ if RESPONSE_FILE is not None:
         confirm_full_prompt=FILE_FULL_PROMPT_CONFIRMED)
     show_progress()
 else:
-    print('File import is off.')'''),md('''## 7. H1, H2, H3 and the new plots
+    print('File import is off.')'''),md('''## 7. Assessment of your H1, H2, H3 and H4
 
-H1 predicts lower pipeline sensitivity in the brief-deadline scenario; H2 predicts higher full cost; H3 predicts higher bullwhip. Python calculates these from submitted decisions. The report shows actual outcome levels, order trajectories, cost phases, and **deadline differences alongside same-deadline repeat variation**. It never forces a nonzero effect or treats generated identities as independent human observations.'''),code('''RESULT=build_report(RUN)
+H1 concerns underweighting outstanding orders; only a sensitivity proxy is available. H2 concerns total cost. H3/H4 require causal education versus a matched control lecture: those groups were not collected. The report marks them **not tested**. Bullwhip is supplementary, not the new H3. The deadline text did not enforce binding decision time. The existing sample remains descriptive.'''),code('''RESULT=build_report(RUN)
 print('Report:',RESULT['report'])
 display(FileLink(str(RESULT['report'])))
 if RESULT['tables']['hypotheses'].empty:
@@ -114,7 +115,7 @@ else:
     display(RESULT['tables']['choice_changes'])
 for name in RESULT['images']:
     display(Image(filename=str(RESULT['folder']/(name+'.png'))))
-if RESULT['images']:display(FileLink(str(RESULT['folder']/'RESULTS.xlsx')))'''),md('''## 8. Explore a chain
+if RESULT['images']:display(FileLink(str(RESULT.get('workbook',RESULT['folder']/'RESULTS.xlsx'))))'''),md('''## 8. Explore a chain
 
 Blue and orange identify deadlines. Line styles identify repeated generations. Gray shading marks practice, and pale orange marks automatic continuation.'''),code('''if RESULT['rounds'].empty:
     print('Save a response to explore its chains.')

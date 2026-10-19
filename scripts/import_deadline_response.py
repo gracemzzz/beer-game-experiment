@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 from beergame_study.deadline_cohort import read,import_response,next_task,progress
-from beergame_study.deadline_cohort_report import build_report
+from beergame_study.hypothesis_alignment import build_report
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)

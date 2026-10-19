@@ -14,7 +14,11 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--run',type=Path,required=True)
     args=parser.parse_args();run=args.run.resolve();root=run.parents[2]
     before={p.relative_to(run).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in run.rglob('*') if p.is_file()}
-    m=audit(run);plan=read(run/'plan.json');result=build_report(run);rounds=result['rounds'];tables=result['tables']
+    m=audit(run);plan=read(run/'plan.json')
+    from beergame_study.hypothesis_alignment import STUDY, build_report as aligned_report, source_folder
+    result=aligned_report(run) if run.name==STUDY and (root/'reports/CURRENT_BEER_GAME/results/provenance.json').exists() else build_report(run)
+    rounds=result['rounds'];tables=result.get('legacy_tables',result['tables'])
+    workbook=result.get('workbook',result['folder']/'RESULTS.xlsx')
     specs={c['chain_id']:c for c in plan['chains']};direct=[];orders=0;probe_pairs=0;normalizations=0
     for task in plan['tasks']:
         if not accepted_path(run,task['task_id']).exists():continue
@@ -46,9 +50,11 @@ def main():
             np.testing.assert_allclose(contrast,difference,rtol=1e-12)
         assert tables['hypotheses'][['p_value','ci_lower','ci_upper']].isna().all().all() if not tables['hypotheses'].empty else True
         for name,expected in tables.items():
+            if name=='hypotheses' and 'legacy_tables' in result:
+                expected=result['tables']['hypotheses']
             # Generation labels in this sheet are strings ("1", "2", "1-2").
             # A partial study containing only "1" otherwise gets inferred as int.
-            exported=pd.read_excel(result['folder']/'RESULTS.xlsx',sheet_name=name,
+            exported=pd.read_excel(workbook,sheet_name=name,
                 dtype={'generation':str} if name=='choice_changes' else None)
             if expected.empty:
                 assert exported.empty;continue
@@ -56,8 +62,8 @@ def main():
             for column in expected:
                 if expected[column].isna().all():expected[column]=np.nan
             pd.testing.assert_frame_equal(exported,expected,check_dtype=False,atol=1e-10,rtol=1e-10)
-        assert len(pd.read_excel(result['folder']/'RESULTS.xlsx',sheet_name='rounds'))==len(rounds)
-        assert len(pd.read_excel(result['folder']/'RESULTS.xlsx',sheet_name='probes'))==probe_pairs
+        assert len(pd.read_excel(workbook,sheet_name='rounds'))==len(rounds)
+        assert len(pd.read_excel(workbook,sheet_name='probes'))==probe_pairs
     for name in result['images']:
         assert (result['folder']/(name+'.png')).read_bytes().startswith(b'\x89PNG')
         assert (result['folder']/(name+'.pdf')).read_bytes().startswith(b'%PDF')
@@ -67,10 +73,12 @@ def main():
         fictional_identities=plan['fictional_identities'],generation_trajectories=len(direct)*4,
         weekly_orders=orders,probe_pairs=probe_pairs,replayed_role_states=len(rounds),raw_files_unchanged=len(before),
         normalized_responses=normalizations,figures=len(result['images']),workbook_sheets=10 if not rounds.empty else 0,
-        direct_h1_h3='passed',holding_backlog_cost_identity='passed',p_values_withheld=True,api_calls=0,report=str(result['report']))
+        direct_sensitivity_and_supplementary_bullwhip='passed',holding_backlog_cost_identity='passed',p_values_withheld=True,api_calls=0,report=str(result['report']))
+    if 'legacy_tables' in result:
+        record.update(hypotheses=4,education_effects_missing=True,source_report=str(source_folder(root)/'REPORT.md'),hypothesis_framework='user-H1-H4-post-collection-v1')
     path=root/'reports/software_checks'/(run.name+'_audit.json');path.write_text(json.dumps(record,indent=2),encoding='utf-8')
     print(json.dumps(record,indent=2))
     if not tables['hypotheses'].empty:
-        print(tables['hypotheses'].to_string(index=False));print(tables['choice_changes'].to_string(index=False))
+        print(result['tables']['hypotheses'].to_string(index=False));print(tables['choice_changes'].to_string(index=False))
 
 if __name__=='__main__':main()
