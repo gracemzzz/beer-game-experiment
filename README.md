@@ -2,6 +2,8 @@
 
 The current deadline-framing study is **complete: 20/20 responses, 500 fictional identities and 40,000 submitted weekly orders**. No more prompts or API calls are needed.
 
+**For another user and their agent:** [Step-by-step guide to the API and manual workflows](docs/README_FOR_NEW_USERS.md). It explains setup, new study identities, API budgets, fresh-chat collection, validation and final deliverables.
+
 ## Current experiment: start here
 
 | What you need | File |
@@ -45,5 +47,7 @@ The exporter reproduces the same package/ZIP from unchanged source exports and r
 Maintenance rules are in [AGENTS.md](AGENTS.md). Earlier experiments and source evidence remain in their existing locations so notebooks, audits and historical links continue to work.
 
 ## Change record
+
+**18 October 2026 - new-user handoff guide.** Added a standalone walkthrough for both workflows, with verified CLI options, a new manual-plan example, notebook progress instructions and a copyable agent brief. It distinguishes historical model settings from current availability and explains that the historical shared campaign guard does not automatically cover a different campaign ID. Documentation and command/syntax checks only; no model calls or experiment changes.
 
 **18 October 2026 - final package and navigation cleanup.** Added the four requested deliverables and a portable ZIP. Shortened this README and the report index; their complete earlier texts are [archived](reports/archive/repository_cleanup_20261018/README.md). Added a reproducible offline exporter. Checked 20 prompt hashes, all 40,000 extracted orders against original replies, six unchanged figure pairs, ten workbook sheets, package links, ZIP contents and preservation of prior evidence. No scientific outcomes, prompts, accepted responses or spending changed. See [package checks](reports/software_checks/deadline_cohort_2800524c9b2e0729_package.json) and [cleanup checks](reports/software_checks/deadline_repository_cleanup_20261018.json).
