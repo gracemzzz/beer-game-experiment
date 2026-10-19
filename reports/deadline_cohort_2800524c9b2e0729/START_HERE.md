@@ -1,14 +1,18 @@
-# Start the new Beer Game study
+# Completed Beer Game study
 
-**Progress: 3/20 accepted.** [Latest response receipt](B0002_G01_AMPLE_RECEIPT.md).
+[Open the organized final package](final/README.md): README, report and plots, exact prompts, extracted results. [Download everything as a ZIP](Beer_Game_Deadline_20261018.zip).
 
-1. Open the [next prompt: batch 2, 10-second scenario](prompts/b0002_g01_brief.md). Copy everything inside its box.
-2. Paste it into a **fresh GPT-6 / Pro chat**. Do not include previous answers. Keep the same model and mode for every prompt.
-3. Copy the entire JSON reply back into **this Codex conversation**, where you requested the experiment. I will save it, check it, update the report, and give you the next prompt.
+[New to the study? Read the short explanation](STUDY_EXPLAINED.md).
 
-Alternatively, use [notebook 07](../../notebooks/07_deadline_cohort_rerun.ipynb): run sections 1–4, then paste the reply into section 5 and click **Validate and save**. Rerun sections 3–5 for the next prompt. Run section 7 whenever you want updated plots and results.
+**Progress: 20/20 accepted. Both rounds are complete. No more prompts are needed.** [Read the short final findings](FINDINGS.md) or [open all results and plots](REPORT.md). [Final receipt and checks](GENERATION2_RECEIPT.md).
 
-The new plan has **500 fictional student identities and 20 responses**: five batches, two deadline scenarios, and two repeated generations of each scenario. Each response supplies a complete set of weekly orders for its assigned batch. The progress bar counts accepted replies out of 20; it does not monitor ChatGPT while it writes.
+1. Open [notebook 07](../../notebooks/07_deadline_cohort_rerun.ipynb).
+2. Run sections 1–4 to load the saved study and show 20/20 complete.
+3. Run section 7 for all six plots and hypothesis tables, then section 8 to explore any of the 125 teams.
+
+Sections 5–6 were used to collect responses; they are no longer needed for this completed study. All original replies and earlier report versions remain saved. Do not regenerate replies to replace results.
+
+The completed plan has **500 fictional student identities and 20 responses**: five batches, two deadline scenarios, and two repeated generations of each scenario. Each response supplies a complete set of weekly orders for its assigned batch. The progress bar counts saved replies and now shows 20/20.
 
 The prompts describe a student deciding within **10 seconds or 180 seconds**. Each is generated independently, without seeing earlier answers. Repeats help show whether differences between deadline scenarios exceed ordinary variation between generations. We retain all valid replies, including unchanged choices.
 

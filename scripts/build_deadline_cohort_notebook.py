@@ -6,6 +6,10 @@ ROOT=Path(__file__).resolve().parents[1]
 md=nbf.v4.new_markdown_cell;code=nbf.v4.new_code_cell
 cells=[md('''# Beer Game rerun: separate deadline scenarios
 
+[Final package: README, report/plots, exact prompts and extracted results](../reports/deadline_cohort_2800524c9b2e0729/final/README.md).
+
+**Completed website collection (18 October 2026): 20/20 responses.** [Read the short findings](../reports/deadline_cohort_2800524c9b2e0729/FINDINGS.md). Run sections 1–4 to load the saved data and show completion, then sections 7–8 for plots and interactive team charts. No further replies are needed for this fixed plan. The instructions below describe the collection workflow.
+
 Use this notebook for the **new** study. Notebook 06 and its original results are preserved.
 Each fresh chat simulates students with either **10 seconds** or **180 seconds** to decide.
 The conditions never receive one another's answers. We repeat both conditions to show ordinary generation variability.
