@@ -1,0 +1,89 @@
+Simulate the Beer Game decisions of the fictional student cohort specified below.
+For each assigned participant, act as a hypothetical second-year undergraduate
+business student at the University at Buffalo, with introductory business knowledge,
+no prior Beer Game experience and no specialist inventory training. Use the assigned
+personality consistently. Try to minimize the team's inventory and backlog costs.
+These are fictional students. Do not invent demographic traits, deliberate mistakes,
+a particular bias, a desired treatment effect, or artificial variation. Identical
+choices and zero orders are allowed. Do not target any aggregate result.
+
+GAME RULES
+The four positions, in fixed array order, are retailer, wholesaler, distributor,
+factory. Each week each position orders a nonnegative integer number of cases from
+its supplier; the factory starts production. There is no suggested order or maximum,
+revenue, ordering fee, bulk discount or capacity limit. Holding cost is $0.50 per
+remaining case per week; backlog cost is $1 per unfilled case per week.
+
+Each week: receive deliveries; observe incoming demand; ship as much as available
+toward old backlog plus new demand; assess costs; then submit this week's orders.
+Backlog persists and already includes unfilled current demand. Outstanding orders
+cannot be canceled and are not inventory. A new order reaches the supplier next week
+and dispatched cases take two more weeks to arrive. Earliest arrival is t+3, later
+when suppliers have shortages. Factory production started at t arrives at t+3.
+New orders cannot change today's shipments. Track each chain separately.
+
+Initially each role has inventory 12, backlog 0 and outstanding cases 12. The retailer,
+wholesaler and distributor each have deliveries [4,4] due over the next two weeks and
+another 4 outstanding cases awaiting dispatch. Factory production completions are
+[4,4,4] over the next three weeks. Incoming orders at each upstream role initially
+equal 4. Weeks 1-4 have customer demand 4 and automatically order 4 at every role.
+Subsequent customer demand is iid uniform integers 0 through 8; use the exact supplied
+realization for each chain. Generate only the requested post-practice weekly orders.
+After the final submitted week, 12 automatic weeks are scored with customer demand
+held at its last value and each role's order held at its own last submitted quantity.
+
+Each simulated student may use its local state, its own prior rounds, and all four
+remaining inventories. Other roles' orders/backlogs, future customer demand, and
+the final decision week are not information available to the fictional student.
+You, the cohort generator, see paths and the output horizon to construct the data;
+do not intentionally give that future information to the fictional decision maker.
+This instruction cannot create actual information isolation between generated roles.
+You may use arithmetic or code to track physical state and format the answer, but
+do not substitute a single optimized policy for all student choices.
+
+MATCHED-STATE QUESTIONS
+For each role also give two independent order choices, separate from game history.
+Both displays have week 12, demand 8, received 4, shipped 4, inventory 0, backlog 8,
+awaiting_dispatch 0, and no past rounds. Shared inventory is 0 at the focal role
+and 12 at the other roles. The first display has deliveries_due [4,4]; the second
+has [16,16]. Apply the same assigned personality. Do not change any other quantity.
+
+
+PRE-GAME READING
+Supply chains connect several organizations with distinct names and responsibilities. A retailer serves final customers. A wholesaler supplies retailers, a distributor supplies wholesalers, and a factory makes the product. Labels identify the organizations represented by the boxes, and arrows identify the direction in which a transaction is recorded.
+
+Business records use conventional units. A case is a unit of product, a week is a unit of time, and a dollar is a unit of money. Tables usually place observations in rows and named variables in columns. A column heading identifies what its entries describe. A caption explains the setting of a table or chart, while a legend identifies the visual marks used in a figure.
+
+A line chart uses an ordered horizontal axis and a numerical vertical axis. Different lines can identify different organizations. A table can instead show a separate column for each organization. These are alternative ways of presenting recorded observations. Consistent labels help a reader identify which organization, period, and unit an entry describes. Titles distinguish one record from another without changing the recorded values.
+
+Classroom business exercises often assign roles, provide written instructions, and ask participants to submit decisions through a form. The submitted entries are stored as records for later discussion. Researchers can organize those records using role names and period labels, and can describe the exercise in a written report. This reading introduces terminology and presentation conventions. It does not specify an ordering formula, target inventory, recommended quantity, or explanation of how ordering decisions affect later supply-chain conditions.
+
+
+CLASSROOM SITUATION
+The student has 10 seconds from seeing each decision display to submitting its order. The order is final when submitted. Represent the choice the described student would make within that deadline.
+This is the fictional student situation. It does not impose or measure chat-model computation time, actual per-decision elapsed time, deadline binding, or psychological pressure.
+
+OUTPUT
+Produce this one complete cohort response independently from the initial physical
+states. Include only this classroom situation; use no earlier responses.
+Return one complete JSON object, preferably as a downloadable response.json file.
+If file delivery is unavailable, return the literal JSON object in the reply.
+Do not return costs, statistics, explanations, hypothesis claims or another case.
+The exact root fields are schema_version, study_id, task_id, deadline_seconds,
+lecture_id, rules, chains and complete. Each chain has exactly chain_id, orders,
+probes. orders contains one [retailer,wholesaler,distributor,factory] row per output
+week. probes contains four [first_display_order,second_display_order] rows in role
+order. Every choice must be a literal nonnegative JSON integer, not a float,
+Boolean, string, null, range, repeated-policy description or omitted entry.
+Answer the three common factual rules questions: use a literal JSON Boolean for
+the backlog question and JSON numbers for the arrival-week and cost questions.
+Include every assigned chain exactly once and every requested week/probe pair.
+Set complete true only when the entire payload is present. No ellipses or filling.
+Code may track physical states or serialize choices already explicitly made.
+Do not let a shared heuristic, optimized policy, randomness, or other program
+generate missing participant choices. An optional serialization source may contain
+only explicit literal choices and JSON writing; it cannot replace the JSON output.
+Identical choices, zero orders and identical cohort outcomes are allowed.
+
+FROZEN INPUT DATA:
+{"schema_version":"education-deadline-trajectories-v1","study_id":"education_deadline_dcd6a6887c0ec5d1","task_id":"r01_b10_control","deadline_seconds":10,"lecture_id":"control","role_order":["retailer","wholesaler","distributor","factory"],"output_weeks":[5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],"participant_profiles":{"methodical_calm":{"id":"methodical_calm","label":"Methodical, emotionally steady","status":"Fictional experimental profile; not measured from UB students","background":"Second-year undergraduate business student at the University at Buffalo; introductory business coursework; no prior Beer Game experience or specialist inventory training.","description":"In ordinary coursework you are organized, dependable, and prefer working systematically. You usually remain emotionally steady when a classroom task is uncertain. These preferences describe your personality; they do not prescribe any particular ordering strategy or decision."},"methodical_concerned":{"id":"methodical_concerned","label":"Methodical, uncertainty-sensitive","status":"Fictional experimental profile; not measured from UB students","background":"Second-year undergraduate business student at the University at Buffalo; introductory business coursework; no prior Beer Game experience or specialist inventory training.","description":"In ordinary coursework you are organized, dependable, and prefer working systematically. You tend to feel concerned when a classroom task is uncertain. These preferences describe your personality; they do not prescribe any particular ordering strategy or decision."},"flexible_calm":{"id":"flexible_calm","label":"Flexible, emotionally steady","status":"Fictional experimental profile; not measured from UB students","background":"Second-year undergraduate business student at the University at Buffalo; introductory business coursework; no prior Beer Game experience or specialist inventory training.","description":"In ordinary coursework you are flexible, informal, and prefer adapting as you go. You usually remain emotionally steady when a classroom task is uncertain. These preferences describe your personality; they do not prescribe any particular ordering strategy or decision."},"flexible_concerned":{"id":"flexible_concerned","label":"Flexible, uncertainty-sensitive","status":"Fictional experimental profile; not measured from UB students","background":"Second-year undergraduate business student at the University at Buffalo; introductory business coursework; no prior Beer Game experience or specialist inventory training.","description":"In ordinary coursework you are flexible, informal, and prefer adapting as you go. You tend to feel concerned when a classroom task is uncertain. These preferences describe your personality; they do not prescribe any particular ordering strategy or decision."}},"chains":[{"chain_id":"c00001","participant_ids":["s00001","s00002","s00003","s00004"],"profile_ids":["flexible_calm","flexible_concerned","methodical_concerned","methodical_calm"],"customer_demand":[4,4,4,4,2,3,0,2,6,1,3,1,7,8,6,2,7,7,8,5,0,4,0,1]},{"chain_id":"c00002","participant_ids":["s00005","s00006","s00007","s00008"],"profile_ids":["flexible_concerned","methodical_concerned","methodical_calm","flexible_calm"],"customer_demand":[4,4,4,4,4,2,5,8,4,6,2,4,6,2,5,6,7,0,7,6,3,2,8,4]},{"chain_id":"c00003","participant_ids":["s00009","s00010","s00011","s00012"],"profile_ids":["methodical_concerned","methodical_calm","flexible_calm","flexible_concerned"],"customer_demand":[4,4,4,4,0,5,0,3,1,0,5,7,8,0,6,5,8,6,2,1,1,0,1,6]},{"chain_id":"c00004","participant_ids":["s00013","s00014","s00015","s00016"],"profile_ids":["methodical_calm","flexible_calm","flexible_concerned","methodical_concerned"],"customer_demand":[4,4,4,4,7,5,4,6,8,6,0,3,4,1,2,2,0,5,0,0,5,3,8,7]}],"rules_questions":{"backlog_includes_current_unfilled_demand":"Does current backlog already include unfilled demand from this week?","factory_order_week_7_arrival_week":"When does factory production started in week 7 arrive?","three_week_backlog_cost":"What is the cost of five backlogged cases at the end of each of three weeks?"}}
