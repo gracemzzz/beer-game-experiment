@@ -83,7 +83,10 @@ def build_report(run, *, recovery=None, followup=None):
     blocked = sum(row.get('status') == 'pilot_blocked' for row in status.get('tasks', {}).values())
     def failure_reason(row):
         if any('Physical inventory readback mismatch' in issue for issue in row.get('issues', [])):
-            return 'inventory calculations disagree with the game engine'
+            count = sum('Physical inventory readback mismatch' in issue for issue in row.get('issues', []))
+            return f'inventory calculations disagree with the game engine ({count} checkpoint vectors)'
+        if any('Wrong chain count' in issue for issue in row.get('issues', [])):
+            return 'missing or invalid chain collection'
         return str(row.get('reason', row.get('status', 'unknown failure'))).replace('_', ' ')
     failure_summary = (' **Current failure:** ' + '; '.join(
         f"{row.get('model', key)}: {failure_reason(row)}" for key, row in failed)
@@ -100,7 +103,10 @@ def build_report(run, *, recovery=None, followup=None):
         f'5. **Budget:** ${spent:.4f} charged or conservatively reserved out of the authorized $5 total across this experiment, including pilot and retries.',
     ]
     if followup:
-        conclusions.append('6. **Claude follow-up:** Three accepted GPT pilots are reused. One revised Claude pilot is scheduled with medium effort and explicit physical bookkeeping; both earlier Claude failures remain preserved.')
+        if pilot_responses == 4:
+            conclusions.append('6. **Pilot lesson:** All four small pilots passed, but passing a two-chain pilot did not establish reliable generation of a twenty-chain main response. Preserve this stage; use the separately approved weekly-state experiment for new collection.')
+        else:
+            conclusions.append('6. **Claude follow-up:** Three accepted GPT pilots are reused. One revised Claude pilot is scheduled with medium effort and explicit physical bookkeeping; both earlier Claude failures remain preserved.')
     elif recovery is not None:
         conclusions.append('6. **Recovery:** Two previously accepted GPT-5.6 pilots are reused. The original GPT-6 inventory failure and Claude token-limit failure remain preserved; recovery changes are recorded separately.')
     settings = (
@@ -159,6 +165,23 @@ def build_report(run, *, recovery=None, followup=None):
                   'Any further change to settings, pilot attempts or the all-model gate requires a separate recorded amendment; already accepted pilots remain available for reuse.', '']
     main_chains = [r for r in result['chains'] if r['phase'] == 'main']
     if main_chains:
+        lines += ['## What the accepted choices actually show', '']
+        for model in sorted({r['model'] for r in main_chains}):
+            chains = [r for r in main_chains if r['model'] == model]
+            rounds = [r for r in result['rounds'] if r['model'] == model and r['phase'] == 'main']
+            orders = [r['order'] for r in rounds]
+            if orders and len(set(orders)) == 1:
+                lines += [f'**{model}: all {len(orders):,} weekly orders were {orders[0]}.** '
+                          'The order trajectories are identical across roles, chains and pressure conditions. '
+                          'Constant orders are permitted, but they show no behavioral response to pressure in this collection.', '']
+            for condition in study.CONDITIONS:
+                subset = [r for r in chains if r['condition'] == condition]
+                if subset:
+                    lines += [f'- {condition}: mean chain cost **{sum(r["total_cost"] for r in subset)/len(subset):.2f}**, '
+                              f'holding {sum(r["holding_cost"] for r in subset)/len(subset):.2f}, '
+                              f'backlog {sum(r["backlog_cost"] for r in subset)/len(subset):.2f}; '
+                              f'mean pipeline sensitivity **{sum(r["sensitivity"] for r in subset)/len(subset):.6f}**.']
+            lines += ['']
         lines += ['## All chain results', '', _table(main_chains, [
             'model', 'block', 'condition', 'holding_cost', 'backlog_cost', 'total_cost',
             'sensitivity', 'zero_orders', 'max_order', 'final_backlog', 'final_supply_line']), '']

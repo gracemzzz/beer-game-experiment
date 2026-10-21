@@ -1,0 +1,590 @@
+{
+  "task_id": "gpt-6-luna_main",
+  "model": "gpt-6-luna",
+  "phase": "main",
+  "attempt": 1,
+  "payload": {
+    "model": "gpt-6-luna",
+    "input": [
+      {
+        "role": "user",
+        "content": "Generate the Beer Game choices of the supplied fictional undergraduate cohort.\nEach chain has four students, one at each role. Each has introductory business knowledge,\nno previous Beer Game experience and no specialist inventory training. The supplied\npersonality describes ordinary coursework, not an ordering strategy. Each student\ntries to minimize the team's cumulative inventory-holding and backlog costs.\nUse the same assigned identity throughout. Do not invent demographic characteristics,\ndeliberate mistakes, a target pattern, or artificial differences between students.\nIdentical choices and zero orders are allowed.\n\nCLASSROOM SITUATIONS\nEach chain's input states its own classroom situation. Apply that situation to\nall four students in that chain. Track chains separately; one chain's choices\nare not information available to another chain. Each situation describes a\nfictional student's experience. It does not impose or measure\nactual model computation time, a deadline, or psychological pressure.\nAll chains and situations are nevertheless visible to this single generator.\n\nPHYSICAL RULES\nRole order is retailer, wholesaler, distributor, factory. Each week, each role\norders a nonnegative integer number of cases; the factory starts production.\nThere is no revenue, production charge, ordering fee, bulk discount or capacity\nlimit. Holding cost is $0.50 per remaining case per week; backlog cost is $1 per\nunfilled case per week. No preferred order quantity or maximum is supplied.\n\nInitially every role has inventory 12, backlog 0 and 12 outstanding cases.\nRetailer, wholesaler and distributor each have deliveries [4,4] due in the next\ntwo weeks and 4 previously ordered cases awaiting upstream dispatch. Factory\nproduction completions are [4,4,4]. Upstream incoming orders initially equal 4.\nAll 24 displayed weeks require student choices; there are no practice or extra\nscoring weeks. The exact supplied customer-demand path is used without changes.\n\nFor each week, first receive the next due delivery and subtract it from outstanding\norders. Next observe incoming demand: customer demand for the retailer, or the\ndownstream role's preceding-week order for other roles. Ship min(available stock,\nold backlog + new demand). Remaining inventory and backlog are then nonnegative;\ncurrent backlog already includes unfilled current demand and persists. Assess\nthat week's holding/backlog costs. Observe the decision display and submit orders.\nEach new order is added to outstanding orders and reaches the upstream supplier\nnext week. A supplier's shipment takes two weeks to arrive downstream, so the\nearliest receipt of an order made at t is t+3, later if the supplier has shortages.\nFactory production started at t arrives at t+3 without any additional supplier\nor raw-material delay. Outstanding orders cannot be canceled. A new order cannot\nchange today's shipment, inventory or backlog.\n\nAt each decision, a student can use its current local state, own earlier rounds,\nand all four current inventories. Other roles' orders/backlogs and future demand\nare unavailable to that student. You see the complete path and horizon for data\ngeneration; do not intentionally give future information to the fictional student.\nGenerating the entire chain jointly cannot enforce true information isolation.\nTrack the four evolving states using the stated rules. The inventory checkpoints\nrefer to the moment after that week's receipts and shipments, before its orders.\n\nSEPARATE STATE QUESTIONS\nThe shared probe_states bank defines sixteen hypothetical displays. For EACH\nchain, answer every display in that chain's probe_order. Independently choose one order for its stated role and\nassigned student in the same classroom situation. These hypothetical displays do\nnot inherit any chain history or earlier probe decision. Use only the displayed\nstate. The deliveries_due list gives future arrivals starting next week; awaiting\ndispatch is separate. Return each neutral probe ID exactly once.\n\nOUTPUT\nReturn only one complete JSON object matching the supplied schema, containing\nevery supplied chain exactly once. Do not return\ncosts, statistical results, explanations, programming code, or claims about an\nexperiment. For EACH chain, supply exactly 24 rows of four literal nonnegative\ninteger orders in role order, exactly 16 probe choices, and all three inventory\ncheckpoints. No\nBooleans, strings, decimals, nulls, ellipses or omitted choices as order values.\nAnswer these three common factual questions ONCE in root-level rules: Does current backlog already\ninclude this week's unfilled demand? When does factory production begun in week 7\narrive? What is the cost of five backlogged cases at the end of each of three weeks?\nUse a JSON Boolean for the first answer and integers for the other two. Keep all\nsupplied identifiers unchanged. Set complete true only for a complete response.\nNever replace omitted choices with an aggregate description or invented results.\n\nFROZEN INPUT DATA\n{\"schema_version\":\"batched-pressure-chain-v1\",\"study_id\":\"pressure_api_c04ef16c05dd826c\",\"task_id\":\"gpt-6-luna_main\",\"probe_states\":[{\"probe_id\":\"x09\",\"role\":\"wholesaler\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":0,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x13\",\"role\":\"wholesaler\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":0,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x11\",\"role\":\"retailer\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":0,\"wholesaler\":12,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x05\",\"role\":\"distributor\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":0,\"factory\":12}},{\"probe_id\":\"x08\",\"role\":\"wholesaler\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":0,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x00\",\"role\":\"factory\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4,0],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":12,\"factory\":0}},{\"probe_id\":\"x07\",\"role\":\"wholesaler\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":0,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x03\",\"role\":\"retailer\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":0,\"wholesaler\":12,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x10\",\"role\":\"factory\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16,0],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":12,\"factory\":0}},{\"probe_id\":\"x06\",\"role\":\"distributor\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":0,\"factory\":12}},{\"probe_id\":\"x01\",\"role\":\"retailer\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":0,\"wholesaler\":12,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x14\",\"role\":\"retailer\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":0,\"wholesaler\":12,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x12\",\"role\":\"distributor\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":0,\"factory\":12}},{\"probe_id\":\"x04\",\"role\":\"distributor\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":0,\"factory\":12}},{\"probe_id\":\"x15\",\"role\":\"factory\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4,0],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":12,\"factory\":0}},{\"probe_id\":\"x02\",\"role\":\"factory\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16,0],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":12,\"factory\":0}}],\"inventory_checkpoint_weeks\":[1,12,24],\"chains\":[{\"chain_id\":\"main_b07_c0\",\"participant_ids\":[\"gpt-6-luna_main_b07_c0_retailer\",\"gpt-6-luna_main_b07_c0_wholesaler\",\"gpt-6-luna_main_b07_c0_distributor\",\"gpt-6-luna_main_b07_c0_factory\"],\"profiles\":[\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[5,3,3,2,8,2,5,8,3,5,2,1,0,1,1,5,8,6,8,5,6,8,3,8],\"probe_order\":[\"x09\",\"x13\",\"x11\",\"x05\",\"x08\",\"x00\",\"x07\",\"x03\",\"x10\",\"x06\",\"x01\",\"x14\",\"x12\",\"x04\",\"x15\",\"x02\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b05_c1\",\"participant_ids\":[\"gpt-6-luna_main_b05_c1_retailer\",\"gpt-6-luna_main_b05_c1_wholesaler\",\"gpt-6-luna_main_b05_c1_distributor\",\"gpt-6-luna_main_b05_c1_factory\"],\"profiles\":[\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[6,0,4,3,0,6,8,5,6,2,6,6,1,1,1,8,5,6,3,1,2,3,3,8],\"probe_order\":[\"x12\",\"x00\",\"x05\",\"x08\",\"x09\",\"x11\",\"x10\",\"x07\",\"x01\",\"x06\",\"x02\",\"x14\",\"x03\",\"x04\",\"x13\",\"x15\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b03_c1\",\"participant_ids\":[\"gpt-6-luna_main_b03_c1_retailer\",\"gpt-6-luna_main_b03_c1_wholesaler\",\"gpt-6-luna_main_b03_c1_distributor\",\"gpt-6-luna_main_b03_c1_factory\"],\"profiles\":[\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[1,3,1,6,1,4,4,5,4,0,7,4,2,8,2,8,0,6,2,2,3,3,0,8],\"probe_order\":[\"x01\",\"x11\",\"x03\",\"x13\",\"x09\",\"x12\",\"x04\",\"x07\",\"x14\",\"x05\",\"x00\",\"x15\",\"x08\",\"x06\",\"x10\",\"x02\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b02_c0\",\"participant_ids\":[\"gpt-6-luna_main_b02_c0_retailer\",\"gpt-6-luna_main_b02_c0_wholesaler\",\"gpt-6-luna_main_b02_c0_distributor\",\"gpt-6-luna_main_b02_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[8,3,8,8,3,1,5,8,4,7,8,1,4,7,3,6,7,2,1,1,6,7,4,2],\"probe_order\":[\"x15\",\"x11\",\"x01\",\"x06\",\"x10\",\"x07\",\"x00\",\"x02\",\"x12\",\"x13\",\"x14\",\"x03\",\"x09\",\"x05\",\"x04\",\"x08\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b09_c1\",\"participant_ids\":[\"gpt-6-luna_main_b09_c1_retailer\",\"gpt-6-luna_main_b09_c1_wholesaler\",\"gpt-6-luna_main_b09_c1_distributor\",\"gpt-6-luna_main_b09_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[4,7,3,7,4,8,4,2,7,5,6,3,2,5,1,7,3,3,5,1,5,5,0,1],\"probe_order\":[\"x15\",\"x06\",\"x04\",\"x13\",\"x07\",\"x03\",\"x10\",\"x09\",\"x00\",\"x05\",\"x12\",\"x01\",\"x02\",\"x11\",\"x14\",\"x08\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b01_c0\",\"participant_ids\":[\"gpt-6-luna_main_b01_c0_retailer\",\"gpt-6-luna_main_b01_c0_wholesaler\",\"gpt-6-luna_main_b01_c0_distributor\",\"gpt-6-luna_main_b01_c0_factory\"],\"profiles\":[\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[8,4,6,6,3,3,4,7,3,6,5,4,1,4,2,2,8,8,1,7,7,4,3,8],\"probe_order\":[\"x05\",\"x03\",\"x02\",\"x09\",\"x08\",\"x12\",\"x11\",\"x04\",\"x00\",\"x06\",\"x01\",\"x15\",\"x07\",\"x14\",\"x10\",\"x13\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b07_c1\",\"participant_ids\":[\"gpt-6-luna_main_b07_c1_retailer\",\"gpt-6-luna_main_b07_c1_wholesaler\",\"gpt-6-luna_main_b07_c1_distributor\",\"gpt-6-luna_main_b07_c1_factory\"],\"profiles\":[\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[5,3,3,2,8,2,5,8,3,5,2,1,0,1,1,5,8,6,8,5,6,8,3,8],\"probe_order\":[\"x09\",\"x13\",\"x11\",\"x05\",\"x08\",\"x00\",\"x07\",\"x03\",\"x10\",\"x06\",\"x01\",\"x14\",\"x12\",\"x04\",\"x15\",\"x02\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b00_c0\",\"participant_ids\":[\"gpt-6-luna_main_b00_c0_retailer\",\"gpt-6-luna_main_b00_c0_wholesaler\",\"gpt-6-luna_main_b00_c0_distributor\",\"gpt-6-luna_main_b00_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\"],\"customer_demand\":[8,8,3,1,8,8,5,0,0,7,3,5,7,7,3,4,7,0,6,3,8,7,5,7],\"probe_order\":[\"x06\",\"x11\",\"x10\",\"x04\",\"x03\",\"x02\",\"x13\",\"x15\",\"x14\",\"x00\",\"x05\",\"x12\",\"x08\",\"x01\",\"x09\",\"x07\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b01_c1\",\"participant_ids\":[\"gpt-6-luna_main_b01_c1_retailer\",\"gpt-6-luna_main_b01_c1_wholesaler\",\"gpt-6-luna_main_b01_c1_distributor\",\"gpt-6-luna_main_b01_c1_factory\"],\"profiles\":[\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[8,4,6,6,3,3,4,7,3,6,5,4,1,4,2,2,8,8,1,7,7,4,3,8],\"probe_order\":[\"x05\",\"x03\",\"x02\",\"x09\",\"x08\",\"x12\",\"x11\",\"x04\",\"x00\",\"x06\",\"x01\",\"x15\",\"x07\",\"x14\",\"x10\",\"x13\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b04_c1\",\"participant_ids\":[\"gpt-6-luna_main_b04_c1_retailer\",\"gpt-6-luna_main_b04_c1_wholesaler\",\"gpt-6-luna_main_b04_c1_distributor\",\"gpt-6-luna_main_b04_c1_factory\"],\"profiles\":[\"Organized and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\"],\"customer_demand\":[4,4,5,6,8,7,8,4,1,1,0,4,3,5,1,1,7,1,2,2,8,4,1,2],\"probe_order\":[\"x08\",\"x14\",\"x02\",\"x09\",\"x01\",\"x12\",\"x03\",\"x07\",\"x04\",\"x00\",\"x13\",\"x15\",\"x11\",\"x06\",\"x05\",\"x10\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b08_c0\",\"participant_ids\":[\"gpt-6-luna_main_b08_c0_retailer\",\"gpt-6-luna_main_b08_c0_wholesaler\",\"gpt-6-luna_main_b08_c0_distributor\",\"gpt-6-luna_main_b08_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[2,5,7,4,7,1,6,8,5,2,4,5,8,6,4,3,4,2,0,5,4,7,0,4],\"probe_order\":[\"x09\",\"x10\",\"x12\",\"x15\",\"x05\",\"x11\",\"x01\",\"x07\",\"x00\",\"x14\",\"x06\",\"x03\",\"x02\",\"x04\",\"x13\",\"x08\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b02_c1\",\"participant_ids\":[\"gpt-6-luna_main_b02_c1_retailer\",\"gpt-6-luna_main_b02_c1_wholesaler\",\"gpt-6-luna_main_b02_c1_distributor\",\"gpt-6-luna_main_b02_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[8,3,8,8,3,1,5,8,4,7,8,1,4,7,3,6,7,2,1,1,6,7,4,2],\"probe_order\":[\"x15\",\"x11\",\"x01\",\"x06\",\"x10\",\"x07\",\"x00\",\"x02\",\"x12\",\"x13\",\"x14\",\"x03\",\"x09\",\"x05\",\"x04\",\"x08\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b08_c1\",\"participant_ids\":[\"gpt-6-luna_main_b08_c1_retailer\",\"gpt-6-luna_main_b08_c1_wholesaler\",\"gpt-6-luna_main_b08_c1_distributor\",\"gpt-6-luna_main_b08_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[2,5,7,4,7,1,6,8,5,2,4,5,8,6,4,3,4,2,0,5,4,7,0,4],\"probe_order\":[\"x09\",\"x10\",\"x12\",\"x15\",\"x05\",\"x11\",\"x01\",\"x07\",\"x00\",\"x14\",\"x06\",\"x03\",\"x02\",\"x04\",\"x13\",\"x08\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b00_c1\",\"participant_ids\":[\"gpt-6-luna_main_b00_c1_retailer\",\"gpt-6-luna_main_b00_c1_wholesaler\",\"gpt-6-luna_main_b00_c1_distributor\",\"gpt-6-luna_main_b00_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\"],\"customer_demand\":[8,8,3,1,8,8,5,0,0,7,3,5,7,7,3,4,7,0,6,3,8,7,5,7],\"probe_order\":[\"x06\",\"x11\",\"x10\",\"x04\",\"x03\",\"x02\",\"x13\",\"x15\",\"x14\",\"x00\",\"x05\",\"x12\",\"x08\",\"x01\",\"x09\",\"x07\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b06_c0\",\"participant_ids\":[\"gpt-6-luna_main_b06_c0_retailer\",\"gpt-6-luna_main_b06_c0_wholesaler\",\"gpt-6-luna_main_b06_c0_distributor\",\"gpt-6-luna_main_b06_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[1,5,5,5,5,2,5,7,8,2,0,6,4,2,3,0,8,0,1,1,7,0,7,2],\"probe_order\":[\"x05\",\"x02\",\"x03\",\"x11\",\"x06\",\"x00\",\"x15\",\"x09\",\"x14\",\"x08\",\"x01\",\"x04\",\"x10\",\"x12\",\"x07\",\"x13\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b05_c0\",\"participant_ids\":[\"gpt-6-luna_main_b05_c0_retailer\",\"gpt-6-luna_main_b05_c0_wholesaler\",\"gpt-6-luna_main_b05_c0_distributor\",\"gpt-6-luna_main_b05_c0_factory\"],\"profiles\":[\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[6,0,4,3,0,6,8,5,6,2,6,6,1,1,1,8,5,6,3,1,2,3,3,8],\"probe_order\":[\"x12\",\"x00\",\"x05\",\"x08\",\"x09\",\"x11\",\"x10\",\"x07\",\"x01\",\"x06\",\"x02\",\"x14\",\"x03\",\"x04\",\"x13\",\"x15\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b09_c0\",\"participant_ids\":[\"gpt-6-luna_main_b09_c0_retailer\",\"gpt-6-luna_main_b09_c0_wholesaler\",\"gpt-6-luna_main_b09_c0_distributor\",\"gpt-6-luna_main_b09_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[4,7,3,7,4,8,4,2,7,5,6,3,2,5,1,7,3,3,5,1,5,5,0,1],\"probe_order\":[\"x15\",\"x06\",\"x04\",\"x13\",\"x07\",\"x03\",\"x10\",\"x09\",\"x00\",\"x05\",\"x12\",\"x01\",\"x02\",\"x11\",\"x14\",\"x08\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b03_c0\",\"participant_ids\":[\"gpt-6-luna_main_b03_c0_retailer\",\"gpt-6-luna_main_b03_c0_wholesaler\",\"gpt-6-luna_main_b03_c0_distributor\",\"gpt-6-luna_main_b03_c0_factory\"],\"profiles\":[\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[1,3,1,6,1,4,4,5,4,0,7,4,2,8,2,8,0,6,2,2,3,3,0,8],\"probe_order\":[\"x01\",\"x11\",\"x03\",\"x13\",\"x09\",\"x12\",\"x04\",\"x07\",\"x14\",\"x05\",\"x00\",\"x15\",\"x08\",\"x06\",\"x10\",\"x02\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b06_c1\",\"participant_ids\":[\"gpt-6-luna_main_b06_c1_retailer\",\"gpt-6-luna_main_b06_c1_wholesaler\",\"gpt-6-luna_main_b06_c1_distributor\",\"gpt-6-luna_main_b06_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[1,5,5,5,5,2,5,7,8,2,0,6,4,2,3,0,8,0,1,1,7,0,7,2],\"probe_order\":[\"x05\",\"x02\",\"x03\",\"x11\",\"x06\",\"x00\",\"x15\",\"x09\",\"x14\",\"x08\",\"x01\",\"x04\",\"x10\",\"x12\",\"x07\",\"x13\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b04_c0\",\"participant_ids\":[\"gpt-6-luna_main_b04_c0_retailer\",\"gpt-6-luna_main_b04_c0_wholesaler\",\"gpt-6-luna_main_b04_c0_distributor\",\"gpt-6-luna_main_b04_c0_factory\"],\"profiles\":[\"Organized and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\"],\"customer_demand\":[4,4,5,6,8,7,8,4,1,1,0,4,3,5,1,1,7,1,2,2,8,4,1,2],\"probe_order\":[\"x08\",\"x14\",\"x02\",\"x09\",\"x01\",\"x12\",\"x03\",\"x07\",\"x04\",\"x00\",\"x13\",\"x15\",\"x11\",\"x06\",\"x05\",\"x10\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"}],\"role_order\":[\"retailer\",\"wholesaler\",\"distributor\",\"factory\"]}\n\n\nSTATE-TRACKING CHECK\nKeep physical inventory, backlog and outstanding orders as three separate\nquantities for each role. Initialize inventory=[12,12,12,12], backlog=[0,0,0,0],\noutstanding=[12,12,12,12], next upstream incoming orders=[4,4,4], and delivery\nqueues=[[4,4],[4,4],[4,4],[4,4,4]], with the next receipt first. Each week:\n(1) Remove the first entry from EACH delivery queue; add those receipts to\ninventory and subtract them from outstanding.\n(2) Incoming demand is [customer demand, prior retailer order, prior wholesaler\norder, prior distributor order], using the initial upstream incoming orders in week 1.\n(3) For EACH role compute owed=old_backlog+incoming_demand,\nshipment=min(inventory,owed), inventory=inventory-shipment,\nbacklog=owed-shipment. Complete these calculations for all four roles.\n(4) Append each upstream role's shipment to its downstream role's delivery queue.\n(5) Record any requested checkpoint now: these four inventory values are\nremaining physical stock, not outstanding orders or pipeline.\n(6) Choose the four orders; add them to outstanding, set next week's upstream\nincoming orders to the first three orders, and append the factory's production\norder to its own delivery queue. Repeat using the updated state.\nA new order does not add physical stock today. Calculate checkpoints from the\nfull preceding ledger and submitted orders; do not substitute typical inventory\nvalues. This is physical bookkeeping only and prescribes no ordering strategy.\n"
+      }
+    ],
+    "reasoning": {
+      "effort": "medium"
+    },
+    "max_output_tokens": 32768,
+    "service_tier": "default",
+    "store": false,
+    "text": {
+      "format": {
+        "type": "json_schema",
+        "name": "beer_chain",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "schema_version": {
+              "type": "string",
+              "enum": [
+                "batched-pressure-chain-v1"
+              ]
+            },
+            "study_id": {
+              "type": "string",
+              "enum": [
+                "pressure_api_c04ef16c05dd826c"
+              ]
+            },
+            "task_id": {
+              "type": "string",
+              "enum": [
+                "gpt-6-luna_main"
+              ]
+            },
+            "rules": {
+              "type": "object",
+              "properties": {
+                "backlog_includes_current_unfilled_demand": {
+                  "type": "boolean"
+                },
+                "factory_order_week_7_arrival_week": {
+                  "type": "integer"
+                },
+                "three_week_backlog_cost": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "backlog_includes_current_unfilled_demand",
+                "factory_order_week_7_arrival_week",
+                "three_week_backlog_cost"
+              ],
+              "additionalProperties": false
+            },
+            "chains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "chain_id": {
+                    "type": "string",
+                    "enum": [
+                      "main_b07_c0",
+                      "main_b05_c1",
+                      "main_b03_c1",
+                      "main_b02_c0",
+                      "main_b09_c1",
+                      "main_b01_c0",
+                      "main_b07_c1",
+                      "main_b00_c0",
+                      "main_b01_c1",
+                      "main_b04_c1",
+                      "main_b08_c0",
+                      "main_b02_c1",
+                      "main_b08_c1",
+                      "main_b00_c1",
+                      "main_b06_c0",
+                      "main_b05_c0",
+                      "main_b09_c0",
+                      "main_b03_c0",
+                      "main_b06_c1",
+                      "main_b04_c0"
+                    ]
+                  },
+                  "orders": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    "minItems": 24,
+                    "maxItems": 24
+                  },
+                  "probes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "probe_id": {
+                          "type": "string",
+                          "enum": [
+                            "x00",
+                            "x01",
+                            "x02",
+                            "x03",
+                            "x04",
+                            "x05",
+                            "x06",
+                            "x07",
+                            "x08",
+                            "x09",
+                            "x10",
+                            "x11",
+                            "x12",
+                            "x13",
+                            "x14",
+                            "x15"
+                          ]
+                        },
+                        "order": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "probe_id",
+                        "order"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 16,
+                    "maxItems": 16
+                  },
+                  "inventory_checkpoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "week": {
+                          "type": "integer",
+                          "enum": [
+                            1,
+                            12,
+                            24
+                          ]
+                        },
+                        "inventories": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "minItems": 4,
+                          "maxItems": 4
+                        }
+                      },
+                      "required": [
+                        "week",
+                        "inventories"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "chain_id",
+                  "orders",
+                  "probes",
+                  "inventory_checkpoints"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 20,
+              "maxItems": 20
+            },
+            "complete": {
+              "type": "boolean",
+              "enum": [
+                true
+              ]
+            }
+          },
+          "required": [
+            "schema_version",
+            "study_id",
+            "task_id",
+            "rules",
+            "chains",
+            "complete"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "payload_sha256": "04128fc4446bd37e164cc638d2fa6194feb9ef13c8f54426e7882e870a009793",
+  "started": "2026-10-21T04:31:59.632096+00:00",
+  "status": "invalid",
+  "http_status": 200,
+  "response_file": "gpt-6-luna_main_attempt1.response.txt",
+  "response_sha256": "fb89e46c5465d81dbed5734fbd877d9c606418b5305b242e4147e9def15082b4",
+  "credentials_redacted": false,
+  "usage": {
+    "input_tokens": 8005,
+    "cached_input_tokens": 0,
+    "output_tokens": 10963,
+    "reasoning_tokens": 2396
+  },
+  "response": {
+    "id": "resp_0368ff84fdbf4ac2016ad840411a6487d19978b326afafdeb9",
+    "object": "response",
+    "created_at": 1792557121,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "billing": {
+      "payer": "developer"
+    },
+    "completed_at": 1792557228,
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 32768,
+    "max_tool_calls": null,
+    "model": "gpt-6-luna",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0368ff84fdbf4ac2016ad84042281087d18e2d5c895de16840",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq2ECscex1K8uL91KoVHiaxCGqUGqzSx4sSSUSNojVX6JlmolK0dplDhlvWlZ4z2U_Fhm4y4SG4XVzOaXixzG4O4UWbFdi567Ec90hecp4nzRF713puaMNk1HMXZP167HFeLMuJFfGcksShx2zrrU-nPTwceb0LpahmP-fS9yXDJziMhYerQfnNagboWqfE4S8ghsjY6N1lteCg6muWePxvGNw7IUc5YVqtP16DRuHYx7CUqhvMntdNOMiN6j9lsCJpoN7lqTGhoGIP8-w1TgCrMqggO3cAkCBf1NaVp0OsGWkHU44khUcyBFd4MOUJhBuRJT9jpyqkCVX6W4dnkVSHeeEB_jN333-e8J37ViupMywAhBY6a5nmg0ppWUrg3DPYZFh2ikt0NTfNbzooRJER2A15WXCi1WKCVHCI0KqmzUFXoNM3UCdMZDCguo8NhDyvZqaxvisFgVJJz7Gfn0vVasl3fLCHKP1ODERHL7Jg5_PSzWn0iUfhGpv7FECOM_STMvQ2arQnmr7vEoItl9I1hF5WyBEGLwB6stbU8Wu-9BYTVIQAHpQBL04tXlNbME-mfe614RDLw-VyucJ7Vj5fQG550AZix5XVvk9nK-U3R5qDbLYG8TAKmoTR6-IafqG6cYNQWvMY8d_sH9wgT7xbthxfkMGFtBAqkUF_im-X7Jr7hPdoqcr87pXLU7LhA22OQ-CvfOO7p24hhwqDTJGngnO2jPVPa0Uf7ajJ5_LA9M6i5E2QYC4QCRouLZ-U-wMMp5Ep2UHA30zLg6zkB6nQUQADyp9KCqY7CLQxLwaDHGpvLMCyrcljCusEFULidADzP4gDvlQzsQbtcm6TkIeOtxrtVXMcGR1qTig8sMHs2BTa1sDXstG_hx3qPTWQY7YpvzvLnLrbwUf0Yn66iVyQqy2zjbgxVLqaonCTyGWogSYKsUPN7852suVIU6hHiMeZSKpBWud07qALvsJM2Be21_KztsxX7papA-N8QVw-hJIuVn_oYs_O3vHPI5rUq-rgKoDGV1DTPlVKv_sEsjLf2rIVXQV7jzostGE5IclyznwIDv0nkWTvWtEOo4CsSRsGWpmcYrNFFl1TQdj_Y5_xkGyEnGHuyI3qevit9O3isVC5eBBanxUY2W05pH6BGxLNnFIeidsuJ8c8k9LeVwvzpjCoTAEy4jh-2yEUi74qRe8PgGpGa_QbPlVKnX2umMCFFX_VZADVf0mJenpVyusA5AZCJDQxQD630uOEscvgWA2XQgWd58oTQJdfpkT1tTVGyTtZ-qxSh0dtRm_ckBMXiQ6Mom29CYO-lTw7YW7N9r-rtGvd8Ag-BHn7GNIeU9qVP5KQnEKytetisgwjQU4Xl057m9hjQpCKG--h-7KeTmvQyGrU82U5huu7cR7EXIyBqTfxG9Q1Ph8K6nDiZsRWJxuHPppqK7NtVDI1fFOxzofrJUuSdaA6EfYKp7hG5tEJufb9NPtG8WF6-r74PEfip-nkrtBEI8VR1UZ2V7S1IGDoIsGnTeo61qu6DaVG_X_529oFsHZF7ajjhVfan8NVpjWE4V-T_myGgfCn7WAxDus78Ji0mOromhoLRZdvY5wFxsx4ZoYTEmULok3zjvQBxbZ96ENBuYQqd_X2i_uaTOG6n29aOLqygsAE39yTv7Y9kRexcLbFLSzUne2_GTMl5bhyXkVfsMadlZr4I4dvZknChrIzQSgZdtrUxHU9Fx6ieUArTjV1xGaYch7jubhklLKuiuoAdKBGsyah9i6FK3QXrQIaLfKS7EXR5QwKSlm5klLOJpOlX-PNCe3O-whZ0LNu0GtDr8SFR-iL1TF217v2FhInBwbmWRNxXQ7hfUwKj9xG8yMgBfWospPRn8nDX6PzLaHmIztFF1c_yPGpn8uZEXsN0WEntoaEO5MgjtIScxhEuVz4oRrBHWbmQp2FHo5wW40J27itfZl8395sS6rDFgtAzhZlW8GLvpXm5JXNakwEfwDG18E1h-lIXm173vGMnWcuxxzna9-K1ZdPgC6X31AIPkqRv-5wigoWpQJ-zvoQGdoQRD3Dlw3JOPBCdpUuutqPe49LAx80rgZm8q5rzfYdY0kJo3uTN_1oohAPQpZj7-yJvuCLCwBR7JnlNjMZT3uSYwW_CX226qghRiivyyQFFlCdontPAvHjP4YkOUzxahD8RaiA78zaAlu8OxGY9CF68-vHEJvpky8LIv06Z41V6SZaG9_Egp4Sec4keN69bjJKiuUloT4H9HISL7fWGPQ5ga7goM5OSS2ldwz6MwCuLmWH5GQpKGy7Xb0mxU4I-hX7Blr6SWNYyWgxLlqlGvcRy5-_vzMqjGTs_x7AUMnR0XpsiDIFBnx5Yps7nY08AYh3QF3Tipa0qFkhAoMHbGGJtPvdQV28BcoP9GodYy8tiA7ytJ7pa9xvDwr4RhbdDfiZh6gLn1YoN3afBcGPLaCvkIagOx1upbNril9g9uyHVD6ZxCPyQXGevewtBlNN3di4xarp_4rTdMonhAgSqv-3P2TVfEc4kT8829xigVyIT9JPp_Y_kIYj38wvzYVygiWI7yOZ025ZzY95zibAFWGDcdZmCb6MDGSqJlyiWigZofoOl9yrbK4uT-_jDN1CB1PvbSFPG2U4KLugLYtNpOdEImzZG64wtRs2rY4uWXVQpN334CDCAOfplGGpebjiIw8PP83QTCz7YG9i-hFGAbZc61nONfyWzl26u1Q9zMESTRs6n41kiemEbtp5NUGigUT7gQmFQXb_1UCY46kaC-MTKLF20vO-AmH8HeZk7YvpfaOrj8XvHZf3dpXDeHcdhAfnW2xaPONmloR5La3I47AMRPsRhAfTmyZtjGGGu0lNmCiTWmjHNaun5-Hld8jTYF98Tkl2NMEpR99gDN290s_9mcOzIqNYN1lXzp-yLhRQc4J3QQvAqVQGuJ71kEPI-SC_Xt569-HHbSDBtvDMZWsN3L_27flzkXM-fdH-IRMf57ya_hsd9fgU5XrYcPpBL2o0KiD3IRvIV0JIRZY2WpS14s3PylBfWmKnJJYVEQ3Z3PHEIMu9Qas1-sNc2Iw6nuCLw2fY9Nim1fgp_IYOB5CXY7Tb8PaEjbhqmuCsLzHt-OKD4cnU3Tka_h0m1fPMx8UY7Zvv4aal1hLikeZiFGf_bzAN6eVFCktRzQyRRCgRVjZ3pm2jyESsZoRieiM6h7wMVQGQnaUjUK4J3ZcUjzndFZUHURAlDL-G6msJswlM11jWeB1qva7zeqSQkkAkGmeQPqlNgQpsPFYIULlMgkAw38QIb-48cximf6F-6bVk5QcdGKlZ-IL9azuaQVLBbyQ2Hch2I57LUEgZPdoctER79IXHI0qMosjXmDeEwJRdngqP_K1WvcUYo7W3I5XlzzWloV3K5nUK6kcTW6ikmGcd8Cy4Om3k0Rt2GAN0swpEEcvbNQuRzP0_wi2JsTosLYiqgRrCvOAq8mMAEzYywgLrF8FChYdhttVcPJi223dddxoJSnITVF49L8hr5eSE29-QhG45oxwrlFTts7u0cvKjgz9g-lc0urpFpqvGgv6wR6LEvQGr-4iS9WVK0PFZmzow2NDyQ890Ln8jn6QV5r2nKwrsORzDPoR8plpLHQUro0qO221s5jlamkC1qHZPV8JUTXZfuPBoip1Oj6zeMWzjNREKvWcjYjibLh7x0don4sFxTE0CV8SdHu1NLoiCLN3dh11Vi1o1ulrX6L3_22zbJuCKVwjPSft7PukkvdL7HqvW-sjP-rc1eS4Ij955POtd5hcWnsi3vlF-s31M7BnVGFNLC697sFlE-uwH8-NstC-iIqOXWoESiX5vcbls2snF4PV3BYfAxh0u_E6RLZoBJa-kK3D0GcFDd8Q1gX7R3dSN4jzUxVWHAstvEFjtO5gCq0R4kUPDyG1kmPUEi5LIq0w7cTNJ199SD0iJFSSKQ5KGBQIlu6k75bi8FWvZ4Ko3Z_CMwlLE7NbFvPCD4YjsZMdd3UsmCuqGikOxTIJ6LCP1drPM7ah7Asz1RLifzcRkg1bt-JjfZvsFUDAT9qUBWGa-m4U5_TsBNNA14OX_2BIswBiEa7AeFNzf6NbDEFg_QA3TzLunNNry2EZhcBK20UYO1V5cDqPcK80ARqBwGBGjNONpQ_hLn7N5CTgJjtpOi09N9uHnpZLwK6dGabxKXRTtZid557IDtrqyVB6b9rIqIYOYOGqwC3nhssp3QnkfC_vn8By6Ur95druQfyv-W7sqbHAHFIO4spBs-q-zWfYyTYp3K2U3BTxBJZGj1we7q3L8xlZtQc3zenktCL6QUP4KI2LvG_OOWfyIv7-5IeWClkXse9hKHdKU9-jeGU3PdGqIYGYv_FuFK72t_URV0PpGJGP4vrkJt4qRfsKlVdgybITYuV3h16hKqYL9xJljHLeKB17EzgfYYlWxx5iRO32fRePzVRFfL7X21Z34e-s9ijO488DAFGUYAaXEVSW41Wjei9-mt6pYNAn5ktW7gV5Rk1KDE_YpnWJmwn8YbO4zrhB6aXR_6sa3axWaOIUkPMTTHIRneU0sM0sO2LTDXO3LlX0gi3i0QLydRqwoNJ1YQzVJrnWV-nXtUoq256XWOhv6_s_68ntrOVA7V6URvQBo6itBkzkXB2PCeEM2NsvoH3i8JzLMAs9ToL1Ech6c1T0U6czoInFSzneWSyfynyfye792gfdXT8fn-f_PK24cIirlW6gfEW2giX7cl5Noz1F-NWsXwhDU6Nbh0Klgn-qBu9g5Gkf0c9uSotxiQ8S549xIROBfCQN2gUwTPpF40WvVJZoTFubMzkQnBGnMQk8XufswNi79ulTTNLpZV1HIdr_04CkRBcG6qsJS4KI8ORKgWHvH619KPEyngS-a6w_4uKrEj2G-cika1UkWM9qlMDJbgt3n82zpjHiib4N8D25UDUQElHcgGP8ZvZtk_lnupAygvCp5sXQxBKG4sVS6BOAbMnU2x_6C9otZVt4yMeEo0cQvNOtRPmeIPaY7jYkrGlHrv9OsSdn2v-fiqMbP5Ek1p7p-ftdoIXqy7brq6a-wmEjed2yaNEMSdZgaeP7qBO0Ouhv365AmwH5_JODr1JhZE3O8ruChrZPNwoONdqe22FLpy4w0Puwy78OQtk7IWUcvQXH7p9AVKNyCWSr9X9yPs0nmPdIK9vVQdFVoEQFvZXApyfS8AiDWmJnXZU_0TsZvFqvDxDFfUsRppF3rPc4Gpu1ednpy1msY-vOUWq7H6PgusYknZiam5BB6oWoh-fSXfNy2yhgs-4VLzk2WoCRZGZYK96X-iWiEY3FYZpRmp6kaUeGB9yIhUMyAxFc0Yvl5BTjCqzEmBvZ-2SaXHvopfFfi3BKZJ6zK0h1cRAYQpO2NYpfzojKzIsNBWNipTByX9VijZdnWyEHIct4plI3UokSBZCi_79MzVDNOwcQXec28PElBpocT4WCTzNZaUix08fQSPtOeZIIMatJKZQxHOvY8zaGy5HOrJ04QaqYrfWbC3UcEOGRxPPUv4JOnvo23Swwg4z5f3wnWLo_26BUV1BfQ7mih2lZr1S2Z-g54a7c2Uv_Mf3jZZP-WVkMq5zl8vtzV1LYzf5-UE1I-oUwxlHLnkWMsKasMtW6YYdN0Pz2W48BkIJaRwe2WIAODkD3iYe-uKy-swzMpmhJ-W9PDg4Gf0wpV9WSgVDuku7DGKMtZX7XAmrkAp9vrDZEELKxbGntAlimj4IFtSQFkmtC181frBRhCG1kV0W-YDd6RHkCp4dqFpOgeMtZLS_RzTFU_bMWp3pq9D4KG0sNKi60f5lB96frAjtw00LVDolulSKWEL6laKAspf51UxX92cVkXgXlH68h8p1Hw3BrpLZBCGoRJ71yJUqCrt_oksDb6jbobwembHxElgV8PRxGSHCzwSPG6Y1q50LOpqkbuP2Tv6l-luyftmqOhbJIan9IbUQDR9nOJ4FWvEy6PQKhATThunP40bjK16_Yi9Yr4La1kCdq5PzFTDRUL5Ew-NO3wTib5howEvCOigoBFp_o5YgO_tURidX9371PwD13UkqMXVsqfGazSpR2iVrqeYE5jNgVf2NMHXYkkfS7dwqitSBNMhh4WaZpcN59ynUQxnOFlkjDIUqOBC2HYRYe9cOvKJFe-OCAHuCESnjn6WfbOMI2s3QPpZhyEIm09WQQing22MKCbICw3CB4tKv-zB3_kojx66S9pItyVCtKdw9Wx64UjvKsgluAzfmLtfI24tGP2bhdH6Zgd2_pJSisKCAQh1e3Xi-uJE5eny-7t20o5IKOC_E60k9jufSRyIDPW57PJq5rI3z6sOqtSHQPHKQHtwaBAeIeEq_C8gV80nfB4QMR-Ws2s72FXxea37RzNLzJpsEXAQacOOAZFRCqMP_xmpr_fIC-A52V7suNImmjFwP6-UI8P0aH8vEppiViTyivOCdTohAFBuXlXYznitFnV5-IQBYuLRhmBYWRz7bjKKw8eO_jvLbVnmyqNiiLaCO3q_0GmQFuUxxdU2yk5LxN21JBFEJCoSMfnmB6RyvXJT80KTU02Stace0uufmLw6UbVZvE9WHI2jWrVtNsXxw0c1QMna1xrkTfkIl89ravtTyiJT7SC17ynUAyDXtooo2J1NcuUizNYFIN4Vay_gZeGOyPxL1YYWkpyWa507qmqWhQLWz9tdvJG53ebMXeOVj1dIp1IS-xK_CHbmJnxCy0wph3XiQA5Tp1UkNZ7-Cov2IFMGuTNc-18LyTEcfPRSj1pPrOxHOHly_VyRWiin7kR2sAR_ikwNSquVW33_dJt3P5YT63MJron2uHYXYLBYkldv-fOLl2UbvNlWmrAe4XPnrnVh0CHBYCMH_LIMLYsGEuweffTDyG9DTC6q6lzWxApX-cvLXYLE_iLKvUFWq2fX-D2AbllntrfzZyhUZfhV5twb6-pyiIAi_tL8f0xn7YXJgCzkCUaO7KTfHmaDahRIFLgdRFZCtAKbI57i6aGxIXOKCOt1ADYqdUmzCgZGK3gdo4j87Cuw8U5AGEWKio2MiViaTU0QUACetHw_K7BOwfeWCCLoOYXJ6LNV9u7q3uAx9r_gMtQsd1UF6XBwqCg894ddyD8tdEyGCXti9FpPcF1PvyK_7DfGZ7nZf5c4EAWyXMXeqTVTdaXhiACm0LWa8lT50eGZQWj24SP07eXkhZ00FZqm9gbpr581Fl1epSsWGqbcW4qoA1UbQc3nj-05wQq6YRk5ms2Aesl783W70hwRk02LQvbrrXJsbs22MQW301pzzs2FVpJ44Ch1f5gz-QSRDfUbhubU3l8AgeQzFTdxUuVBYBPZdIyTS4YzmMwYzT1W4iHqHMXkitMYbxta8kH4yAiHeK1A_DUrb44dT2O_Y3XBJjuNwITrWRZDz7rEmhDnsQx6xiva-Z7JJRW8oAKmJb3qGcPKMbQBjh4OcFkOes99C-lElcVFOJck47BnGrMqMOOQVOJkouecr5mzbZS10DLoZBMr9wNgiQhmy59xF5hU8sg25uUMumbgF8o-X8eDfNEyMTfC3_xIVhb0Ea7ZKlrACYqly4FtOP9OFf87w7MjSt7qC9MRQ8ND8gMHUFqNsRzze2cjxklAfkmWfQ6XENEYfpTOKuKUkwKnnl2E1cLttCJCGaopU-0flYFH-jjdRJhq8C7rmn5i6JOs8pScT13mT1CyNV-gCwSQJ-0uWMlKhoJ0VxpRUyz1E6Jx64BBQ7C-VbqxSq1h6PHE0I83_zDtHVApnxP3z_gcQ3qPUtpbKgGjKUwUzY5i6dmGC5lXi-nRP-suAa3XtkA2iaRjzHXHTIyU0zFPIOfGhGh3EgCKcbV5K6XKiRWoTMYgzMQNzSZne6MwLkW0zwCSnClrRZcCH-ZVzBSYlVB16vjJVrI7cHtsz13hPlqQhB1_Ju1OxyhLUGelO6dl5EG16O4WHTDUszmcJyp4fr1hBVAAk8_6HCWfnkiAUe0-11ih6W7pdl8DELSbwJ23pCyjSlBNFRiahqYw8BS1hGJfWBaK56Rrqxn0vuZkkkGyV18l2lpn2WcF7EdnrjPdC_2EeP-Lzh4NONEg==",
+        "summary": []
+      },
+      {
+        "id": "rs_0368ff84fdbf4ac2016ad8404a132887d1b782552b71019056",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq2ECsccIpwnifBtEh9Dh8TaTv43j-4XcUZHuCFQqmLam80QuZbbMR7B0TIQf0k0Vume8xPHXFI7HzDDullH-6qge7qeMlVI8zYAqajByPAjRgqcPERIUbENndMPsNh5cal4wLK_BCX4qG4z1WRC33hgASUKSqeK3PH3jfLWvoyi7A6HcdN-rxO1BBfzSFtKyGKrUP97v42RcxDVqx2xeBozkOMiA41K3kGX4M-HskD_373AuQ4M_ULPgV3fL3EkrJFNM5-N2IXY1ch-8945_WoOadAdTjVbJRPZ1fzR9XAQeZRQL5vgr4afArVRQFfr-YhFGT2eXE9_6WBeS80bMw2Rg6cbkWmOxp2t2BkgXJ_h1BMpJB9DmG6gk8XqLQPAH8aIxklXgc16dArEN_aGngqKjvOxtpWYPoCkAQ2sMG8bm5OeY90eRs6YJkNAm4_MkkJaNmJzmvYiOcHEAXlFX7k0SqPPy9d6bmqtQpMDMKE93FHDXuaTq2opAE0hdtOTtP-gJnD1TC5eaoLvWTncosBvlPwEvvEmd1UH77erbvLTIRuoLPyXlxmssZhT-nJqFUCisu68PMsSl3vLE2jkEMpGZOY54DQS2EkWw873C8cT0ZI_xpbflFONNP-9kpYM2Caj175XTtIzlrAKU2340-r8RuwTkkJ2P_ionGYzK_XfQ99nsU91B0uOBDb0EuJ2zmso91KP2yz3rW1VhcexIPlrVZVzXHib4GQrWDnnoE-8IqlPJbBk8B7c4A6RspdbYNZeJg4jgD6kd0nRqIj571iRmHgY0tgLprz1CwcxoIA4zw0LWDMOCu4R8LWGSsiCBcWd1WOCFviMX94FwGXl8n7G2qvFP4GKrefol-T-J9jcb9mR1x-BGDVoQD3vNlPUdhASoYt0uoszXJpmDNEtGvfZg_gXjLCs1XdoJtzICuSMYJTDLsrqL964yVy4LY-URhqYoNNb_qrbSrVmnDcSuHupPPWO_tln_7zcjaeWcAThGpNF83B7vL5qpPbJA43Vqts7-LN0S46WxjkemKrbjMzP4_7bbEV06zsE8_lUQDMSlmuKGRP5rCKtVv25nNdcYbM0dzOchV_ySGvOZ8CRLCYaM7z96jTSEdi0MFFTbka0iyFoAoetZAGL_JzHzRS-M3zbUdQCGJiZh51L4YKOLardHJ1CkE-nm6wZLNTK0FZ4HwQ8_xtxpXTm5lcp7YxRU4Q7-XjCZvu8mRZ1F0NpZVUJqlPWxrXNjyrFax8zh25zxTXrVWK5Tgny-xPF0o7s_jYyd5f-UWG8gwTLQilkHLyjrYm6bMgf0Vwp5_USAfcqMpZbFLnlCWCYX6skBWBBIs-gso-OM0QtRa7uwRHlFzz3YevWRsu0q07zqhl99sq1dnrTMtaAE5iQMsqJlXN_ayfdIRhQAcxvSzjCpObKGdWoYW4RSXWfTf8xvWUUMDTtU20gZon8wB1wdu-kfg4syTH1JdPLBIupOY2xGiqtHOsIaydQ94oL1v5L_BcH-h5eSiTLwije8b29Gn3PA8mjoxjiKdU-9ZpFnJ-QjNkj4yvGC93VbsFm3k-kXGFZFkk24iQEyjZOXtXyUkoNA0iDviUvMFqRnLxfXlSxG3_GS_4HhaSYvtj52BpEXfXx_TQGjrWy30PjveN0T2FyNs19UdteOQbM7uxHlzup2ufxnDtbR9EQ44Y0vMhiNZEzWVRYMwjkeDvlcPNXuRKIFu1q7NemsVfED4axxPzjx91Qmh4SaCZoNuN7ZiPvN9qVu2ZLbIXEw42I5HpGY-Bnm3sPvvLb4DL0E4COSTPusXWf3-PLSmuCDNi2jiTSd5_dOSVMN3QC65L0D-8cKq7POyX-vWS04RCrfgYrVmU_Sll0gmaScjLYWiNVxzjx2IO5y6tGfjyLzdC6cHzbLrao8OiGoAx1llL2wxz6STOlEsAq5Yi_G5RAQG74ZTRuPULfUCih3xQMC3NWaGj9eOI82izBKgQdDwTCA_sg47nQ6etf-_F9_O9To-h903hNBV8Fh_AhsuPXDaCfZLS7gcGAmPr5nl15_uFrpJFAIKOJ4uJ7feB6r9GaI7lrP_BXDjGdKyqh2a0YW1d6kgd-ip6o7_eGSJbkZKHiKJ5bcjqwOBhPXHpHjjA8XBvCKwbmvRNxMj8J1TcvHdQu9Fl91Cj_qsNhpQxsx8vAnTb3JTCiDYo59xH6k2tkfnQEimQIJ3_9oE2qRBLpLDlmU8zpIr7gWcZkY5Y7xstp8yhpMtyLQBR7hGwTJl8TQ5zauFwB8xU7Pjt5EouekjZjYdPW22IF-VGv6XBipSAzlDr6nYKYdGJZ-hSY96H4Nk-fDU2_Yuo6V1svBwqntkKmXsKeeLw2Hc50NZebGQAg3IEVNlKnkqWvBBwlI6Oz5WX7Wm-mCyUfFfxZZsvgKz1L4MC4cLT4YzHb8xk7iKX9K9WB13w32QnsXvhjFQfleM3e9MMAW2WSu77KsUBpKIvyvYAq8z8OR17AZnbvFBNfL5QolBAnQbzO7ahXFRs-1UtZvTS5GqYKcPJmXnk0v7t8IV5sNZB02OqwWKuF34h72uCYAgHXXmLuMRNbjSltoa5CB1GvAGtH5f3NzLEsQPD_NZYrA8k0oiNU8u1PKsMg6yWCe_HOZgz7p6YXP63QRihbRwVcFj1eSLXfT5cAYadZzDXTWovYp5yelHINjvb5bYqrsdC7-5_r-ERtlfebFUQDCaXa9qmJcW5SAVN56x8hb_rm32wzyocQ2QIyOPSOwvHdXbzcU5M8m9vSE33qgLzOPuaCteNI9o4n4qQVGXMXRMHfGaJOZiyaLwWgxCK_qtbQ6GqhhCQ9U_wW0zBbrI3woBWtEByZ0LAmOEefC0ZJKRQtZsxDS8rqWV5m8R6bUUZE90hcwqD66vi1232Jt6GOT9Jrlc_SSHB7tTxJHl70pVIjEa-nl2IeLbnYlh4fKBoE8-TG5vEVkKBMkRX8xvUYo7RvR6Ms9AiWQZaHN_6VJIqP6AxWw_sM12I-GOJhxrN0GD2a-p0XJYa8B1yu41X11yTPa2N70iefBGClIMhY_bW0sto0FaVC6H1pELHaExgzuV_e89hhH2br2b4LSWNZTvp7j82hQmRyDc85wh47SIfNwwHAlBlQOFcnCZO6LY4OLE3HMJhpOdIHnjDD5a-BtaWmL1LtwHQxM9Jg976EMl0JXnk6RbaS3zp2vQaPKsUgd24vjT7-SjvjVwEt6HvkRsLj3IsK91QwhRgu2sV4M8XQRQYm7OcctNPWRbXr0Cfq9BTFwe1N96asg_x7t2RH8evJn729q38b1s1CvVa24EL2WzvXaKzDlmPa8qF_96_hYwE5i6avw2NwPTpd2OFCHAqLlEhpqxrCYCwKrB4RGMAtI9hdztXG7BWN-CX_GCSyqtvQwJ-ISEKPj2JGS-QSy210EWGEScBRsNxbbzet7RDFszjWgF4cmHHQ8bqQPmNmbrTml3l5AzSnjFJbRN1D1dnnNSHvCIhZmGtMyLfMIbrJznbtCa4FLTrYBywGeqlP0Bvk-gJcOlWuldEqiIYkIYgGltdsHQeswRyJxvcZs3a15Hv5wBcVZErlKAS8aPF2KojnZscoZjStdD-w1atNJigkHOJdP4rHU-2s03ycru-H-KqF0iz_PGhnAFVKtTHLLb8Nb4-EY5cSsBod5amT6ZQWv3-DEWnjL7U95D7e5m4KilRuoKCaWXkG16IkFyJbNKrgDIQpf07Hzgeci-oVV_EiOQdUTKEVokQOBQriWgAJTsBqOiISmuUIRz6NR7NKeUznYtThvGDWAnLYcHQpWJ1RmvFQ7yB2kyoyC3BNC5SZaDdl5saOcYFzoGRIAXiHUDGxgoBRt-KnPQspIBvoh5x3ESUMf9Tf89DjzfQiNpuI6THanHlamOCY9icpYct011PXRnhHENbjzpqXLUy0xv_mqi5Bv8grUDS5o1ba3r3SdTk8zctI343UgUxLu22DMxG4zaddfr9SERDTCfufjJT5mxbvxMEk-1PNM14_9xSulEv47bzMDAdXg0sQ05zsPXG_fGV1E0Vnzlj6wW62jBOfMgz_WWbzrm_c3t9_XzMMJhbKSG9aXJavaKopUd0xh6rVNu_jvpM-40aRleU91LfKCNDfu6QUCu0omuHquT4BYZrzwYzECzwmrjmruhTdur_DiZic2UK3rZ1LrAvQAIvSb_eeSx6WfVTQ4krHuz4A6G2X1HWAxWiHfuY3b1MWJjtEWYTg44jSt4r-SfOI6TMwGyD-c8UQ5ZhThnXyehfQybSoFJR2wFjM7WCoLyd_J-TjpfS1UqvQxxmAZMM0LEKSMwXzm6UAIJMW_BkFum4l-qtHOk_HP5mA1v3_zDIjyr0khUGNjGEEMzn8PIPmNTHbRiCaSrZVs1J31SEp_wt-sr_NiHm_BgNHlMZ6BYypS0AankC-k9q_s68MlShrB0EE1iSCq9m-2xvZz4uo3LdRjU8wP97Jg0qXpcvMFp_awtPdKal1DKsiCF1VycHmcpy3cjoRKRSTZPBamIqKfsRESwcwl-grzjCA-DdZhNF6wQXEgAQ0O8Skz12iA_Tul-ck6EdxBgZrrmT2hRpUU5gs7tCuR4fca0i6VmdR6vNQ2Z6QmPuXWUaHrVhZiNYa6b_fOkIecTYcPRaYfWJ_ohQrhKi4q4BQQ4HEpSDQLsnqJz97Ed-y0993N6UZZ_IsMbLYJEfDmjTkq723_4Rd9TFpQcLb8jnOymwVjBh87xHcI8I-0Vi9oePu9Yj8K54r_nAxDW7Tb6TKz5jdU0x0QBmhqMw_WCEEe6L2WduyQQn46dKXKhujTp3laKaRDjVle5LSlJMuPQu4tPQ3CcDeTVYuNd5gp70oIHMS6_fRZkvQAVdutvHKT_XBhy8mrdaKiLmnCI758_9OzwYhjigzm33K1iAoeoiLFAZZYNabPa6WjgBUMhqF3STAexmUx6LqM1f2CE2tecrwpKp-2E-TCETXlMWqXHCdW7zENzhWVqeSsY8FKzWPqe2cg0gUJTFhJ3pb9I-1mqyQ0NoMqGwaP8BGG7dISoNbPQccCFQhmeyIokBPorjvEKZEiwWwy8QHo3IAUzMa5ERRLPbyoQB-tu8YcUSmcpN1AxAzA7avWVxfW5DTJrKwwWuayOAGSpco6UjOv3OJVI0rgZueuj1PyZao5tsTQu--sUPexgmYqhtHMKPM6WYOJyYHj_ijra6e18JgX8m2CjzFttbUb7lMZaKy4z10iSt4HY5WEO1VjJ48d2FN8J8EudBXR4zqoHsfiHMH920zTgRgcgKT71jiQLnd81Md5vQh2C2AvE5RP3JQ643sN77tptfxw7ps6OOuzApCex4JTTak8JmbhKJUxLfEj1rawO-FrARNvMLGyUiALL1Fd4qprJ6BSBvbaz0IO1SEPFlOBj1Tl2FFTxvBdypMMMlVGvJnQyKoyDulOvaVhtZ9Kss_AYY8qaSVKzkoQvYSlOvUw9OHElJRqjycUMvovOHa7vA_QtkO7SLPEXh8LwOLDDEJgCbz0NHpkPFJD59ylydS55Rb63zY5TkQQwqGGptPVgTsoFvkdfiG9WKb7uvrjbkjg2TmAUYrPiqyToJ0aoqIFwBAPoFnVLBK2bgnXOQehWvTQbtVcAVOv-d9jx5Wo0XsPAZVcY6zSc3Nfo7HHhmQPW8CFu7NTEpupyPhsZf-VI0DjoIJ02AWTZeeKAH20oA1_gn0XXqKuJrZLC8IKHD87tyDaIbufjj7JvnlYaNIo0JzgIvZm6JVZONIWuRaFK1zsv57MdbLF_vEBsXYGhjbZGprIoMDOkr3nAr3rR5aEOVxpN8pAcP0DwtVyj5WMb5tPbL8vJwb5RfDMixPLLPoyQ8SPuW1-jO6x9v03mMvK3sRmk471NMQCymhg3z536DT6HZdMZUnJ_cGZMf27ocLzkRCbIme5dDAPI1F0z-3_30V35EklChFskqLmZvfi34ThOTykSTpC0DPXgv36dT1lF4I0CU7vgyLMbjwrxh-JojjCVJJiGmMPC7SqbEhZmsOfVbkPy_qkZ5eoYBv9YFH7WWUqCuF6NZO8BPOSWqZ0OxonnvnQZJ-T6obANGF_Wbdba6XT3mkjzaPswU4Ht_Kz3D2BuLOEiLH0a8-qgAJI4I7iTEZixtK5xBKCnxGoJ2zxC6q6UlnJxEJPjTJjclRhtDrmuFI9hfAwCFCcDHRFQYtpJ4vvYqqHqiG7GYm4km-WC7yxGxoNVh_VQKW3Ekhri8TRtqnnRmIbaHGICltTkCgR3I-A3kjhab-dxy_DaIkGTMcPpGVObf7aDDhZL0twCfrO_1CYqrgNm19BH6RT2fjRXJL9Jyvt4Psl6ENbmV66O0QpDkTXSVUVan5hqOfCh8N37JtZeFyEOtmhLzhbv44iSFMIYDO3WtSilzofcGOr744OuQ5BVebO01Hkvui-lh1bPhHJwlVhCC563OVqD4uKtnjSEycfiC5hWmi2pDFg7lt4rMSvXR6wX8ABtTvp-V5V9Xbs4hEuMTplf5-hyPYSxRqMLjaCh_imBGULYAmTjtzHawLIMdKVPZCqugHPnx17CoKmUXyvkXPjcsoPCjTNnOXTzlpBDfDXM8BCWY6iGuSprGZTNfsmcUzeObQjPMWxJDmJFitvJtokMJaxUzXFp1jT-TTblxIJ_CP0HQfkShpg7s85B0anNuPix53WlTAs1LQly4Kk83725nR6H8cfmr7FHWURRvwvO_s3Ox929IvM9EuOjnErkuRvxoIgCp8a_1OYxZdmwX0Yzgj4iUwY3eIeaOgtDBbuP1rA_Ns48DPzDGDVBIbysnf7rPt-yNO5ibClfkG7G44TzeSC8OB_-Jt6EldFpNY4Lx4TbPFORTFZswKgCWdQZmrvyd1M4CWC2___RvsCQpo-PFoWXJXwoK-S5VE8OFGZMQt5KHeRkOfcJmhl9jKkfYoTa7KCFYQkiv5Tfk6bMPdpCxOqzcYb-U_GKoUNDEAmyuwNLdEm7nXnYNqLDq2R-CR6VlTXeoxD6TxwwZwZAfAFxMWZLwG27jwSTNB3xorvcedMo7R-C7L0t2VgQC2XgkUXoD-NK_FNEr_fHdo02glUoHPWhn7DJ_OiW0K7Ff4le85ZdkVIYpKcai-Z6EOBOdmhVQe9YYv3q_v8E_l78amv-CRm3C8OEVB5-BNF8Esh34fBTn6whIuKY8XyEGAQg7SsVembj0LhJA99eNw-wG1dqgJM3Rtwvv-7s9wHeRxOIammCqJDI3qtL2cInB-II_NAqFANSUruXWOlwyCyw7LNAML5YJ4lZSkRl",
+        "summary": []
+      },
+      {
+        "id": "rs_0368ff84fdbf4ac2016ad840515e8087d1a0f698008d7246b8",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq2ECs--Crf_UAPdA2yNQquUktHFt4YPm1HeDawjNNGrvtKgGdh-YzdieO7LPI2gCwZmOA2wexZplxkCE0aSTafr0XjaHFPS1hEVPtYnZWNuBGB9y-C3kwd9nHkOP-7UMtBZJLL_VGqG4dlAHFUIsJX_JwNogyAtjMZFlsk754pHDPvSer7T0i0w9iiDOV0XNrU2ZH_5aa7it5iT7eCJ9RZBZlFUbGnI6Aude6L6SNPNEP504_EOxg76E-1cuEzZDF0HRGgNKP0yeXNMkDUKDuAqhW57cV-Map3QLyVtDQzBzjT-zaH1lPdb3HMBnKQ_gbNLCdM7t9p86Vc93hN8DxgCLOa_7xIWoggpo-RbEj3tzK6zRtLLSHaFh4yn5Hpk-xUetAI0FAyJ1BIGhdKSMgqE2hZdtOVmIBpo88C3AQV7RoxPtqGANxYLu75dU2fvntR2IzVt_aEqZ7Tlf_drRXIfL9DIXGI6kDFpue-_DHnn6Zc3SF8vdRXeGWbFLS1biZXlQFrWPry9r3L4LBTo1FPtH6zX1CH1bqLDeyHtvx0cSzitDnN8mVSaiO_hgTWliIpAOgqZzHLb2BA2AskmUIRv3nULLulKeoklV3Dg4Y_1kR8HU053-Pq2SpAR1Ao5rGKfv2aQzuTuWp7JwYmUrxf7iKczZP8lRf0wlfTmFu8pazyTvrNTCG1z3PLNrEbgeg19ev2V2A5ik-pv4I5yzv19dMn3CYpGOyEqBN9BXVE3Fc2jwieZ3IJNPYRvAzaL3lrb1ENHf7lm4IJ71SI2A_0edLE0dVYNoyr9BavmKngLU42TcSwzlhZYHOFDmFP36wfYLekVWbDBNin0P9AhpBmABD4rItpblzGCYhiO1CMvlESY8u8SlDFKDTDNe9iigkJa3viWNtobFERwQtzbLITpXZu05M2_84lV17elFkqzv3NTb01EdQtmodvDW8waRh1jrW-DWPmHseAmW_OT-EKKfxG6nqBYkMQ3IgiUQb-AjF6ufpZeNWV993zBW4RHn-q78Nuc8ckXFM8PKUwemWd3f0F_VYMcxN9L7P-Fji77Uc7jZhKhHq0GOpS9zPyVAGscb5Az4eeIy6dVIeMXB3G7BpnybkJoRsnSYnjvWGuanoM_zu_v5RobWFcNvZPuGiUBw6afiIzHiQsqHBrlBF3_Y5QLy5zf9Sl2y4Fks839c_wycJPHZFFRZbMfEUkVpkXG6oaIWgHIh5-xwgvaj2r8h0bFjgVFwP6qXh2WKTgyn2k9qtXvSyxVvTFF6EX5mNvHSlc5GLXOIUWsInTDf5HVOE1XSOw7YZUbsKq02rPaQ5FrsBblGB3TH15IiSL64S2fhGDxqgf2uhV9wxQxUY_SBwx9uVU96-2-hHWZ9IA4pWQN9IdyNk7v7lgOTyX-tjMNs7GVinUlcu_esSV3c7ObbtRPiR7j45qdohGclW_ExfY0fKuojn8nk77dm_cC1nnUWXwww3YB6xDbDXAkl7K7VOcbpFOnHJ4tOiYG0IMta0ulJNZMAaIpu1NEXWL_vq5h8pliYB7wLqD9P_tb31bF2fbeECv7PwZbOj9dwEpfCrUqQuMdIpbdP3W4FkuS4dHcbdY1DKwEWUhHelANzrZJvtW2ajzfRPFOre1P3ub1nx8_SLcH3AXlTiDwi9UpIcE6VYUquE3vaYb9c4i-pfo7tmb1jIjmNX8uJ3OF_WniLNhTJacSvXnMIH_tgrOl_5oldMv3PV0sUXurMQklu3BLSGtuimQl1j9HPNjw5c9wfQa3ZgLbBSUEEB13-4nzwNsimCY_nl1-XhXc1F5SAfww4xF2f0CSTHIOUtcjtBf-_0vkR_5byOKifDQRvhccn_LOBvXdEvQ677PHhR_HlgEwDZ3eYTvycQQdDQf2x5YRos3rPC1U6XrD9D4Ego6aPprLtk2VyU5Jvz4MdIAJ3-6Fv3NSkYGgs4dADhspey8qMJ6JqDYJkWGSakDGO_C_N3MYGeH15edYlOaT3gg66GLl2CrJa8y4oVWrDEc8PfPYDzZQ34_JpPMuxj49JGiBfLUjPOd766ZrXuFaFpSIwZ0-ZanChPjPf3JKXSday-2yRtH8s727fWtWQOFs-995nawjnx53gQW6KpjLw5c0Y9qHxAqRnSN-n7Vl73zcEoVn1iLizpvv3kijjFZM43h9OgEQ5TIPTYN76O5R3B2giS50esxXQ3jwCLm02Iym0Zk0Egl9z41XHYzELKdjB-BgAtDKonqb9MEiHxWwCV3_I1omcBurDXoN2BVCsf49Il14AqBUZy0ZyzaYeHzKBpj1PLpTDixWPgi1U1P1ui-WzUTrEkKxaKMQbIXFW90YfwRLJxQcdAVFjP5IUm1zGd-DIfQxulekgVG6X_AVbkzBHdIO0B2lPI1tsjNZ-9A2WRhj5OoHBgB1g1zFbRxylmn8BwPkIDeA2AXDseG_BLC2qBtqAUTydjPpc2bi_1BFWciZ_KRjoA1lw_ggM9_w-Papyh7JfuHwoavljzOeXeT7R4Tu17JoQrYPEQP6YI55sY1uzk0s6kqNPOSaQF0pwt55Hfr7QZ7R-q5NUj4nXy3ktzCsol-fGE2kbueJRD43zpfGA08VffgdnXiq215VUnfY1lPDRG0zNxbMi5ky55RbTSkvEeG1-MGEXo3zoiTuc98FH6JATMwcgRv3L7YZNR690mmSG-UFO_JBk8n94S7b7xQewLK0qSzQyUeKEYwWPIOnF5xDlZTH4SiSJnMbi5bRybDfgDUapwnXKlh1mQN5o0_M9DCYKq08ddn2_5TVrBnZa0G0otjQGpAeoGl82BSQx3M4VQgyqm4dVqQ48BbJi1fOjNMPU0QWLdUS8E-qwMAZoqDzZ58ztO6mtRTzLp6BVaYVcySSzViJx_SL1vzVot77z38VZlhNPM47x6XfVl1jKE9joIMiiTai4CA2JUc1TH1xRDHAEsBbgRcbbj_ZNXFVMRiqo0y2Tg7f5G2Cw3BAS_6fc4tuoyAgrmuipZZ82rl_oDHprY2Y8UzlxoUlk0JGyXNPphCliyxsIL4yNxbtfVjOClHGClHZzgakXpMWb58fJwnnB5EcLf_e0ARztQ2xXCqTYGBQcC6yGrFvtmc4NFUhNLpxsTscW9pgxeNeZMsCY6PyVnMo03M_s7DLYDrUF2DezX9Ayasvubt8ZOxdorEbORUScjY1dtvykAgKe65tldTW1ZBvqxTgom4PXT9pgLR1ZoB4YtUPhpk8y2xCU7UptfPeppt7uj2zq2HIk4cA6Lz889QOQ7_OKnwlI0pWEFmKTfFW2tXjY_QfQLUoJqmfh9x4J5wA6Oh0UmxgrLDeQg2BYZCzPyMwEystKBsY6NXuQOX39SWobyvON5Nu3Xv_EwMjtyaljm2wsQv0DryhpxiOI5q9bCIUwdylpdJaFb6ZSI8J1DTpI_iAr_pUbHFi8MeE0faShdbzrLnwJWzgF1Pr08YRpJBJpJHvKAF9jl7zBokzj25Gen5fXUrQH-6Ysg-E4C7t53cVc6F2Ydp72j0P8T3B0r2QpbJnOleYPFLO5Z-koS7A46fMwojB4iMTcFSbi50Jx5Nf4nxzTWbT0V4oot3CIpaH3Ju3auxFMSbfwImaKBeJVMBoTatpjFJIvCP_IRwjnn2PWrFXpVo8ptMGm0lamOXa_nl4wPWiaxPnOA2MWYVZ0FF8I-Fb5szJ7sCFc--F_Qsuiw2aSNmJccwcZhHLSqtJ7zOa31QqBWr7jClP3ZOORYVqRNlln55UXmAFfgDnfV2c_IFq1AmV0R3FYYO7WQRtBbqY8w-4T3-LRHx7PXkQpnHuosI95BB_0NXIGAJ8ly8SZgBNL9BjXHTaGiGvUrqIeOFAK35e7WAKbM0w2UW2hYiPU8CUrV6RbLBgvB2U4KWBv4dJcNRcb8PC1-whWX-WE1g85fctwVXGSWLXeYujL0x0uvKDQYIp9KQ_C85gJoCeCYCQ83iAubu0fN20eTVFkTPSxK3gJ5xeOx2gTYGX710_IegqToHsw3OpD7EpowH5Gn1r8YqJALgnjHMhYPXnvnLS7ezQosJy59YoEGfOSy3tTAqxQtCI1wQzlkizUoN6nlbYMAwMWWmB_rbF95bR34JIPYLC0pRVQSqCtqrm6_lxfNkzl1NBFX5-s4R96u5dxbCPQk6p3JiS5-J6BHrKfXCU75XKYwvwuGFU5GO--8_Op9oiuNahHcwf2kvQr_QqyF5P9gfHt3YxnnrVE5_k3-trPgrRghXvZsoHGJ7lpPghY-E46Hmf5bIdrYUp-c8K9B_1YeRfXXxRkDYOJXZTXUrY8ZJyliEW_7-reJa0zllDmLvVP_OwwYCWW0c4YZxv1_MsoFyPsfkXhsUUJktXs0abJbTr3JTF0FRQ2ke2Cz_YQhJ3VgRi6xDQ7ie2ByYrWCXyp4TlkMqLSD3VyC_pfJO43OU-ECf8QZou1lwHm_68KWipOuNhbeASb1AfDmHoARzbndh2VoFmP1Cie_UXSkYmCcEEJ5FIubeFZvucDXqQUL5Z2Js2gNRnotCifoVyJ7U6aqmdOVMWnxTimO3gwTzemRQeb1TeqHox1NvjiXpcPlmS_FJRXODpUktzP_TiaHUTMsDc96UUjJc0NNMWnLElHhQIZa3mzUk7cz9Flp_4ygIBYLzOv7K7isRDU_4axs3r3fQCtR2qVtg7m9Kk2sQzl3ZsD5F6Ff5GSYHaM5Fryo13Zt-mPq8au2ESlFXlVAU6BmEdAXUV0fu0u2qpFy0_AE-xxFAJwFwnTehPtqqL7d5sdEXh7jrrSDZxLMNcwu2cK2gXYHVj861rvvts6valXxnoevfcUoEBHoIWw6dLQ_-nu43K-WL3gJ7Wb3SH6x6bK7nuEVtXtw9ZM0XirzfvG0EFLEykFIDc8JoFCKQ72vejkL2LdNUNHla9_EReGVBGQiqOX1ddYlugGg24GB_JbiktnmJyJYENp89hI9jNFfrGKj7BMtO_2T4UmqEOnZyEkvORmn9Ewp4wACsi-KCzRYIepEyZYJncvnS_CIAYa5oudpRJZbhNSgHWOI1zM-9oU3o6V8ZJO0ztAZRAOzp90BwhDcpbJ11NXY-SktbWwelfTHXTSjPcHjXXeJkGXZEDoZ-86hP7tC5c86Q3Z5rp-hr7U5-VmcZpDDmfEfAOwaqOfWHv4X58TcUKTdtxqJTOqB3EatPI2WGj1U2Ntr2tjtOn8PgIFbFbm9oRXS_FvBVSwiHc24sLaifgz-9yf62OKloly_qbcOfFqYmKeHG_POCLfnHpZc4VFnhKQo7px71BXZ9RLLy-j_X-uhY9Ef9RLeQzDtPPsqGMrWfYQpz4erR_PTFHRYqlntF9lVeRN_f0gHaxfFc8EJvWu8vhFciTy352Aw73XtgQxO64egYBdo9LZhTdArkMk8bpI2MggVRK7npTS6VJXH8MCuhCpeiTlHmQ0xMmEtn91fix0AYZkQo73-MV0myKzjEE6aR4mcTezQM8QGDI1VknIRY_OjRI3mzkRLXUpjtLYc-B91eTplDXdLtwFUPOBqsOJaiSUVPfTvmmMX01cXOqJawNglbiGtXoB9Fbu6tnQGl6FzwgGaKv5ZH9ixK0SyWPvhHGDf1ey1IHiWJ45PFbnoWoG-dvfKKzcn6l5JBIDKcVszlG3hZLTDwk_YE-nzhQWIwfPy34Uu3Y1AbNsamXDwSGdETZ8IOm1aAn-ZZFQZ_qU_WGvlNJmjNvVMWjuxilhkPk_k2fGz4ppmd4-bNTgYHOMvCsKmJ27cwemgcnM3bYSc8dmjLp0l9ItUN7PJeW1gTf3gAfboltKbWFPTPwNWywluC2hsDkhtdEO806Zdp2nz0ZVftQB-vZ9AyJczUllZK6dyLClgsbAXlkafSGLNMvJGJF2XugOl-YbXFZyBzYGq_s1E--hWD9Cn32tx9aNwSM3mTXEm90r58KYoi4w1QFItSW-XSwvrRdAlBMaXNZV9k6LMU1oENo1jjzFhMMFjX3YHfRTOdwP3e5j9t4aT5zOp3WRbY1xqg1Iim1C5tG4Gd1MyLE5dKiYEM2waJu4JSCniiFCsk9L39PFgwXVN-YyHkCmwbSRzVza8g5wX6JutuGRljrJBS3Qsgkl_AQbupxA7NgQkVY7yA3xNiaWsSBKh1Tc5Lp61Kqoq6gZn9nu6b9c3jS21SdeNFHLU2JE-sfZrNKhihkESagE6nPNcAk7IMcHYTishK8KCRmtOLt0w57CgawLd4AlD95nYKxlqFYMDmthcJLgLjwOdLGelhwAJt4H1h4Ew0gMAVQKuYCMoR7_A9Sshl_KZ-OIDU_7Aqt8UKOTKa8-0mQU1m3ciTfYPSQ4mGBd932zdphGViqiHdaGgBwEy9v1VIIG9EFlVC7yEcCy4Y4AgdiTu_S7n2ECi87b5Kc3LVY1qhpkQyBypqodf4DXP5veWgxmOhiuLkKwm8USOUos-3ALTwEo8YklaOjZAGdyyPLSBGB-RMRUKSRnPF7U81w_j0GTqNXohiLwuPlrKNBtmnOeRAzzpm54bFXq9eS2PRlftE9lxUOIrEb5KqCVdDtMS7t6BgqL4OCgEViKfgm_8gyycijZAAZHzTvJmCpQ41weAtIUJ2lABUaPfJ5Ni183Hr4Q9YAtIhiRCRHTQmzbLsBJJ63nxZeeuiBHO3Us3HlQ_IodfiazOFpJuxtpMld39ccEKwMlHdL3tr1COTsuhA7aWfa2W6AJ2gnAP76lRRrCnejXaNmAUaM5sb4NeTB8XYCXw4wp8Cu5vCLGGX-jJkCC8JPcZQDxnBmOZ9E3Kl-smrfkkMB9XVE6XObJILn-GtB9QHoB5ChpC2HU9fnlH469aLLtHSStZscQ_17yJ-vVCfUJENryezcmmuiP5OksIuD1g-NQQE7OlkbKSeUSKosmVVz9ePYTPYAQEbBoj4xB2N4vwyjRqpJzveX8YUbQUNgui97D6Sbz-C4WAjr4lb5kELDr2rkajaWylk9O8TOB3jTchryhIdDA6ICzyhduKImVhwDHus61PTKMzwpkfq8jtxBdwRaMXZisx5R4QTg2A7Lf-uaxVT0PcFR0EFWi_-7XSBV7NhEBXL8ZGwyUyJGK-vXjXtXTCC548qcb_vm6w3tgxp8FDZRkQSkaBrFO-S6b21dIdRKsBOeWd40S6DrIpHqjGvRsiUOcZzYEIALsgLO-6WleZP2ZysXG7LjnUfPUqFjLD8458toJp5KFjAh0FUjoiaW3ssfFO9KgdB4auYSdcS9glKgXQ00Q-kq50_00BrfGxLo5ROR7r4WQ1buFogcD-aNegQ4Yu7xQqWXbcCiU2xHO4qnlzKC4Bg82bjnOliZF9ZnHFb2ac0_XsHTvpkATeVrWDdI0e-L7I9K6seRVsQfvJ4GXXNKVJ6dZOiIm8V-Lls2nwTusDhDkXqXVUxPi_8bWSpPjrlHRQUTaSmCKDy5d7bwrqmHkipJ0BOfTccVMHX2tTMukHwair3I1Zeawf6RnCdGXnVv26TZtf_yrGc6P1VQ5C3jlNtzCG6panZfjgECM5IiZvZFCxfW9Ihrr-sH50LhBhlxJ-M5y2EBo5zE6PtR8C_OtrHQKZzOfxnIlURlg-w2Q1R42c1eRVzctIbm0uqGkUdcNlfQ3zO7aqNWP6ItV94HmUp6sA73ttqcE9VDiXn73IyHXkY5fZmnLrOcE0tUaGMB5tj8DCjun2vcTsr2jNhgJtDk6IXBZgmsT0pVldEO2jbiiE0CMcS1SXkZ7AWQ_Pt6uqVWYVmus3QUp0vEA5wRRt_g8KsoeHj2yk1TMYJMuIkoPgEQFBwfldNcb3BWFbDdgwX1DHaTdXJp5HLyqwPifpXi9Gdcs80zHX4-1MTk3yaR7qhgXau4wfOK46JSml7N3goYVKtbYHueKwjYgUUULRDOspCdmLvKIUuX0shK3HJW5G1Z1_u7rt_3drXmszFF6_lj4NIBm7Yy9ugeY5laX8ohb11D-_34yD3aSD5ZFdoYnlN7BmykwLUzIUPltIamtrbbT-dPphSHWmftJVxwBvSqILcPIRHXB447EfK0JTGzX1M7NHH1fBJYpM2XKHeJSCJRBNOynm7-1huK50bmB7_ukFd4CL1MbEK_d66UlHBUkK0_Kd42LTJVVoyZhA41VTCv7IQUqrV1FB_VqTuEtB5YSExfZ9zVKxyUl1yum30VkOAT5kWeWYMOxlmq0fqVywgeuGvRGRwCPVb4trtysYpNbpXUjYr0U_0QrfX99ADsM1Cqxoik-20XcLcgGpmWPAK1jkLna1YHkD4qiV9lrmMWftyOzgM-p7kDw62uiKXJrrF8AH-XmHJIc_U4_cqgbVMW-esxzWldksODCmt8mAlvt7apeAVlnBIIe_0Cg3jSI7fKqjC8U4WqzE6aMQEg0MY-XZCzm2HNhuTtlZVdP0MM2vHrr-s3LU4Q2es307KIOZyWMcJDcNONHWs_OMe6U_",
+        "summary": []
+      },
+      {
+        "id": "rs_0368ff84fdbf4ac2016ad840594ec087d1b9aebae3e60caaf5",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq2ECsBAy4uDKbwT-AdbNyCAcudJ6Hh9bPII2N5KQ1mvUYPyKISuX73dL_bP9GrdYOmRJSlq_85t0OM_vs_AoTXqL8kLrplCnOhkznEVH-OrWCVbRFv9JoMEELQujqYo7XIsVlqKrYFY4nujvSgPHzNJVTEXeH9KG0UFddHkSd18JX8afKZ3SsC0eTTHAcKxsEaRzZg6rhqL-kT757BS0qvkGChxgFia-gME1WYnUO5MdDCXtfVResfZ5Axj4x5EgWibkmKFJSROGtUGRZD6R7SDK0ZJK2GcNZDXDz-ZyzEqPus2xdYwLMYd4NWS-rEpy56mLWGbB8BxGdngkEG0CuBAFj12mb_fjcQadYuDoszPvuQElqbj_NRe9zmQbGn5Di1aJi6YblZbq_CZLaityFCYjHHQhaswhHbCwwDyX_nWYHC8_y2PnRmfnSC8gT1EoczlLT30G-1ZCOixDXIxt3i6EN3IivSfvTHDcqVCqQD41qLz6snUjhKGm1nFtrDgDamITQFq9V-q-_YY9Sig0lSnBP1Xk_ijO4EUsVb6RZqhpWT8yq5JMdLYJF0EtOqjn3OP_obdNqsD3hkFILCH5_B3MDtE-PNjX7TTFn9q5q1CsEjHtdPpHobPhu354nsE7FoqrJE1pzczNYOKwX0LHQ5zcthRSa-SDGQiM4Dl6oqS2KI7_SAkgikguKQlEadde9fZhFg7-dN3-hRVWk6r0wMrxpwDNrRkMlMoDIB30xAcctdvsOxjOmCj5D8iXezJQ2I3cONN3aolBfi2dlpzv8IaNQiA3Xc9sbH5NXorpf0hIMb3tQmgxpYen142J8eF6PlMAdAdJYsNiH-MKQSIb1zPbw_RMSd0lfFIk8TneAw6hbzgtcHHNWZ2rFsHNYuYJa3fIPvgYNhDPmbnHv_rlLrkpSXHt7vxRotHXCv3KFeTqmcwfy0vGf8lbcm97iYRzwl5l9e4haqOFAzG-OvXzXhAhDjStWiUP3joagaQQshmCTADhOXQeKrnmyF85u5ESNmSWC1glKlmX8_b3Ck1ljOq15UXS2GroqHlVQvK0v19A0g8Y6QkNIPHBs-VfAjOz3H5DsmAdpEiAv7Zpq5VaPIgucoIrUhtJb6rd1Gi7pDQFFGMLYRP2TQVExPETq_2-iNUxOYoKpU6VwKm0JK6-QGCp4xIJFBc2rKsXxgpVMFFnTqm59h-0niDsnGOtMoC8Y9oNPQEufGLCnnKC3UXitsCL0xWIZap0EbSWO9u2_erTbcC9VlaMvPwOlT9CW-gyGc6yPWi5sG6E3k3PpZ3aUD_HecjTtaLKvwcH1byK_Ic_XIodDndMyFr2QKX5lcT10YWPa-_fIR_mRZnBC9lYsxme7CdXj8JeU0Xs75rkpEtehQNqS9xNKjRb9Y_ITxCjsdjmPTYJLaS7hmRiaTfR_KO6p4sA5vjV4d1_BdjO5lzbqsuDMIJ_E6qiuW-QoYLV5cQvHPuyYnZZ-OFf-qDg3LD6eg2wIbCR82bGxZ_aZr7SmeWKzKikBx1peT89s0671H7c_Hlo-aQop-O-FyNO7gdqVY3HXYQO5-aMOeNciUcO6nCteRkOMfCwQvV233kQ2Lov-e0oEAO0eKbvwr9WaI5lkjDwKKcKUbiz94PIWLKZ_vWvTt0V_3w-b9R2_fGqTYGTZjy3G5COBZC9g45HYJTuyUHRL61i32iskhG3t_PekTpJaWw4aNXaF87tltGiPFf6gXQHl28JeNAc0LwvOFm-fClyWVsy56WgMdQ0FvaywsCwDdG9c8X8O7gEq6o7gTbDH8ysElm5z3bQL2nyaH3gmO1phioV_BSEYe93VHn08K2PqZrk8zHLfHuRv1ZfuwhT4WgLwIQ240zV44KoS0eNA0XF9r3Cdsji9itBxXXrDcIaiW2zqvSfeJa51Zs94PRyO6R6g29n5bzo7_bYZj61uHUqC_gWnE68recLVcx683QtxleYo_wbt9HuVRI8lYS81Px1n3iqI5NJlvDGlRL0LUJhHDZBG03ZrbYJimoUlde-LTYNaW2vjfQh7TgEiK0Oq02V4kFfVMU1GlfFRuBr5CuDzvFihH2olUEOsSdHKlWMtxKskOpwOVqZWgESHE9SLwemYcVDNJvNTpmfv4aRlgb6WeHQ0d9AHE4y-RB8qMdKxiXiZNXzxjaHKd3yb6eaq5a9Ge8xSP7XsCrKI6-En48-rWVUY0lsPmpAtDXDLDHhzONzxXjac1hvPfKsDrf3kwVecD4s6yA-IBblU647WG6apRnLCc62ABBuwgMiVGjToJv5UUkXcXOsLjyiFf7chSyObCWVzTo8UW0W5LgZEKHC1Tlju3f6O2XxN0DlPx3K_LwXWyQZFSj1rJ-SzRH-wVN8oF6_hJCKCge09zdIM6-0vbsjtDbTdVaXtRcoh9Eh5tJquH92EZ4Tl2tcp6lqmDmdAgy5ZY9Vc_uIKw8V37A4jwKPSAxORlI8aZ6gNF-7R2zyEwZEXgODOKcKA9DYQjq8Nr7r1TffDhkgrabngqKD2SrlKvB2N8YrZAfX7TS2bF1MR2lnrECK0Nm19ARfjIqWadD-Kd0DFc1UV7qiZ-Da9IvgGq5P4XW92b-cKY3VfH8o5i37bF6NOQxIk4xUeZUFs4M3zZjNsapfGMVGpGn16Ll_CWs7Djp4vNeam5MDXCJqtfMRZxpm-sexLsOnXqZZigKQj9pDOGG0tYifwgbWeNbuxIvL_6oC5oxowmeYtYdWzPqcSyb3BizERXuqVBw2wWldxnPVv4YQ7plmaEq5Jq7ldXX1fj4ar4kKgzEpmWnvqnFmm4MtPLaKhg-eA8NXQ5MeDiCb7wMV280SOBPzyo0VG6mm0blPmOWboUWmbiXUok8Dr9JKhW1pP5XormNbEQWGgYyxuGGZe-wVBi-XnV00VkjhufoV9C90jNHxA7JY_Rf04njZKluehhc0zbKyvAqv6JN3gTjFhPat6Ox-5_U6FX3DibHtes6t6ixMUxjPMV52Ipwsn8w7ySCZ__HObINvyPG5qMIrz-OjsN4a3uF0quIqexQHVwIKSvykZCi4nND8sc5BWaKEA4P-nAaQpg97o4I_1_T35UAdnEJOt9c8LnZQ7ZGLbhy_u9UK_41eF-rCAJ-hO6iI8mx2BjVHIlw-4PkjswCxqGmS6YZ9iLMFhA8XUwNuuWXFHWCttmcpq8epy_UnmZGzABndHEm7VAL0INbN3gLNNHl-JYCk8fJIsQP5fnUqyMA6TcIEArXAb0-0dBvDHn4zAqob8IUtSbFtIgS0oTDWqr063w9APorFIwXvipkrjb5-rXYvHC89CU2GAKUvfVNQidB750tsvnDIybRzDEJujrIrxA-olxf3Ulb4H2_W5xr-KnLjxigFpGjGWwTNm6lGs6TAtrst5b4P-ptyyHpXt3WWGSBehRNaj0Q6o6IkatJUJKDkGkYTm7E9ojL-58fJj2S3ITpKn-YyW6JdmNGJ2Nzu30rL7TnkdFBmbMVo6XoCJb1WxR3Xi8_fdc1TMvqRnQ3EjcP1B2keOSjxrmsDbFxgbQlagW2z11M7KSRimhLCA08bJWXlLptJeDgiVVmqLtuDdgq0wRs5KKFJjrnqwnnXw3qZpG8APdB79bIXbbUEP18kKacC07eSpUCdIvEta1UnTXn_Ml2KyHGww4IHm7b0-QequMVlOLA8DxmNq78LDiGpzIJS0LLkp3gLSYDqwh8NBAufPy2zMIRk6NFUjULvJDQUl2TP0ExMcBfdSaEvp8vdxgt-oHynikjf0qho2lh34-KUWPMcVA8zG9sUz-LlDYXge7WwLTW2miS10g4JjSYf4qbG3yyU1VvLhvDgkBfjk0mIgnyMmbeSUOKkr4HSpNGNtT7N6l4wb0lOs2VcTJoiZDZwNPqNYPKKcihuXki4GmpgYPotvrJTQbhVg-dnduWmscjME6aUNAWEDLi3gbF79o1qQ1LzWzBF5hWTEjZuh3qC80p1vPrmoLEPQ7O7Qjqb4iIK_09l6OdhuJNSybNt6OHwDS9EYdjIwnj54rLGwHiH38Rj4KWXRy3BArAfvpASWMne0k8vt_VXAY8y5ha_2ulHHdV2qd90qeFX3d_hEzR-NSC1w7yZFzmZszjojUfbJ68DtrQaJreQOtxUzJ8a2_6gMXYScA9wfHJrb-8rBr9enk9I5l6NNfkbsVDeMX5EvJTR7dPcCE_FXVR9wr4BDmuLXtEmjPFaJ42GQ2bOE5G1QC1WnTUCcfFpg8sgF37KXsHCIZCI66l9J7u7b77E4pG-l-iOPdcPXX5WmGQzq_klkY5janL6YNyKKVS6ww3tbA1T3vZpDmryF_ynMOtiB4TUPZF5hZyBJ86VLKq7WDQgcnKK0HDOxVvPq3qDvKeTUK4vNCONrbtPTQC-QE6w2QYShMpjaISPwG-3Fx89KPQsYu6quaKGU4ST9QbdPQFNlkUAT1toZBeTrqHdlaz_4ply0pXCsPtHACx-tBpXVNQ0OqDPyl9bTIK1cNCUoWy2-NVipPCLnqyGzRStXZRetiuUAY5WGgtH_z9hxDgZzYhYxCXMafFc1vu4dK376DWcofIaDL8aO7AzF1CMfCL3yoKtROlLPrBti1f_Dz3WLd-AWtwIhdolKjJRuEL4WdLndU0BhhGVYLn83Getw0jIJwt0bnEN2kJsOO_mIwNagmTfcLeX-5uFK9b5lmWKB3DODArI7tTmPlSKA4QAFxM2A8MijoL250R7nFpNK0W-3H77BLRsHpLPtTA3tDMqrXI7x-TgDWibg_xEeiVPiFCeFOXiuogwd-hJtQrgwY30niFonYuVgQX1T1siyMHcC_3FfnV7sXWVFG4on4BZAFxXAeoEiOij98Xv1Zu4ThlSgVjIUqV8pGaAt7FTgDo9-tXJHdBIfYnHtDDRKfnFuvLYr9ZzoEYNanxM4-KuXFPXXVF11e4772rl6xqR_ENR4ZrasoZ1mqxvp4cQ2J_tgf_1JJUarhBrpWz5yP74EgUeQe5iuxi48NvggfmlnGNizbtVl5F-L3keQPGWBU1s2giLDyHt4Xx10PUVlKCkWXOCPAHRRr98mce1zeevYbWWOaEivd5p2dp7QisVpakHPS1kbYeULk5cQ3cNdRyZrSU47JE1jlfxy-PgWiR237YW7Ux4BJm0lrJCIMvklR2WqHHrmW4hytd7b5NJUCe4WspA1_GJp4gzqItK6Jf_OqPTVpr3ayreEptbZWTSA3j_gNHs9-V8Rud40_7gcMyrcc7IlNWf6ejPrdhfXxeYP62jqvzuAN0t5Ac-mkom8CyKH7HxjmCqW-KwI42U19Q4ylf9k34HKssNX_xJRYg4q8AbHMI7-YAoqcN1sJ4ibnhktaBMNxOW8Je7C_SjEdN2S1uyxstyyQj_kUJphygnROMeIynI1_eIhvfT3AkjvUrJL7o1cSx2E5sWTuWU9TLA86DYvGUVi0RNYXHuZ93K1tydSlUKJ1CD4YXIxy9HyekoRm5nI4CxT1vSGEaciVpI8I9mUjeLB8wKysfFh88qBlj_WNCtDxEQB8Sv8JwXUXrTOQzsPuUwPGm8dzz1baK8XyPR-louvUnuPr1nck8TkSJNuZAyDlTsoJ3uNn8pnbsFGsZd3enbLOojH51ldKdembRnHWD98r8Zh5qCwPvO5r1IJ0Z8qtH5ujcrxaQjwtBBO2OV4CyJGQ_UIByDr_3icOh6Trzd2cNLD7qDZGEsWnmulYbGCl3rrpyUl3GsSrucxqwNHnjX1TeBWg3ZTUt39fNWWMIy0BqMvMTaY32or0cJUa1ZHrcM-TDMAlldwok-NlWYqgfMmA9B5cyXjW1Uclmh1SW2fhtZaqjby_RpoaMUF29bp0Os24bNcfAG0kPP0mPW3X7tAiJa3grpNAQnas1V9cftZMhu9bvX9FwC2AU246PLvSY03cyEulFpLVP2iJ40c5mJ-thQS0TbEQPHrPukYt-MoUHXXUwJpNvficEWPgYpu__-5gNNLORUreq7ysd-jzUYJnnrDGv6O4tAG9UZT1CNdxetTt6dYRB3ZPn7x4W4jpqyq8D_NDsriTurU4fpsSW086nvqtvfc9s7IaLFs9ZhSYtZ5OtTrLCmTD-cXse0MrwH0K_GU3kWa2ay1zyX6WQHcyMNDa3gyKEDeik9tUsRm-tUoKJr6IPXATJ1GnF0g52sm1S53cdusN52kUmAFPv7VBaObLWmGqgkFqySLa_fJUaBOQj36dfakH6jFxh0mKq042p43Od0TxuD5rOklOTZfZF14Nj3aRurS44yWutQJPCaZIP3zvzeplkC_B3BclR3Tv-JVwv1NWpALLxFYS93rCkX-mmgcNRlMNq0s8zPtPGIwGrgWFC84AFemjm9DoJG-Trl2Zikzg7SgvU7CXH3VAWVWeJxNZPNYsMnIoA2bGmegQzBMQ-72dpgJ--kTSPHVZ4ib1sqcnlJfKCxiknvkL9RulPAZXKZjJSL3ElUDeiYaHFi-qvgAJgkoXhZe5SP7o0sdpWhvOTQOY0dPDsgub69kn2rUEYrkjeB2bxBP_cVYhfOgyo94k1Kk7ZoU1WdxkDlLCnoYy2SQLDPkuIjm_n6QvzbS59k5pnhKjvk42xI4zj41z3Hs9npL7oxYhtOezdBfguNPIr1z_10Ud3ThlAFbXyNyy_xGhuC1NEQrYJdPM7ntJNamzOHk7CHYBtl5ZtfyOABSDkeacqm1OauQy8qh9TkyR_qpZeEMDlNaYH4XNTwh3FVa6JTuyAdvSroDDwr7O33H8bJZcxjGygbTw7ITyWadyT08K_Xt",
+        "summary": []
+      },
+      {
+        "id": "rs_0368ff84fdbf4ac2016ad8405fa97087d1bc845188da1fc5f5",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq2ECsjuRHRElve-wVukcqOd52J7kBN8QbD73ehDTwaj0KH26tsf_BTmdlbIJLUyXjur3sqbCvIDxxMp0R2Syi84xk2mUN96W-OZLESMwWYACzOjHGGR6r-0Puy5VBKfepm9HUPV1Q1kUsdxtngKL5dwCTwjdVAoIVVoTcSYVpJAGpKE0m-17uI2yZvZnTiuRjCVnSz1gwvmdQvDAszN-aNDH9SnGMb92ALR29VhIYYpEmI0qh4E89izKdzjg1VA24YwwIvI1Kiihhra20BKgKSGrtsRV4_JCJReNYttx9cie05GGeGChSS57yDtSvU5rwrFwYLUOoZqp3TeX6gvhgIGOr6-YsPytI4eGANgCfj7-kI3LzAjKLCtKkRIAJ-4Am3gBH105ftQuersleMhmAJjWsl4d0uXgNbZisb8cHHbtknBQ4p9HCL5zIz9D4ot0PElpsuhu_fSq3T98azhjc6CBaWayFhDsqyBvnqPb5OwNStUxrxvco79Dy11jP5M1p-2g3kWotbw1dcchJO0S8QAZ9NyTb8vKYRpffpfyLdH1dUuK3uosCb6sQAmXQFcLWsi1U6_OHRR7LmK0a5Aow8gsg9OR6jAbutMoEvM5gi3c3Z6w_KtA5ISktlNvWrecXAy3fF1h5PHrFXe_wP0XPTRXagM8QINFVfF7hRZBWvdTsS2sw6icUUzEORtFXmpg5qSQSSbo_lgBOMWJSvOO0LxcK0-xcDuPnKfWkee4C2kDHloYmt7AmL7yzH-a5UUbq2KOi6uXu-MJq3r6Edyuzr1OopHDXpwtf7P-1oou19ALWltxOmFcGXnb_Dd96lHhD1tHR3eBmxBLJ1hABQ7SdQFpcOKlB1P5POzNYMaLfd3gsa939hyf3YseYYYLeIlnWG475kZmjdgTpy-O2nTNgAxa9JA81vbPXPVvqm16RDtXoXKySznATeAYklOwIewH8ZPBQlzGq2eZS2MiqLPApmpZuMuSWP0_5OGEo1wYhntZkKLXHV2w8GSsxEQSzaVEAfZkfClI4HUmiUNfRE7YlRJcoY6YXKWK9NeDmWYaJPqx2Dhfu5q75gXc2KPyjF1PGqvIq7c6tqBwKr1ofUNmgRnKWppFhaoZaBTcaWDK8rfOtf4SiDKtSQZiAspzrtJ3jF2E8kLKm9AKC6mliF6gqP93OlPas_gx88XxXc5IRRXMuw2QCJTRqSMmhaeUCOwYXNpHpCzMkYf7QpAymYgZieqdGogeSYf7Kek4ShI2oiVdFHtieeeol53GjCn0QKx2cLEPZg2-zv2XKJDUuQiY-FMHPApQDgzod8T7xJhFp4m9hgaN8wIhGexJvOnbURFcbm84RR1qOa16Iz4M2CmW_SPg_tgJ6xWn1Od9asMfgan-HS4tXMFTdO1f5WpWsiiCHik8q-Wht3M1eCSPIO3OsljaX_-E7tqipCsOOl6R4fBEonpFSq4ZkKvp-5jYbBts0VoW5xb0r0goKI1R1FLeemC4J28L0nES80gh4ipak1TsellVnf-x24ufwweA7S_0TiNFAHLlQRaI1uiBuWXaMhwLcBSntQRX6T9mlkro71pcE4rAAv_JEsoZzSOJWab5ms43dweSjIPZ1WX-AUdWnWVYQS6IgbCzXeSqgoxBm-fhZ2ktDzbhidaPrBqmHWhjrqtR43FSxAUiw_X9oYwudJrQacQK81FYlks57u38lGd1G7Uhe8k_W86oVUnYdsthYog3E8i6nmfeEBkWgAgzuf2iVmwZgG6UH-0ADMR-z01YF7wA7_D6N9OHDvu_tFZH-1XFzPEm9qeY72vskw7EDGK_wmHvwZ2pd0mOSgZL0aIcPx8B2ye0W_cVCHzX7RmG5kEMtWwrAI9v2c3cOySZ13ZlBDKAnYdk5A5mLuG9yegtCVLHrrirQ-A5pQVIQlLttISELPaqFEt0CCfxNkkCDHgdchpTKVM5gyba7Xk5h7s45Mc6l-6fTn7SimWtHqa3hVAV_8ZEv5XhmHvp7z_8vbetEZeMv4CqZraRB5egOmfNH-47Aw2ClGrNWkN5o7DKSsWsr-OYwKvJIEm5mTOjZjdapmpSErUZB-Eag7AeGre9XiFXkhd2dxHxZBiljbVdwXStRU0AaPajdUDtdq9P7fb27rVuxZDR4-X3rxb_G_Bc4EbVm2Wtwm-f2BQOqw4vB-x84a41fX5T5voucltm91qFG7njEhV_eVyhz8f5suZ1FKkhAraeQfNd5Y-m4CYN5wK-5Ecml2jQNosKBhDycIa3vUwdhdjY_T-jMDhVjWX99-756Jr9gtFeXBY8KhD_s3kRjcaIVvwn8FxPCSN_Zl7FVyGWgxPNa5qHB1jfHYp34PRHzJSELsHstMIaAf4513JvSfUAXKVOJAQbpDlLvkGk7cnVVsiCQWWlpJZjDMzvuCsccshMxgEjwmspMyJBOmWN5RFTtAxdl9z4YRqFfWDMxGAo6xFv3RyCBicsPWhXP0OagmRXwRg9NfXiL7GF3BagkoFvE0MPzrXyMwgsYN55dDYNFvNI5o6XKkNSTGgrJbsO1a2JtnCpUcx4EndNYiDeqVlReL1OvjHQ4fOb66PaD7ifjE16rXO7u7GKroy64Nez4Wz3u2tVZ8q-Z9ZZkmcRGV9LBcBNiv0QUDjVYOfDLUGflzJm3hznnehgUF5RYcUwBzthgCkRdIMb1uoAElcnXvEqGnaB4p7kqPjMnDhm_SrZMQ3mzKBgT0saqH4tUOS_nMIuqf81-2iCGrNsw9v1yupdccaOvLn31hcmNODBoGLV2wfIk29BilMYhWtmRYynCpgTVqvrB7k1OPh1h6BCElLEpZxHrh0URK_nelyURI-7wrMx5yc00Ywu9gfdPFITIchPcXWvBaB6zpzg2J-K2cwEnVDfdz1PpRYRzn-1NFRSdwUGypYSWhKU3jHLvbIrL2Yt_YeW3MVNUTdNMT2nBLgLowCRKtYXwb-j0whXAkD2ebynIR5DtsS6G2dRxyd2VXJAW2kBwN5zG8r_hfi7bFrUalNkMClON-h400LZYY5yW3gua4-BN1X4bul8mu0S_eA-Nyk_4f83RBUGTo2Vq_ZIMmvY0l_OSBiXbV6ts1kb1a2LFTSF2fBeJzUuO-lUfsbUlCP8u9fkb-MNPlWLs1jVwpB6TJe2hCEw251R-RKVkY8F7URNx6zX1Ot0hRVfc9zNETsxFKjHbrXCleBR33lYxxbW-gwRj-ueJDLnBhQMBJ4JvPJQUkQ06Sq-26yeKTudIHEmkFswQ0oo2fIpG3ogdNMaPLNx5U_JMZitYNVhpN3edLMxhfvJL8naJpv-bfQ_3Rl0Gm4jDH_JAvDxnMNtRLN2qgHsG_UunsKZXaPm4NfBA8lGMqpSJws2WcY81iVkAmywSigBUuxyxZW8PoGwwWJBVA7niSxcoWQ74ccbv7lntMvH8f20SbSAnitwfyz2P7ZwqeFUUiDz9CgffHWx-9hrYt5MIPEuNVLmKw9iMSI9s0gqk-KRb6J0HL0BKPqU40DX5BC9Qc7Q8QZz5wMZcgyFFWMiPzazTNS4BbRErGM3KFQi2_-KezKOzZmGC8xS1GsE1-9NK1jmvt2DcE2yhz22wT0haI2ii3Rox7xHjNl2p-W1ytHtNWuWmtmPGCdd1GKdFGtvrNKT5PTKz0pG9UuZqljBrhk3yJBm67DkEzsGRSNBv4h3f6RsXyKNevX2Jr80-DWG2Kc4Q1ibGk4029YLrk-H39jSpNolRHMJXdraGgJBeJif1E__SHUpe0wrQU7F3TJVjeEadWF7gQc5-VV1DNMPeFzBCNysdK-B1Uo3trlK4yjX8n9DRikgvQFaOYKbn2X-Dibrbs9BCGqYsG-fQvgfVeOiYhKUsnZijLKMztGhnYHFc3y_Q-HiwHZUpU1_kDRVBQCu8Dt5Cu1YlbN9Ut3UtpAAB4H28OUj2booUVsXCeN-iPo-AaLDVddeOHAzHjrtAEDjGNWlQiZrgykSZgFq-C57heX_HwcoOixQ0nWAuPj_PAXs-iNRQw0SeBS2H0C97tp--tpz_xQaF6EczhHZ5-NJatYSChDLkaHHTbcYaSUJ8H3neUq5FH0wuLTRZzgU6l9Jhu30IzPYXcXYSGx1_hIrQU7QietM-ZNMpRsWiEJgx7yT6otCNRMOWGilcQcrLEf0UcYYM9umpchwi-tEc3qstYnyE7SfoX8AdDZ-1QJXELqdtsWE81T48vslE-XyWo9HhBrYs-Gxm6TX7l3WNLMGXxWxcU-a6uuWX5DfUFwSiIuzrFXJ53ICE_-8YWm4k5h6oZAv4obsAxonG675YZX-wuRmG45qeALTjoV_jyWnphXf9Y0VMHzb4LojiArPF_BzvuW0NucW_GXbYjjOnGwUz19L2igpHo-YDRLt-mJLc2CMqKIebCcAbMXvHFAlMfBNAulA9oFSr5adQXPxWCe6Z4XMdMpBdsuz_adp-_LuBa8u4DW43Lzr94eUZIA41ysLkp3RN9qKhmpQscKhfpjIfuWUYGAiHkqnHv-t78Xh2pIafUZInJdk6eHPT0OpYsFJVeygVcEWkW99arGikEWQZ0YC5495MyHI_Ghr3We7s97_3lDKMCzd70QBmUMnJirNMHCRuRavHA14LntrZfT_rj6PQ022skUgErUYTGqy0sxju1mCDCQqEMLjQ8orNak6d0h3W3JVZXzVg_3z2DHhE7eOCEh2_Iz_QmJ26l7KYGjquCprAI8mYDvsXYY1B2BOC2iaYNXB0-NshoYb3XxDKRwCFEAtbIGS1vyx2VkudlX9mhe0wVzMK3NBYlrNpjw9MLYSOjcDcKNlfwhWZXsSj8MlqbbaLmfXBugzLj1HuAShO56hNAiQg6YoXExUwXtau6bNTXz1w3YPX_IGHyDOEelx_75kXbuUgcY1XTLc7tbCL3wKeabDkTTUNHmMrGQrfdIjDyXdC9A8ejySSxrDWA_a7jy9nWyS_uoUN91bHisquMZTCye5fBbHv5Ki8MbFwgXjf",
+        "summary": []
+      },
+      {
+        "id": "msg_0368ff84fdbf4ac2016ad84063d8a087d18af52ad4b531e2b4",
+        "type": "message",
+        "status": "completed",
+        "content": [
+          {
+            "type": "output_text",
+            "annotations": [],
+            "logprobs": [],
+            "text": "{\"schema_version\":\"batched-pressure-chain-v1\",\"study_id\":\"pressure_api_c04ef16c05dd826c\",\"task_id\":\"gpt-6-luna_main\",\"rules\":{\"backlog_includes_current_unfilled_demand\":true,\"factory_order_week_7_arrival_week\":10,\"three_week_backlog_cost\":15},\"chains\":[{\"chain_id\":\"main_b07_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x02\",\"order\":0}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[11,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b05_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[10,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b03_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[15,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b02_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x08\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[8,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b09_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[12,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b01_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x13\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[8,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b07_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x02\",\"order\":0}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[11,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b00_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x07\",\"order\":16}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[8,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b01_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x13\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[8,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b04_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x10\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[12,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b08_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[14,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b02_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x08\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[8,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b08_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[14,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b00_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x07\",\"order\":16}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[8,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b06_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x13\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[15,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b05_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[10,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b09_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[12,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b03_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[15,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b06_c1\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x10\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x13\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[15,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]},{\"chain_id\":\"main_b04_c0\",\"orders\":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"probes\":[{\"probe_id\":\"x08\",\"order\":8},{\"probe_id\":\"x14\",\"order\":8},{\"probe_id\":\"x02\",\"order\":0},{\"probe_id\":\"x09\",\"order\":0},{\"probe_id\":\"x01\",\"order\":8},{\"probe_id\":\"x12\",\"order\":16},{\"probe_id\":\"x03\",\"order\":16},{\"probe_id\":\"x07\",\"order\":16},{\"probe_id\":\"x04\",\"order\":0},{\"probe_id\":\"x00\",\"order\":8},{\"probe_id\":\"x13\",\"order\":8},{\"probe_id\":\"x15\",\"order\":16},{\"probe_id\":\"x11\",\"order\":0},{\"probe_id\":\"x06\",\"order\":8},{\"probe_id\":\"x05\",\"order\":8},{\"probe_id\":\"x10\",\"order\":8}],\"inventory_checkpoints\":[{\"week\":1,\"inventories\":[12,12,12,12]},{\"week\":12,\"inventories\":[0,24,24,16]},{\"week\":24,\"inventories\":[0,24,24,16]}]}],\"complete\":true}"
+          }
+        ],
+        "phase": "final_answer",
+        "role": "assistant"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "json_schema",
+        "description": null,
+        "name": "beer_chain",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "schema_version": {
+              "type": "string",
+              "enum": [
+                "batched-pressure-chain-v1"
+              ]
+            },
+            "study_id": {
+              "type": "string",
+              "enum": [
+                "pressure_api_c04ef16c05dd826c"
+              ]
+            },
+            "task_id": {
+              "type": "string",
+              "enum": [
+                "gpt-6-luna_main"
+              ]
+            },
+            "rules": {
+              "type": "object",
+              "properties": {
+                "backlog_includes_current_unfilled_demand": {
+                  "type": "boolean"
+                },
+                "factory_order_week_7_arrival_week": {
+                  "type": "integer"
+                },
+                "three_week_backlog_cost": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "backlog_includes_current_unfilled_demand",
+                "factory_order_week_7_arrival_week",
+                "three_week_backlog_cost"
+              ],
+              "additionalProperties": false
+            },
+            "chains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "chain_id": {
+                    "type": "string",
+                    "enum": [
+                      "main_b07_c0",
+                      "main_b05_c1",
+                      "main_b03_c1",
+                      "main_b02_c0",
+                      "main_b09_c1",
+                      "main_b01_c0",
+                      "main_b07_c1",
+                      "main_b00_c0",
+                      "main_b01_c1",
+                      "main_b04_c1",
+                      "main_b08_c0",
+                      "main_b02_c1",
+                      "main_b08_c1",
+                      "main_b00_c1",
+                      "main_b06_c0",
+                      "main_b05_c0",
+                      "main_b09_c0",
+                      "main_b03_c0",
+                      "main_b06_c1",
+                      "main_b04_c0"
+                    ]
+                  },
+                  "orders": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    "minItems": 24,
+                    "maxItems": 24
+                  },
+                  "probes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "probe_id": {
+                          "type": "string",
+                          "enum": [
+                            "x00",
+                            "x01",
+                            "x02",
+                            "x03",
+                            "x04",
+                            "x05",
+                            "x06",
+                            "x07",
+                            "x08",
+                            "x09",
+                            "x10",
+                            "x11",
+                            "x12",
+                            "x13",
+                            "x14",
+                            "x15"
+                          ]
+                        },
+                        "order": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "probe_id",
+                        "order"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 16,
+                    "maxItems": 16
+                  },
+                  "inventory_checkpoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "week": {
+                          "type": "integer",
+                          "enum": [
+                            1,
+                            12,
+                            24
+                          ]
+                        },
+                        "inventories": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "minItems": 4,
+                          "maxItems": 4
+                        }
+                      },
+                      "required": [
+                        "week",
+                        "inventories"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "chain_id",
+                  "orders",
+                  "probes",
+                  "inventory_checkpoints"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 20,
+              "maxItems": 20
+            },
+            "complete": {
+              "type": "boolean",
+              "enum": [
+                true
+              ]
+            }
+          },
+          "required": [
+            "schema_version",
+            "study_id",
+            "task_id",
+            "rules",
+            "chains",
+            "complete"
+          ],
+          "additionalProperties": false
+        },
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 8005,
+      "input_tokens_details": {
+        "cache_write_tokens": 8002,
+        "cached_tokens": 0
+      },
+      "output_tokens": 10963,
+      "output_tokens_details": {
+        "reasoning_tokens": 2396
+      },
+      "total_tokens": 18968
+    },
+    "user": null,
+    "metadata": {}
+  },
+  "elapsed_s": 108.36574170899999,
+  "reason": "response_validation",
+  "issues": [
+    "main_b07_c0: Physical inventory readback mismatch at week 12.",
+    "main_b07_c0: Physical inventory readback mismatch at week 24.",
+    "main_b05_c1: Physical inventory readback mismatch at week 12.",
+    "main_b05_c1: Physical inventory readback mismatch at week 24.",
+    "main_b03_c1: Physical inventory readback mismatch at week 12.",
+    "main_b03_c1: Physical inventory readback mismatch at week 24.",
+    "main_b02_c0: Physical inventory readback mismatch at week 12.",
+    "main_b02_c0: Physical inventory readback mismatch at week 24.",
+    "main_b09_c1: Physical inventory readback mismatch at week 12.",
+    "main_b09_c1: Physical inventory readback mismatch at week 24.",
+    "main_b01_c0: Physical inventory readback mismatch at week 12.",
+    "main_b01_c0: Physical inventory readback mismatch at week 24.",
+    "main_b07_c1: Physical inventory readback mismatch at week 12.",
+    "main_b07_c1: Physical inventory readback mismatch at week 24.",
+    "main_b00_c0: Physical inventory readback mismatch at week 12.",
+    "main_b00_c0: Physical inventory readback mismatch at week 24.",
+    "main_b01_c1: Physical inventory readback mismatch at week 12.",
+    "main_b01_c1: Physical inventory readback mismatch at week 24.",
+    "main_b04_c1: Physical inventory readback mismatch at week 12.",
+    "main_b04_c1: Physical inventory readback mismatch at week 24.",
+    "main_b08_c0: Physical inventory readback mismatch at week 12.",
+    "main_b08_c0: Physical inventory readback mismatch at week 24.",
+    "main_b02_c1: Physical inventory readback mismatch at week 12.",
+    "main_b02_c1: Physical inventory readback mismatch at week 24.",
+    "main_b08_c1: Physical inventory readback mismatch at week 12.",
+    "main_b08_c1: Physical inventory readback mismatch at week 24.",
+    "main_b00_c1: Physical inventory readback mismatch at week 12.",
+    "main_b00_c1: Physical inventory readback mismatch at week 24.",
+    "main_b06_c0: Physical inventory readback mismatch at week 12.",
+    "main_b06_c0: Physical inventory readback mismatch at week 24.",
+    "main_b05_c0: Physical inventory readback mismatch at week 12.",
+    "main_b05_c0: Physical inventory readback mismatch at week 24.",
+    "main_b09_c0: Physical inventory readback mismatch at week 12.",
+    "main_b09_c0: Physical inventory readback mismatch at week 24.",
+    "main_b03_c0: Physical inventory readback mismatch at week 12.",
+    "main_b03_c0: Physical inventory readback mismatch at week 24.",
+    "main_b06_c1: Physical inventory readback mismatch at week 12.",
+    "main_b06_c1: Physical inventory readback mismatch at week 24.",
+    "main_b04_c0: Physical inventory readback mismatch at week 12.",
+    "main_b04_c0: Physical inventory readback mismatch at week 24."
+  ]
+}

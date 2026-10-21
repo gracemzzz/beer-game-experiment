@@ -15,9 +15,11 @@ Each experiment has its own hypotheses, prompts, data, analysis, reports and not
 | [Static pressure-prompt development](09_pressure_prompt_development/README.md) | 18 October; bounded isolated-assistant development checks |
 | [10-second / 180-second deadline framing](10_deadline_cohort/README.md) | 18 October; completed user-reported GPT-6 / Pro website sample; separate assistant pilot |
 | [10-second / 60-second education study](11_education_deadline/README.md) | 19–20 October; prepared GPT-6 / Pro plan, assistant preflight, received GPT-6 Astra / extra high effort collection |
-| [New pressure-framing API experiment](12_pressure_framing_api_20261020/README.md) | Four models; 80 fictional testers / 20 chains / 24 decision weeks per model; one joint response per model |
+| [Whole-cohort API feasibility collection](12_pressure_framing_api_20261020/README.md) | Four models; 80 fictional testers / 20 chains / 24 decision weeks per model; one joint response per model; 1/4 accepted mains, zero Sol contrasts |
 
-The historical folders preserve distinct protocols and evidence. The new experiment has its own sample and budget; historical samples are closed.
+| [Weekly-state API experiment](13_weekly_state_api_20261021/README.md) | Four models; 80 fictional testers/model; Python calculates 24 weeks; 104 planned calls; same cumulative $5 ledger as experiment 12 |
+
+The historical folders preserve distinct protocols and evidence. The new experiment has its own sample and shares experiment 12’s original $5 budget; historical samples are closed.
 
 ## Add a future experiment
 

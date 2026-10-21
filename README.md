@@ -4,19 +4,21 @@
 
 | What you want | Open |
 | --- | --- |
-| New four-model API experiment: 80 fictional testers, 20 chains, 24 decision weeks per model | [Experiment 12](experiments/12_pressure_framing_api_20261020/README.md) |
-| Run the new study: four pilot calls + four main calls, shared $5 cap | [Run notebook](experiments/12_pressure_framing_api_20261020/notebooks/RUN_EXPERIMENT.ipynb) |
+| New four-model API experiment: 80 fictional testers, 20 chains, 24 decision weeks per model | [Experiment 13: weekly states](experiments/13_weekly_state_api_20261021/README.md) |
+| Run the new study: 4 pilots + 96 weekly batches + 4 probes, shared $5 cap | [Run notebook](experiments/13_weekly_state_api_20261021/notebooks/RUN_EXPERIMENT.ipynb) |
 | Latest completed Astra education/deadline findings | [Experiment 11 report](experiments/11_education_deadline/reports/website_astra_extra_high/REPORT.md) |
 | Earlier completed 10s/180s deadline study | [Experiment 10 report](experiments/10_deadline_cohort/reports/current/REPORT.md) |
 | All previous studies, their models and results | [Experiment index](experiments/README.md) |
 | Verify old results or understand the reorganization | [Maintenance and compatibility guide](maintenance/README.md) |
 
+The completed [experiment 12](experiments/12_pressure_framing_api_20261020/README.md) accepted only Sol’s main response, with zero H1/H2 contrasts. Experiment 13 addresses the other models’ accounting failures by calculating state in Python. Both studies share the original cumulative $5 budget.
+
 ## Folder structure
 
 ```text
 experiments/
-  01_... through 11_.../     preserved historical studies
-  12_pressure_framing_api_20261020/
+  01_... through 12_.../     preserved previous studies
+  13_weekly_state_api_20261021/
     hypotheses/             hypotheses, protocol and configuration
     prompts/                exact messages and schemas
     data/                   original responses, settings and receipts
