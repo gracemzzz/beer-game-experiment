@@ -15,6 +15,7 @@ from beergame_study.batched_pressure import prepare
 from beergame_study.batched_pressure_api import Runner, estimate
 from beergame_study.batched_pressure_report import build_report
 from beergame_study import batched_pressure_recovery as recovery_study
+from beergame_study import batched_pressure_followup as followup_study
 
 
 def main():
@@ -22,12 +23,14 @@ def main():
     parser.add_argument('--experiment', type=Path, default=ROOT / 'experiments/12_pressure_framing_api_20261020')
     parser.add_argument('--run', type=Path, help='Review/resume a particular frozen run.')
     parser.add_argument('--recovery', type=Path, help='Review/resume a prepared recovery; preserves the original pilot records.')
+    parser.add_argument('--followup', type=Path, help='Review/resume the bounded Claude arithmetic follow-up.')
     parser.add_argument('--api', action='store_true', help='Make paid calls within the authorized shared $5 cap.')
     parser.add_argument('--phase', choices=('pilot', 'main', 'all'), default='all')
     args = parser.parse_args()
-    run = args.recovery.resolve().parent.parent if args.recovery else args.run or prepare(args.experiment)
+    stage = args.followup or args.recovery
+    run = stage.resolve().parent.parent if stage else args.run or prepare(args.experiment)
     print('Run:', run)
-    print(json.dumps(recovery_study.estimate(args.recovery) if args.recovery else estimate(run), indent=2))
+    print(json.dumps(followup_study.estimate(args.followup) if args.followup else recovery_study.estimate(args.recovery) if args.recovery else estimate(run), indent=2))
     keys = {}
     try:
         if args.api:
@@ -41,13 +44,13 @@ def main():
                 print(f"{p['done']}/{p['total']} finished; {p['remaining']} left; "
                       f"{p['accepted']} accepted; {p['failed']} failed; {p['skipped']} blocked; "
                       f"${p['charged_or_reserved_usd']:.4f}/$5", flush=True)
-            runner_type = recovery_study.Runner if args.recovery else Runner
-            runner = runner_type(args.recovery or run, keys, callback=progress)
+            runner_type = followup_study.Runner if args.followup else recovery_study.Runner if args.recovery else Runner
+            runner = runner_type(stage or run, keys, callback=progress)
             asyncio.run(runner.execute(args.phase))
             runner.keys.clear()
     finally:
         keys.clear()
-        exported = build_report(run, recovery=args.recovery)
+        exported = build_report(run, recovery=args.recovery, followup=args.followup)
         print('Report:', exported['report'])
         print('Workbook:', exported['workbook'])
 

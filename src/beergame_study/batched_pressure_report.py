@@ -25,29 +25,32 @@ def _table(rows, columns):
                      + ['| ' + ' | '.join(cell(r.get(c)) for c in columns) + ' |' for r in rows])
 
 
-def build_report(run, *, recovery=None):
+def build_report(run, *, recovery=None, followup=None):
     run = Path(run).resolve()
     experiment = run.parent.parent
     plan = study.loadplan(run)
-    if recovery is None:
+    stage = Path(followup or recovery).resolve() if (followup or recovery) else None
+    if stage is None:
         result = study.analyze(run)
         projections = estimate(run)
         status_path = run / 'api_status.json'
         report_label = run.name
     else:
-        from . import batched_pressure_recovery as recovery_study
-        recovery = Path(recovery).resolve()
-        recovery_manifest = recovery_study.load(recovery)
-        if recovery.parent.parent != run:
-            raise ValueError('Recovery belongs to a different parent run.')
-        result = recovery_study.analyze(recovery)
-        projections = recovery_study.estimate(recovery)
-        status_path = recovery / 'api_status.json'
-        report_label = run.name + '__' + recovery.name
+        if followup:
+            from . import batched_pressure_followup as recovery_study
+        else:
+            from . import batched_pressure_recovery as recovery_study
+        recovery_manifest = recovery_study.load(stage)
+        if stage.parent.parent != run:
+            raise ValueError('Collection stage belongs to a different parent run.')
+        result = recovery_study.analyze(stage)
+        projections = recovery_study.estimate(stage)
+        status_path = stage / 'api_status.json'
+        report_label = run.name + '__' + stage.name
     ledger_path = experiment / 'data' / 'api_budget.json'
     ledger = study.read(ledger_path) if ledger_path.exists() else {'cap_usd': 5, 'attempts': {}}
     status = study.read(status_path) if status_path.exists() else {'tasks': {}, 'returned_models': {}}
-    if recovery is not None:
+    if stage is not None:
         for entry in recovery_manifest['inherited_pilots'].values():
             status.setdefault('returned_models', {}).setdefault(entry['model'], entry['returned_model'])
     attempts = [dict(attempt_id=k, **v) for k, v in ledger['attempts'].items()]
@@ -75,8 +78,18 @@ def build_report(run, *, recovery=None):
     main_responses = sum(r['accepted_main_responses'] for r in result['model_status'])
     pilot_responses = sum(r['accepted_pilot_responses'] for r in result['model_status'])
     link = lambda p: os.path.relpath(p, publication).replace(os.sep, '/')
+    failed = [(key, row) for key, row in status.get('tasks', {}).items()
+              if row.get('status') in ('invalid', 'failed', 'interrupted')]
+    blocked = sum(row.get('status') == 'pilot_blocked' for row in status.get('tasks', {}).values())
+    def failure_reason(row):
+        if any('Physical inventory readback mismatch' in issue for issue in row.get('issues', [])):
+            return 'inventory calculations disagree with the game engine'
+        return str(row.get('reason', row.get('status', 'unknown failure'))).replace('_', ' ')
+    failure_summary = (' **Current failure:** ' + '; '.join(
+        f"{row.get('model', key)}: {failure_reason(row)}" for key, row in failed)
+        + f'. {blocked} main calls blocked.' if failed else '')
     conclusions = [
-        f'1. **Collection:** {main_responses}/4 main responses and {pilot_responses}/4 pilot responses accepted.',
+        f'1. **Collection:** {main_responses}/4 main responses and {pilot_responses}/4 pilot responses accepted.' + failure_summary,
         ('2. **H1/H2 findings:** No main API results have been collected. Software checks do not provide hypothesis evidence.'
          if not available else
          '2. **H1/H2 findings:** ' + '; '.join(
@@ -86,16 +99,24 @@ def build_report(run, *, recovery=None):
         '4. **Statistical independence:** All 20 chains and both conditions share one main response per model. No p-values or inferential confidence intervals are reported.',
         f'5. **Budget:** ${spent:.4f} charged or conservatively reserved out of the authorized $5 total across this experiment, including pilot and retries.',
     ]
-    if recovery is not None:
+    if followup:
+        conclusions.append('6. **Claude follow-up:** Three accepted GPT pilots are reused. One revised Claude pilot is scheduled with medium effort and explicit physical bookkeeping; both earlier Claude failures remain preserved.')
+    elif recovery is not None:
         conclusions.append('6. **Recovery:** Two previously accepted GPT-5.6 pilots are reused. The original GPT-6 inventory failure and Claude token-limit failure remain preserved; recovery changes are recorded separately.')
     settings = (
         'All models use low effort; the same settings apply to both conditions. The pilot cap is 8,192 output tokens and the main cap is 16,384, including hidden reasoning.'
-        if recovery is None else
+        if stage is None else
         'Recovery settings: GPT-6 Luna uses medium effort with 16,384 pilot / 32,768 main output tokens and an explicit accounting algorithm. Claude Haiku keeps adaptive thinking at low effort with 32,768 pilot / 65,536 main output tokens and a concise-completion reminder. Both GPT-5.6 models retain low effort and their original settings. Settings are identical across pressure conditions within each model, but differ across models; model comparisons therefore include settings differences.')
+    if followup:
+        settings = settings.replace('Claude Haiku keeps adaptive thinking at low effort', 'Claude Haiku uses adaptive thinking at medium effort').replace('and a concise-completion reminder', 'and explicit physical queue bookkeeping plus a concise-completion reminder')
     acceptance = (
         'The four pilots must all pass before any main call. An incorrect or incomplete response is retained; no semantic retries, replacement cohorts, clipping or filled-in orders are used. '
-        if recovery is None else
+        if stage is None else
         'All four pilot slots must pass before main collection, including the two inherited accepted pilots. The user-authorized recovery provides one revised generation for each of the two failed pilots. Original failures are retained. Further semantic retries, replacements, clipping and filled-in orders are not used. ')
+    if followup:
+        acceptance = ('All four pilot slots must pass before main collection, including the three inherited accepted GPT pilots. '
+                      'This follow-up provides one revised Claude pilot generation. Prior failures are retained. '
+                      'Further semantic retries, replacements, clipping and filled-in orders are not used. ')
     lines = ['# Experiment 12: conclusions first', '', *conclusions, '',
              '## Design', '',
              'Each model represents 80 fictional students in 20 four-role chains: 10 no-pressure and 10 strong-pressure chains. '
@@ -112,16 +133,30 @@ def build_report(run, *, recovery=None):
              _table(result['model_status'], ['model', 'accepted_pilot_responses', 'accepted_main_responses', 'accepted_main', 'complete']), '',
              'Acceptance requires all chain IDs, 24 order rows, probes, factual rules and inventory readbacks at weeks 1, 12 and 24. '
              + acceptance + 'At most one retry is allowed for a transient transport/rate/server error, with its cost reserved.', '']
-    if recovery is not None:
+    if stage is not None:
         lines += ['## Preserved pilot diagnosis', '',
                   '- GPT-6 Luna returned complete choices, but its week-12 and week-24 inventory readbacks disagreed with independent game replay. It was not an API connection or balance failure.',
                   '- Claude Haiku returned HTTP 200 with `stop_reason=max_tokens`: all 8,192 output tokens were reasoning tokens and there was no answer text. This was truncation, not a refusal.',
-                  '- Original recorded charge estimate: $0.0716918. All old charges remain in the shared $5 ledger. The recovery has two pilot calls and four main calls before possible transient retries.',
+                  '- Original recorded charge estimate: $0.0716918. All old charges remain in the shared $5 ledger. The first recovery scheduled two pilot calls and four main calls before possible transient retries.',
                   '- Software verification cannot guarantee the next model-generated trajectories pass. A new failure remains visible and does not become a fabricated participant.', '',
-                  f'[Recovery amendment]({link(experiment / "hypotheses/RECOVERY_20261021.md")}) · [Frozen recovery inputs and status]({link(recovery)})', '']
+                  f'[Recovery amendment]({link(experiment / "hypotheses/RECOVERY_20261021.md")}) · [Frozen current inputs and status]({link(stage)})', '']
+    if followup:
+        lines += ['### Outcome of the first recovery', '',
+                  'GPT-6 Luna passed. Claude finished JSON normally using 3,519 of 32,768 output tokens, but four inventory checkpoints were incorrect. '
+                  'This follow-up addresses state bookkeeping rather than increasing the cap again. Three accepted pilots are inherited; only Claude receives another pilot generation. '
+                  'Cumulative recorded spending before this stage was $0.07590755.', '',
+                  f'[Claude follow-up amendment]({link(experiment / "hypotheses/CLAUDE_FOLLOWUP_20261021.md")})', '']
     execution = [dict(task_id=k, **v) for k, v in status.get('tasks', {}).items()]
     if execution:
         lines += [_table(execution, ['task_id', 'status', 'reason']), '']
+    if failed:
+        lines += ['### Current failed checks', '']
+        for key, row in failed:
+            lines += [f"**{row.get('model', key)} ({row.get('phase', 'unknown phase')}):** {failure_reason(row)}.", '']
+            lines += ['- ' + issue for issue in row.get('issues', [])]
+            lines += ['']
+        lines += ['The current stage retains these failures. Re-running the same collection cell does not buy another generated response for a failed slot. '
+                  'Any further change to settings, pilot attempts or the all-model gate requires a separate recorded amendment; already accepted pilots remain available for reuse.', '']
     main_chains = [r for r in result['chains'] if r['phase'] == 'main']
     if main_chains:
         lines += ['## All chain results', '', _table(main_chains, [
@@ -153,7 +188,8 @@ def build_report(run, *, recovery=None):
         run=run.name, report=str(report.relative_to(experiment)),
         analysis=str(analysis.relative_to(experiment)), main_responses=main_responses,
         pilot_responses=pilot_responses, charged_or_reserved_usd=spent,
-        recovery=str(recovery.relative_to(experiment)) if recovery else None), indent=2) + '\n', encoding='utf-8')
+        recovery=str(Path(recovery).resolve().relative_to(experiment)) if recovery else None,
+        followup=str(Path(followup).resolve().relative_to(experiment)) if followup else None), indent=2) + '\n', encoding='utf-8')
     return dict(report=report, analysis=analysis, workbook=workbook, summary=result,
                 charged_or_reserved_usd=spent, reservation_ceiling_usd=sum(
                     r['first_attempt_reservation_ceiling_usd'] for r in projections))

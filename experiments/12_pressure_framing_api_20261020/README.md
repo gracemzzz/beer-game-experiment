@@ -2,23 +2,23 @@
 
 **Question:** Does a model representing students under strong time pressure respond less to outstanding orders and produce higher Beer Game costs?
 
-**Current status:** The first pilot stopped: GPT-5.6 Luna and Sol passed; GPT-6 Luna returned wrong inventory checkpoints; Claude reached its output cap before returning JSON. **No main cohort was collected.** Recorded spending is approximately **$0.0717**. A bounded recovery is prepared; its live success is not yet verified. Read [the diagnosis and recovery plan](hypotheses/RECOVERY_20261021.md).
+**Current status:** **Three GPT pilots pass. Claude alone fails inventory arithmetic.** Claude now finishes its JSON normally, using only 3,519 of 32,768 allowed tokens, but its week-12 and week-24 stock figures are incorrect. **No main cohort was collected.** Recorded spending is approximately **$0.0759**. The next fixed stage reuses all three accepted pilots and schedules **one Claude pilot plus four main calls**. [Current diagnosis and Claude follow-up](hypotheses/CLAUDE_FOLLOWUP_20261021.md) · [first recovery history](hypotheses/RECOVERY_20261021.md).
 
-**Plan:** Four requested models; **80 fictional testers / 20 four-person chains per model**; ten chains per condition; **24 model-decision weeks**. **One main API call generates all 20 chains for a model.** Total authorized spending is **$5**, including the original pilots, two additional recovery pilots, four main calls, failures and technical retries.
+**Plan:** Four requested models; **80 fictional testers / 20 four-person chains per model**; ten chains per condition; **24 model-decision weeks**. **One main API call generates all 20 chains for a model.** Total authorized spending is **$5**, including every original pilot, recovery/follow-up pilot, main call, failure and technical retry.
 
 This is a new prospective study. Imagined pressure does not enforce actual decision time, and fictional students are not human observations. Hypothesis results can be positive, null or opposite. Technical acceptance never depends on the direction of a result.
 
 ## Run it
 
 1. Close and reopen [RUN_EXPERIMENT.ipynb](notebooks/RUN_EXPERIMENT.ipynb) to load the updated cells, then **restart its kernel** so it loads the recovery implementation.
-2. Run all cells with the default `RUN_API = False` to review the recovery plan, exact prompts, estimated remaining cost and saved status for free.
+2. Run all cells with the default `RUN_API = False` to review the automatically selected Claude follow-up, exact prompts, estimated cost and saved status for free.
 3. When ready, change `RUN_API = True`, keep `PHASE = "all"`, and run all cells again.
 4. In section 3, enter the OpenAI key and then the Anthropic key in the two hidden input fields. The progress bar shows completed requests and requests left.
-5. Section 4 writes [the latest report](reports/REPORT.md), detailed CSV tables and an Excel workbook. If a call stops, run section 4 to inspect its saved status.
+5. The API cell now updates [the latest report](reports/REPORT.md) automatically on completion, including a failed result. Section 4 displays it together with detailed CSV tables and an Excel workbook. If the cell raises an exception, run section 4 to inspect saved status.
 
-All four technical pilots must pass before any main call. The recovery reuses the two accepted GPT-5.6 pilots and schedules one new pilot each for GPT-6 Luna and Claude. Original failures remain invalid and available for diagnosis. The shared budget ledger covers every attempt across this experiment's run folders. Null or opposite results do not trigger additional collection.
+All four technical pilots must pass before any main call. This follow-up reuses GPT-6 Luna and both GPT-5.6 pilots. Only Claude receives a new pilot, with medium adaptive effort and the explicit neutral state-accounting appendix. Original failures remain invalid and available for diagnosis. The shared budget ledger covers every attempt across this experiment's run folders. Null or opposite results do not trigger additional collection.
 
-The original four pilot requests recorded **$0.0716918** in estimated charges. Recovery and main requests share the original **$5 hard cap**; the notebook displays their updated conservative reservation before execution. GPT-6 uses medium effort and larger output caps with explicit physical bookkeeping. Claude retains low adaptive thinking with more output room for JSON. GPT-5.6 settings stay unchanged. These changes may improve completion; they do not guarantee valid data or favorable hypotheses. [Exact settings and original evidence](hypotheses/RECOVERY_20261021.md).
+The six requests so far recorded **$0.07590755** in estimated charges. The five follow-up first attempts reserve approximately **$0.606**, within the same **$5 hard cap**. Claude's caps stay at 32,768 pilot / 65,536 main tokens; the change targets accounting and reasoning, since its latest failure was not truncation. Other models' main payloads stay unchanged. These changes do not guarantee valid data or favorable hypotheses. [Exact settings and evidence](hypotheses/CLAUDE_FOLLOWUP_20261021.md).
 
 ## Find everything for this experiment
 
@@ -43,7 +43,9 @@ Shared implementation lives outside experiments in `src/beergame_study/` and reu
 
 ## Validation and collection status
 
-**Recovery verification: 52 checks passed**, including 10 dedicated recovery checks. All five updated notebook code cells executed in review mode with no API calls. The two accepted pilots and all 19 original evidence files stayed byte-identical. The recovery's six first attempts reserve approximately **$0.616**; prior spending remains approximately **$0.072**. [Recovery validation](analysis/software_checks/RECOVERY_VALIDATION_20261021.json) · [recovery test log](analysis/software_checks/recovery_tests_20261021.log). New live recovery responses have not yet been collected.
+**Claude follow-up verification: 60 checks passed**, including eight new follow-up tests. The updated notebook ran in free review mode; a separate mocked API run verified one Claude pilot followed by four main requests and automatic report export. All 45 protected earlier evidence files stayed byte-identical. No live follow-up calls have been made. [Follow-up validation](analysis/software_checks/FOLLOWUP_VALIDATION_20261021.json) · [test log](analysis/software_checks/followup_tests_20261021.log).
+
+**Earlier recovery verification: 52 checks passed**, including 10 dedicated recovery checks. At that stage, all five notebook code cells executed in review mode, two accepted pilots and 19 original evidence files stayed byte-identical, the six first-attempt reservation was approximately **$0.616**, and prior spending was approximately **$0.072**. [Recovery validation](analysis/software_checks/RECOVERY_VALIDATION_20261021.json) · [recovery test log](analysis/software_checks/recovery_tests_20261021.log). These checks preceded the live recovery that subsequently accepted GPT-6 and rejected Claude's inventory arithmetic.
 
 **42 new-study checks passed:** 11 game/protocol checks, 26 API accounting/retry/provenance checks and 5 report/CLI/notebook checks. The notebook's five code cells also ran in a real Jupyter kernel with review mode enabled and no errors. [Validation receipt](analysis/software_checks/VALIDATION.json) · [test log](analysis/software_checks/new_study_tests.log).
 
