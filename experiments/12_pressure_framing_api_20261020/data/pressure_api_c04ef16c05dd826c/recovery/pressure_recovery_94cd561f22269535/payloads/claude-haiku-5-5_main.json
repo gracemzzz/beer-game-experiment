@@ -1,0 +1,190 @@
+{
+  "model": "claude-haiku-5-5",
+  "max_tokens": 65536,
+  "messages": [
+    {
+      "role": "user",
+      "content": "Generate the Beer Game choices of the supplied fictional undergraduate cohort.\nEach chain has four students, one at each role. Each has introductory business knowledge,\nno previous Beer Game experience and no specialist inventory training. The supplied\npersonality describes ordinary coursework, not an ordering strategy. Each student\ntries to minimize the team's cumulative inventory-holding and backlog costs.\nUse the same assigned identity throughout. Do not invent demographic characteristics,\ndeliberate mistakes, a target pattern, or artificial differences between students.\nIdentical choices and zero orders are allowed.\n\nCLASSROOM SITUATIONS\nEach chain's input states its own classroom situation. Apply that situation to\nall four students in that chain. Track chains separately; one chain's choices\nare not information available to another chain. Each situation describes a\nfictional student's experience. It does not impose or measure\nactual model computation time, a deadline, or psychological pressure.\nAll chains and situations are nevertheless visible to this single generator.\n\nPHYSICAL RULES\nRole order is retailer, wholesaler, distributor, factory. Each week, each role\norders a nonnegative integer number of cases; the factory starts production.\nThere is no revenue, production charge, ordering fee, bulk discount or capacity\nlimit. Holding cost is $0.50 per remaining case per week; backlog cost is $1 per\nunfilled case per week. No preferred order quantity or maximum is supplied.\n\nInitially every role has inventory 12, backlog 0 and 12 outstanding cases.\nRetailer, wholesaler and distributor each have deliveries [4,4] due in the next\ntwo weeks and 4 previously ordered cases awaiting upstream dispatch. Factory\nproduction completions are [4,4,4]. Upstream incoming orders initially equal 4.\nAll 24 displayed weeks require student choices; there are no practice or extra\nscoring weeks. The exact supplied customer-demand path is used without changes.\n\nFor each week, first receive the next due delivery and subtract it from outstanding\norders. Next observe incoming demand: customer demand for the retailer, or the\ndownstream role's preceding-week order for other roles. Ship min(available stock,\nold backlog + new demand). Remaining inventory and backlog are then nonnegative;\ncurrent backlog already includes unfilled current demand and persists. Assess\nthat week's holding/backlog costs. Observe the decision display and submit orders.\nEach new order is added to outstanding orders and reaches the upstream supplier\nnext week. A supplier's shipment takes two weeks to arrive downstream, so the\nearliest receipt of an order made at t is t+3, later if the supplier has shortages.\nFactory production started at t arrives at t+3 without any additional supplier\nor raw-material delay. Outstanding orders cannot be canceled. A new order cannot\nchange today's shipment, inventory or backlog.\n\nAt each decision, a student can use its current local state, own earlier rounds,\nand all four current inventories. Other roles' orders/backlogs and future demand\nare unavailable to that student. You see the complete path and horizon for data\ngeneration; do not intentionally give future information to the fictional student.\nGenerating the entire chain jointly cannot enforce true information isolation.\nTrack the four evolving states using the stated rules. The inventory checkpoints\nrefer to the moment after that week's receipts and shipments, before its orders.\n\nSEPARATE STATE QUESTIONS\nThe shared probe_states bank defines sixteen hypothetical displays. For EACH\nchain, answer every display in that chain's probe_order. Independently choose one order for its stated role and\nassigned student in the same classroom situation. These hypothetical displays do\nnot inherit any chain history or earlier probe decision. Use only the displayed\nstate. The deliveries_due list gives future arrivals starting next week; awaiting\ndispatch is separate. Return each neutral probe ID exactly once.\n\nOUTPUT\nReturn only one complete JSON object matching the supplied schema, containing\nevery supplied chain exactly once. Do not return\ncosts, statistical results, explanations, programming code, or claims about an\nexperiment. For EACH chain, supply exactly 24 rows of four literal nonnegative\ninteger orders in role order, exactly 16 probe choices, and all three inventory\ncheckpoints. No\nBooleans, strings, decimals, nulls, ellipses or omitted choices as order values.\nAnswer these three common factual questions ONCE in root-level rules: Does current backlog already\ninclude this week's unfilled demand? When does factory production begun in week 7\narrive? What is the cost of five backlogged cases at the end of each of three weeks?\nUse a JSON Boolean for the first answer and integers for the other two. Keep all\nsupplied identifiers unchanged. Set complete true only for a complete response.\nNever replace omitted choices with an aggregate description or invented results.\n\nFROZEN INPUT DATA\n{\"schema_version\":\"batched-pressure-chain-v1\",\"study_id\":\"pressure_api_c04ef16c05dd826c\",\"task_id\":\"claude-haiku-5-5_main\",\"probe_states\":[{\"probe_id\":\"x05\",\"role\":\"distributor\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":0,\"factory\":12}},{\"probe_id\":\"x02\",\"role\":\"factory\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16,0],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":12,\"factory\":0}},{\"probe_id\":\"x03\",\"role\":\"retailer\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":0,\"wholesaler\":12,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x11\",\"role\":\"retailer\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":0,\"wholesaler\":12,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x06\",\"role\":\"distributor\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":0,\"factory\":12}},{\"probe_id\":\"x00\",\"role\":\"factory\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4,0],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":12,\"factory\":0}},{\"probe_id\":\"x15\",\"role\":\"factory\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4,0],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":12,\"factory\":0}},{\"probe_id\":\"x09\",\"role\":\"wholesaler\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":0,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x14\",\"role\":\"retailer\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":0,\"wholesaler\":12,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x08\",\"role\":\"wholesaler\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":0,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x01\",\"role\":\"retailer\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":0,\"wholesaler\":12,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x04\",\"role\":\"distributor\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":0,\"factory\":12}},{\"probe_id\":\"x10\",\"role\":\"factory\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":32,\"awaiting_dispatch\":0,\"deliveries_due\":[16,16,0],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":12,\"factory\":0}},{\"probe_id\":\"x12\",\"role\":\"distributor\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":12,\"distributor\":0,\"factory\":12}},{\"probe_id\":\"x07\",\"role\":\"wholesaler\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":24,\"net_inventory\":-24,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":0,\"distributor\":12,\"factory\":12}},{\"probe_id\":\"x13\",\"role\":\"wholesaler\",\"week\":12,\"demand\":8,\"received\":4,\"shipped\":4,\"inventory\":0,\"backlog\":8,\"net_inventory\":-8,\"supply_line\":8,\"awaiting_dispatch\":0,\"deliveries_due\":[4,4],\"shared_inventory\":{\"retailer\":12,\"wholesaler\":0,\"distributor\":12,\"factory\":12}}],\"inventory_checkpoint_weeks\":[1,12,24],\"chains\":[{\"chain_id\":\"main_b06_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b06_c1_retailer\",\"claude-haiku-5-5_main_b06_c1_wholesaler\",\"claude-haiku-5-5_main_b06_c1_distributor\",\"claude-haiku-5-5_main_b06_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[1,5,5,5,5,2,5,7,8,2,0,6,4,2,3,0,8,0,1,1,7,0,7,2],\"probe_order\":[\"x05\",\"x02\",\"x03\",\"x11\",\"x06\",\"x00\",\"x15\",\"x09\",\"x14\",\"x08\",\"x01\",\"x04\",\"x10\",\"x12\",\"x07\",\"x13\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b05_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b05_c0_retailer\",\"claude-haiku-5-5_main_b05_c0_wholesaler\",\"claude-haiku-5-5_main_b05_c0_distributor\",\"claude-haiku-5-5_main_b05_c0_factory\"],\"profiles\":[\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[6,0,4,3,0,6,8,5,6,2,6,6,1,1,1,8,5,6,3,1,2,3,3,8],\"probe_order\":[\"x12\",\"x00\",\"x05\",\"x08\",\"x09\",\"x11\",\"x10\",\"x07\",\"x01\",\"x06\",\"x02\",\"x14\",\"x03\",\"x04\",\"x13\",\"x15\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b03_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b03_c0_retailer\",\"claude-haiku-5-5_main_b03_c0_wholesaler\",\"claude-haiku-5-5_main_b03_c0_distributor\",\"claude-haiku-5-5_main_b03_c0_factory\"],\"profiles\":[\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[1,3,1,6,1,4,4,5,4,0,7,4,2,8,2,8,0,6,2,2,3,3,0,8],\"probe_order\":[\"x01\",\"x11\",\"x03\",\"x13\",\"x09\",\"x12\",\"x04\",\"x07\",\"x14\",\"x05\",\"x00\",\"x15\",\"x08\",\"x06\",\"x10\",\"x02\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b07_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b07_c1_retailer\",\"claude-haiku-5-5_main_b07_c1_wholesaler\",\"claude-haiku-5-5_main_b07_c1_distributor\",\"claude-haiku-5-5_main_b07_c1_factory\"],\"profiles\":[\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[5,3,3,2,8,2,5,8,3,5,2,1,0,1,1,5,8,6,8,5,6,8,3,8],\"probe_order\":[\"x09\",\"x13\",\"x11\",\"x05\",\"x08\",\"x00\",\"x07\",\"x03\",\"x10\",\"x06\",\"x01\",\"x14\",\"x12\",\"x04\",\"x15\",\"x02\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b04_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b04_c1_retailer\",\"claude-haiku-5-5_main_b04_c1_wholesaler\",\"claude-haiku-5-5_main_b04_c1_distributor\",\"claude-haiku-5-5_main_b04_c1_factory\"],\"profiles\":[\"Organized and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\"],\"customer_demand\":[4,4,5,6,8,7,8,4,1,1,0,4,3,5,1,1,7,1,2,2,8,4,1,2],\"probe_order\":[\"x08\",\"x14\",\"x02\",\"x09\",\"x01\",\"x12\",\"x03\",\"x07\",\"x04\",\"x00\",\"x13\",\"x15\",\"x11\",\"x06\",\"x05\",\"x10\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b02_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b02_c1_retailer\",\"claude-haiku-5-5_main_b02_c1_wholesaler\",\"claude-haiku-5-5_main_b02_c1_distributor\",\"claude-haiku-5-5_main_b02_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[8,3,8,8,3,1,5,8,4,7,8,1,4,7,3,6,7,2,1,1,6,7,4,2],\"probe_order\":[\"x15\",\"x11\",\"x01\",\"x06\",\"x10\",\"x07\",\"x00\",\"x02\",\"x12\",\"x13\",\"x14\",\"x03\",\"x09\",\"x05\",\"x04\",\"x08\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b02_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b02_c0_retailer\",\"claude-haiku-5-5_main_b02_c0_wholesaler\",\"claude-haiku-5-5_main_b02_c0_distributor\",\"claude-haiku-5-5_main_b02_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[8,3,8,8,3,1,5,8,4,7,8,1,4,7,3,6,7,2,1,1,6,7,4,2],\"probe_order\":[\"x15\",\"x11\",\"x01\",\"x06\",\"x10\",\"x07\",\"x00\",\"x02\",\"x12\",\"x13\",\"x14\",\"x03\",\"x09\",\"x05\",\"x04\",\"x08\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b01_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b01_c0_retailer\",\"claude-haiku-5-5_main_b01_c0_wholesaler\",\"claude-haiku-5-5_main_b01_c0_distributor\",\"claude-haiku-5-5_main_b01_c0_factory\"],\"profiles\":[\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[8,4,6,6,3,3,4,7,3,6,5,4,1,4,2,2,8,8,1,7,7,4,3,8],\"probe_order\":[\"x05\",\"x03\",\"x02\",\"x09\",\"x08\",\"x12\",\"x11\",\"x04\",\"x00\",\"x06\",\"x01\",\"x15\",\"x07\",\"x14\",\"x10\",\"x13\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b08_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b08_c0_retailer\",\"claude-haiku-5-5_main_b08_c0_wholesaler\",\"claude-haiku-5-5_main_b08_c0_distributor\",\"claude-haiku-5-5_main_b08_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[2,5,7,4,7,1,6,8,5,2,4,5,8,6,4,3,4,2,0,5,4,7,0,4],\"probe_order\":[\"x09\",\"x10\",\"x12\",\"x15\",\"x05\",\"x11\",\"x01\",\"x07\",\"x00\",\"x14\",\"x06\",\"x03\",\"x02\",\"x04\",\"x13\",\"x08\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b09_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b09_c1_retailer\",\"claude-haiku-5-5_main_b09_c1_wholesaler\",\"claude-haiku-5-5_main_b09_c1_distributor\",\"claude-haiku-5-5_main_b09_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[4,7,3,7,4,8,4,2,7,5,6,3,2,5,1,7,3,3,5,1,5,5,0,1],\"probe_order\":[\"x15\",\"x06\",\"x04\",\"x13\",\"x07\",\"x03\",\"x10\",\"x09\",\"x00\",\"x05\",\"x12\",\"x01\",\"x02\",\"x11\",\"x14\",\"x08\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b04_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b04_c0_retailer\",\"claude-haiku-5-5_main_b04_c0_wholesaler\",\"claude-haiku-5-5_main_b04_c0_distributor\",\"claude-haiku-5-5_main_b04_c0_factory\"],\"profiles\":[\"Organized and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\"],\"customer_demand\":[4,4,5,6,8,7,8,4,1,1,0,4,3,5,1,1,7,1,2,2,8,4,1,2],\"probe_order\":[\"x08\",\"x14\",\"x02\",\"x09\",\"x01\",\"x12\",\"x03\",\"x07\",\"x04\",\"x00\",\"x13\",\"x15\",\"x11\",\"x06\",\"x05\",\"x10\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b05_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b05_c1_retailer\",\"claude-haiku-5-5_main_b05_c1_wholesaler\",\"claude-haiku-5-5_main_b05_c1_distributor\",\"claude-haiku-5-5_main_b05_c1_factory\"],\"profiles\":[\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[6,0,4,3,0,6,8,5,6,2,6,6,1,1,1,8,5,6,3,1,2,3,3,8],\"probe_order\":[\"x12\",\"x00\",\"x05\",\"x08\",\"x09\",\"x11\",\"x10\",\"x07\",\"x01\",\"x06\",\"x02\",\"x14\",\"x03\",\"x04\",\"x13\",\"x15\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b03_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b03_c1_retailer\",\"claude-haiku-5-5_main_b03_c1_wholesaler\",\"claude-haiku-5-5_main_b03_c1_distributor\",\"claude-haiku-5-5_main_b03_c1_factory\"],\"profiles\":[\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[1,3,1,6,1,4,4,5,4,0,7,4,2,8,2,8,0,6,2,2,3,3,0,8],\"probe_order\":[\"x01\",\"x11\",\"x03\",\"x13\",\"x09\",\"x12\",\"x04\",\"x07\",\"x14\",\"x05\",\"x00\",\"x15\",\"x08\",\"x06\",\"x10\",\"x02\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b06_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b06_c0_retailer\",\"claude-haiku-5-5_main_b06_c0_wholesaler\",\"claude-haiku-5-5_main_b06_c0_distributor\",\"claude-haiku-5-5_main_b06_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[1,5,5,5,5,2,5,7,8,2,0,6,4,2,3,0,8,0,1,1,7,0,7,2],\"probe_order\":[\"x05\",\"x02\",\"x03\",\"x11\",\"x06\",\"x00\",\"x15\",\"x09\",\"x14\",\"x08\",\"x01\",\"x04\",\"x10\",\"x12\",\"x07\",\"x13\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b01_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b01_c1_retailer\",\"claude-haiku-5-5_main_b01_c1_wholesaler\",\"claude-haiku-5-5_main_b01_c1_distributor\",\"claude-haiku-5-5_main_b01_c1_factory\"],\"profiles\":[\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[8,4,6,6,3,3,4,7,3,6,5,4,1,4,2,2,8,8,1,7,7,4,3,8],\"probe_order\":[\"x05\",\"x03\",\"x02\",\"x09\",\"x08\",\"x12\",\"x11\",\"x04\",\"x00\",\"x06\",\"x01\",\"x15\",\"x07\",\"x14\",\"x10\",\"x13\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b00_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b00_c1_retailer\",\"claude-haiku-5-5_main_b00_c1_wholesaler\",\"claude-haiku-5-5_main_b00_c1_distributor\",\"claude-haiku-5-5_main_b00_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\"],\"customer_demand\":[8,8,3,1,8,8,5,0,0,7,3,5,7,7,3,4,7,0,6,3,8,7,5,7],\"probe_order\":[\"x06\",\"x11\",\"x10\",\"x04\",\"x03\",\"x02\",\"x13\",\"x15\",\"x14\",\"x00\",\"x05\",\"x12\",\"x08\",\"x01\",\"x09\",\"x07\"],\"classroom_situation\":\"The students experience no time pressure. They have ample time to consider each decision before submitting it.\"},{\"chain_id\":\"main_b09_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b09_c0_retailer\",\"claude-haiku-5-5_main_b09_c0_wholesaler\",\"claude-haiku-5-5_main_b09_c0_distributor\",\"claude-haiku-5-5_main_b09_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[4,7,3,7,4,8,4,2,7,5,6,3,2,5,1,7,3,3,5,1,5,5,0,1],\"probe_order\":[\"x15\",\"x06\",\"x04\",\"x13\",\"x07\",\"x03\",\"x10\",\"x09\",\"x00\",\"x05\",\"x12\",\"x01\",\"x02\",\"x11\",\"x14\",\"x08\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b07_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b07_c0_retailer\",\"claude-haiku-5-5_main_b07_c0_wholesaler\",\"claude-haiku-5-5_main_b07_c0_distributor\",\"claude-haiku-5-5_main_b07_c0_factory\"],\"profiles\":[\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Organized and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[5,3,3,2,8,2,5,8,3,5,2,1,0,1,1,5,8,6,8,5,6,8,3,8],\"probe_order\":[\"x09\",\"x13\",\"x11\",\"x05\",\"x08\",\"x00\",\"x07\",\"x03\",\"x10\",\"x06\",\"x01\",\"x14\",\"x12\",\"x04\",\"x15\",\"x02\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b08_c1\",\"participant_ids\":[\"claude-haiku-5-5_main_b08_c1_retailer\",\"claude-haiku-5-5_main_b08_c1_wholesaler\",\"claude-haiku-5-5_main_b08_c1_distributor\",\"claude-haiku-5-5_main_b08_c1_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\"],\"customer_demand\":[2,5,7,4,7,1,6,8,5,2,4,5,8,6,4,3,4,2,0,5,4,7,0,4],\"probe_order\":[\"x09\",\"x10\",\"x12\",\"x15\",\"x05\",\"x11\",\"x01\",\"x07\",\"x00\",\"x14\",\"x06\",\"x03\",\"x02\",\"x04\",\"x13\",\"x08\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"},{\"chain_id\":\"main_b00_c0\",\"participant_ids\":[\"claude-haiku-5-5_main_b00_c0_retailer\",\"claude-haiku-5-5_main_b00_c0_wholesaler\",\"claude-haiku-5-5_main_b00_c0_distributor\",\"claude-haiku-5-5_main_b00_c0_factory\"],\"profiles\":[\"Organized and concerned by uncertainty in ordinary coursework.\",\"Flexible and emotionally steady in ordinary coursework.\",\"Flexible and concerned by uncertainty in ordinary coursework.\",\"Organized and emotionally steady in ordinary coursework.\"],\"customer_demand\":[8,8,3,1,8,8,5,0,0,7,3,5,7,7,3,4,7,0,6,3,8,7,5,7],\"probe_order\":[\"x06\",\"x11\",\"x10\",\"x04\",\"x03\",\"x02\",\"x13\",\"x15\",\"x14\",\"x00\",\"x05\",\"x12\",\"x08\",\"x01\",\"x09\",\"x07\"],\"classroom_situation\":\"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes.\"}],\"role_order\":[\"retailer\",\"wholesaler\",\"distributor\",\"factory\"]}\n\n\nCOMPLETION REQUIREMENT\nReturn the complete requested JSON within the available output allowance. Keep\ninternal planning concise and allow enough output space for every required\nchain, order row, probe and checkpoint. Do not spend the entire allowance on\nplanning. Follow the exact schema without an explanatory preamble. These output\ninstructions apply equally to both classroom situations and prescribe no orders.\n"
+    }
+  ],
+  "thinking": {
+    "type": "adaptive"
+  },
+  "output_config": {
+    "effort": "low",
+    "format": {
+      "type": "json_schema",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "enum": [
+              "batched-pressure-chain-v1"
+            ]
+          },
+          "study_id": {
+            "type": "string",
+            "enum": [
+              "pressure_api_c04ef16c05dd826c"
+            ]
+          },
+          "task_id": {
+            "type": "string",
+            "enum": [
+              "claude-haiku-5-5_main"
+            ]
+          },
+          "rules": {
+            "type": "object",
+            "properties": {
+              "backlog_includes_current_unfilled_demand": {
+                "type": "boolean"
+              },
+              "factory_order_week_7_arrival_week": {
+                "type": "integer"
+              },
+              "three_week_backlog_cost": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "backlog_includes_current_unfilled_demand",
+              "factory_order_week_7_arrival_week",
+              "three_week_backlog_cost"
+            ],
+            "additionalProperties": false
+          },
+          "chains": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "chain_id": {
+                  "type": "string",
+                  "enum": [
+                    "main_b06_c1",
+                    "main_b05_c0",
+                    "main_b03_c0",
+                    "main_b07_c1",
+                    "main_b04_c1",
+                    "main_b02_c1",
+                    "main_b02_c0",
+                    "main_b01_c0",
+                    "main_b08_c0",
+                    "main_b09_c1",
+                    "main_b04_c0",
+                    "main_b05_c1",
+                    "main_b03_c1",
+                    "main_b06_c0",
+                    "main_b01_c1",
+                    "main_b00_c1",
+                    "main_b09_c0",
+                    "main_b07_c0",
+                    "main_b08_c1",
+                    "main_b00_c0"
+                  ]
+                },
+                "orders": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "probes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "probe_id": {
+                        "type": "string",
+                        "enum": [
+                          "x00",
+                          "x01",
+                          "x02",
+                          "x03",
+                          "x04",
+                          "x05",
+                          "x06",
+                          "x07",
+                          "x08",
+                          "x09",
+                          "x10",
+                          "x11",
+                          "x12",
+                          "x13",
+                          "x14",
+                          "x15"
+                        ]
+                      },
+                      "order": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "probe_id",
+                      "order"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "inventory_checkpoints": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "week": {
+                        "type": "integer",
+                        "enum": [
+                          1,
+                          12,
+                          24
+                        ]
+                      },
+                      "inventories": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "required": [
+                      "week",
+                      "inventories"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "chain_id",
+                "orders",
+                "probes",
+                "inventory_checkpoints"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "complete": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "schema_version",
+          "study_id",
+          "task_id",
+          "rules",
+          "chains",
+          "complete"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

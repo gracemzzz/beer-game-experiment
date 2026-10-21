@@ -1,0 +1,100 @@
+Generate the Beer Game choices of the supplied fictional undergraduate cohort.
+Each chain has four students, one at each role. Each has introductory business knowledge,
+no previous Beer Game experience and no specialist inventory training. The supplied
+personality describes ordinary coursework, not an ordering strategy. Each student
+tries to minimize the team's cumulative inventory-holding and backlog costs.
+Use the same assigned identity throughout. Do not invent demographic characteristics,
+deliberate mistakes, a target pattern, or artificial differences between students.
+Identical choices and zero orders are allowed.
+
+CLASSROOM SITUATIONS
+Each chain's input states its own classroom situation. Apply that situation to
+all four students in that chain. Track chains separately; one chain's choices
+are not information available to another chain. Each situation describes a
+fictional student's experience. It does not impose or measure
+actual model computation time, a deadline, or psychological pressure.
+All chains and situations are nevertheless visible to this single generator.
+
+PHYSICAL RULES
+Role order is retailer, wholesaler, distributor, factory. Each week, each role
+orders a nonnegative integer number of cases; the factory starts production.
+There is no revenue, production charge, ordering fee, bulk discount or capacity
+limit. Holding cost is $0.50 per remaining case per week; backlog cost is $1 per
+unfilled case per week. No preferred order quantity or maximum is supplied.
+
+Initially every role has inventory 12, backlog 0 and 12 outstanding cases.
+Retailer, wholesaler and distributor each have deliveries [4,4] due in the next
+two weeks and 4 previously ordered cases awaiting upstream dispatch. Factory
+production completions are [4,4,4]. Upstream incoming orders initially equal 4.
+All 24 displayed weeks require student choices; there are no practice or extra
+scoring weeks. The exact supplied customer-demand path is used without changes.
+
+For each week, first receive the next due delivery and subtract it from outstanding
+orders. Next observe incoming demand: customer demand for the retailer, or the
+downstream role's preceding-week order for other roles. Ship min(available stock,
+old backlog + new demand). Remaining inventory and backlog are then nonnegative;
+current backlog already includes unfilled current demand and persists. Assess
+that week's holding/backlog costs. Observe the decision display and submit orders.
+Each new order is added to outstanding orders and reaches the upstream supplier
+next week. A supplier's shipment takes two weeks to arrive downstream, so the
+earliest receipt of an order made at t is t+3, later if the supplier has shortages.
+Factory production started at t arrives at t+3 without any additional supplier
+or raw-material delay. Outstanding orders cannot be canceled. A new order cannot
+change today's shipment, inventory or backlog.
+
+At each decision, a student can use its current local state, own earlier rounds,
+and all four current inventories. Other roles' orders/backlogs and future demand
+are unavailable to that student. You see the complete path and horizon for data
+generation; do not intentionally give future information to the fictional student.
+Generating the entire chain jointly cannot enforce true information isolation.
+Track the four evolving states using the stated rules. The inventory checkpoints
+refer to the moment after that week's receipts and shipments, before its orders.
+
+SEPARATE STATE QUESTIONS
+The shared probe_states bank defines sixteen hypothetical displays. For EACH
+chain, answer every display in that chain's probe_order. Independently choose one order for its stated role and
+assigned student in the same classroom situation. These hypothetical displays do
+not inherit any chain history or earlier probe decision. Use only the displayed
+state. The deliveries_due list gives future arrivals starting next week; awaiting
+dispatch is separate. Return each neutral probe ID exactly once.
+
+OUTPUT
+Return only one complete JSON object matching the supplied schema, containing
+every supplied chain exactly once. Do not return
+costs, statistical results, explanations, programming code, or claims about an
+experiment. For EACH chain, supply exactly 24 rows of four literal nonnegative
+integer orders in role order, exactly 16 probe choices, and all three inventory
+checkpoints. No
+Booleans, strings, decimals, nulls, ellipses or omitted choices as order values.
+Answer these three common factual questions ONCE in root-level rules: Does current backlog already
+include this week's unfilled demand? When does factory production begun in week 7
+arrive? What is the cost of five backlogged cases at the end of each of three weeks?
+Use a JSON Boolean for the first answer and integers for the other two. Keep all
+supplied identifiers unchanged. Set complete true only for a complete response.
+Never replace omitted choices with an aggregate description or invented results.
+
+FROZEN INPUT DATA
+{"schema_version":"batched-pressure-chain-v1","study_id":"pressure_api_c04ef16c05dd826c","task_id":"gpt-6-luna_pilot","probe_states":[{"probe_id":"x05","role":"distributor","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":8,"net_inventory":-8,"supply_line":8,"awaiting_dispatch":0,"deliveries_due":[4,4],"shared_inventory":{"retailer":12,"wholesaler":12,"distributor":0,"factory":12}},{"probe_id":"x12","role":"distributor","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":24,"net_inventory":-24,"supply_line":8,"awaiting_dispatch":0,"deliveries_due":[4,4],"shared_inventory":{"retailer":12,"wholesaler":12,"distributor":0,"factory":12}},{"probe_id":"x01","role":"retailer","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":8,"net_inventory":-8,"supply_line":8,"awaiting_dispatch":0,"deliveries_due":[4,4],"shared_inventory":{"retailer":0,"wholesaler":12,"distributor":12,"factory":12}},{"probe_id":"x09","role":"wholesaler","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":8,"net_inventory":-8,"supply_line":32,"awaiting_dispatch":0,"deliveries_due":[16,16],"shared_inventory":{"retailer":12,"wholesaler":0,"distributor":12,"factory":12}},{"probe_id":"x08","role":"wholesaler","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":24,"net_inventory":-24,"supply_line":32,"awaiting_dispatch":0,"deliveries_due":[16,16],"shared_inventory":{"retailer":12,"wholesaler":0,"distributor":12,"factory":12}},{"probe_id":"x11","role":"retailer","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":8,"net_inventory":-8,"supply_line":32,"awaiting_dispatch":0,"deliveries_due":[16,16],"shared_inventory":{"retailer":0,"wholesaler":12,"distributor":12,"factory":12}},{"probe_id":"x15","role":"factory","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":24,"net_inventory":-24,"supply_line":8,"awaiting_dispatch":0,"deliveries_due":[4,4,0],"shared_inventory":{"retailer":12,"wholesaler":12,"distributor":12,"factory":0}},{"probe_id":"x04","role":"distributor","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":8,"net_inventory":-8,"supply_line":32,"awaiting_dispatch":0,"deliveries_due":[16,16],"shared_inventory":{"retailer":12,"wholesaler":12,"distributor":0,"factory":12}},{"probe_id":"x00","role":"factory","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":8,"net_inventory":-8,"supply_line":8,"awaiting_dispatch":0,"deliveries_due":[4,4,0],"shared_inventory":{"retailer":12,"wholesaler":12,"distributor":12,"factory":0}},{"probe_id":"x06","role":"distributor","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":24,"net_inventory":-24,"supply_line":32,"awaiting_dispatch":0,"deliveries_due":[16,16],"shared_inventory":{"retailer":12,"wholesaler":12,"distributor":0,"factory":12}},{"probe_id":"x02","role":"factory","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":8,"net_inventory":-8,"supply_line":32,"awaiting_dispatch":0,"deliveries_due":[16,16,0],"shared_inventory":{"retailer":12,"wholesaler":12,"distributor":12,"factory":0}},{"probe_id":"x13","role":"wholesaler","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":8,"net_inventory":-8,"supply_line":8,"awaiting_dispatch":0,"deliveries_due":[4,4],"shared_inventory":{"retailer":12,"wholesaler":0,"distributor":12,"factory":12}},{"probe_id":"x10","role":"factory","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":24,"net_inventory":-24,"supply_line":32,"awaiting_dispatch":0,"deliveries_due":[16,16,0],"shared_inventory":{"retailer":12,"wholesaler":12,"distributor":12,"factory":0}},{"probe_id":"x14","role":"retailer","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":24,"net_inventory":-24,"supply_line":32,"awaiting_dispatch":0,"deliveries_due":[16,16],"shared_inventory":{"retailer":0,"wholesaler":12,"distributor":12,"factory":12}},{"probe_id":"x03","role":"retailer","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":24,"net_inventory":-24,"supply_line":8,"awaiting_dispatch":0,"deliveries_due":[4,4],"shared_inventory":{"retailer":0,"wholesaler":12,"distributor":12,"factory":12}},{"probe_id":"x07","role":"wholesaler","week":12,"demand":8,"received":4,"shipped":4,"inventory":0,"backlog":24,"net_inventory":-24,"supply_line":8,"awaiting_dispatch":0,"deliveries_due":[4,4],"shared_inventory":{"retailer":12,"wholesaler":0,"distributor":12,"factory":12}}],"inventory_checkpoint_weeks":[1,12,24],"chains":[{"chain_id":"pilot_b00_c1","participant_ids":["gpt-6-luna_pilot_b00_c1_retailer","gpt-6-luna_pilot_b00_c1_wholesaler","gpt-6-luna_pilot_b00_c1_distributor","gpt-6-luna_pilot_b00_c1_factory"],"profiles":["Flexible and emotionally steady in ordinary coursework.","Organized and emotionally steady in ordinary coursework.","Flexible and concerned by uncertainty in ordinary coursework.","Organized and concerned by uncertainty in ordinary coursework."],"customer_demand":[3,3,3,3,2,6,0,4,6,0,0,4,7,3,4,2,1,8,2,4,3,6,4,1],"probe_order":["x05","x12","x01","x09","x08","x11","x15","x04","x00","x06","x02","x13","x10","x14","x03","x07"],"classroom_situation":"The students experience strong time pressure. They feel they must submit each decision promptly before their decision opportunity closes."},{"chain_id":"pilot_b00_c0","participant_ids":["gpt-6-luna_pilot_b00_c0_retailer","gpt-6-luna_pilot_b00_c0_wholesaler","gpt-6-luna_pilot_b00_c0_distributor","gpt-6-luna_pilot_b00_c0_factory"],"profiles":["Flexible and emotionally steady in ordinary coursework.","Organized and emotionally steady in ordinary coursework.","Flexible and concerned by uncertainty in ordinary coursework.","Organized and concerned by uncertainty in ordinary coursework."],"customer_demand":[3,3,3,3,2,6,0,4,6,0,0,4,7,3,4,2,1,8,2,4,3,6,4,1],"probe_order":["x05","x12","x01","x09","x08","x11","x15","x04","x00","x06","x02","x13","x10","x14","x03","x07"],"classroom_situation":"The students experience no time pressure. They have ample time to consider each decision before submitting it."}],"role_order":["retailer","wholesaler","distributor","factory"]}
+
+
+STATE-TRACKING CHECK
+Keep physical inventory, backlog and outstanding orders as three separate
+quantities for each role. Initialize inventory=[12,12,12,12], backlog=[0,0,0,0],
+outstanding=[12,12,12,12], next upstream incoming orders=[4,4,4], and delivery
+queues=[[4,4],[4,4],[4,4],[4,4,4]], with the next receipt first. Each week:
+(1) Remove the first entry from EACH delivery queue; add those receipts to
+inventory and subtract them from outstanding.
+(2) Incoming demand is [customer demand, prior retailer order, prior wholesaler
+order, prior distributor order], using the initial upstream incoming orders in week 1.
+(3) For EACH role compute owed=old_backlog+incoming_demand,
+shipment=min(inventory,owed), inventory=inventory-shipment,
+backlog=owed-shipment. Complete these calculations for all four roles.
+(4) Append each upstream role's shipment to its downstream role's delivery queue.
+(5) Record any requested checkpoint now: these four inventory values are
+remaining physical stock, not outstanding orders or pipeline.
+(6) Choose the four orders; add them to outstanding, set next week's upstream
+incoming orders to the first three orders, and append the factory's production
+order to its own delivery queue. Repeat using the updated state.
+A new order does not add physical stock today. Calculate checkpoints from the
+full preceding ledger and submitted orders; do not substitute typical inventory
+values. This is physical bookkeeping only and prescribes no ordering strategy.
