@@ -1,6 +1,15 @@
 # Experiment index
 
+**Current v5 workflow:** [live agent progress notebook](13_weekly_state_api_20261021/notebooks/AGENT_PROGRESS.ipynb), [four manual website prompts](13_weekly_state_api_20261021/prompts/LARGE_SAMPLE_V5/README.md), and [manual analysis notebook](13_weekly_state_api_20261021/notebooks/LARGE_SAMPLE_V5.ipynb). Fifty chains per condition, three conditions, 24 weeks per fresh context. The live monitor reads the ongoing local-agent collection; website responses remain separate. Earlier workflows below are preserved records.
+
+
 Each experiment has its own hypotheses, prompts, data, analysis, reports and notebooks. Shared code lives at the repository root.
+
+**New received website pilots:** [GPT-6 Astra / ultra, A/B/C review](13_weekly_state_api_20261021/reports/manual_pilot_review_20261025/REPORT.md). All games replay, but full transcript/adherence review is incomplete and C reports source exposure. One development block; no main sample or significance claim.
+
+**Latest:** [25 October four-model review and figures](13_weekly_state_api_20261021/reports/review_20261025/REPORT.md). The weekly sample is complete104/104. The [separate v2 notebook](13_weekly_state_api_20261021/notebooks/PIVOT_V2.ipynb) prepares a high-effort three-arm resource-opportunity analogue and independent10/20/40-block analysis. Its main sample remains uncollected; the original cumulative$5 cap still applies.
+
+The user's active choice is the [manual website workflow](13_weekly_state_api_20261021/reports/review_20261025/WEBSITE_STEPS.md): larger batches, no API requests, and the same $5 maximum. The v2 paid proposal remains an unfunded development alternative. Use the [manual notebook](13_weekly_state_api_20261021/notebooks/MANUAL_WEBSITE.ipynb) to import JSON plus tool transcripts and analyze independently generated blocks.
 
 | Experiment | Model / design |
 | --- | --- |
