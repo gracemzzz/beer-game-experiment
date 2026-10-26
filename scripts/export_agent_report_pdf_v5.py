@@ -170,7 +170,8 @@ def page(canvas, doc):
 def main():
     sources = [OUT / 'REPORT.md', OUT / 'RESULTS.json', OUT / 'DESCRIPTIVE_H1_H4.png',
                OUT / 'slides_current/MODEL_COMPARISON_REVIEWED.png',
-               OUT / 'chain_size_stability/H1_H4_CHAIN_SIZE_REVIEWED.png', Path(__file__)]
+               OUT / 'size_stability/CHAIN_SIZE.png',
+               OUT / 'size_stability/CONTEXT_COUNT.png', Path(__file__)]
     fingerprint = {str(p.relative_to(ROOT)): sha(p) for p in sources}
     if RECEIPT.exists():
         previous = json.loads(RECEIPT.read_text(encoding='utf-8'))
@@ -203,9 +204,11 @@ def main():
     story = markdown_story((OUT / 'REPORT.md').read_text(encoding='utf-8'), st)
     figures = [
         ('Model comparison: reviewed results', sources[3],
-         'Small dots show individual reviewed contexts; diamonds show model means; bars show the observed minimum–maximum across reviewed runs. The printed p-values are raw two-sided exact tests. This uses the same reviewed observations as the statistics table: Astra2, Sol2, Luna3. A = control + revision; B = control + one decision; C = education + one decision.'),
+         'All five outcomes are shown: H1, H2, H3, H4a and H4b. Dots show model means; labels show signed differences and raw two-sided p-values. H1/H3 use a magnified scale. Reviewed observations: Astra2, Sol2, Luna3. A = control + revision; B = control + one decision; C = education + one decision.'),
         ('H1–H4 metrics versus chain count', sources[4],
-         'Bold curves average the reviewed contexts for each model; faint curves show individual reviewed runs. Each point uses the first 5–50 chains per condition in every included run. Independent n stays2/2/3. H1/H3 use a magnified scale. All 50-chain endpoints match the statistics table.'),
+         'Each curve averages reviewed contexts using the first 5–50 chains per condition in every included run. Independent n stays2/2/3. All five outcomes are included. H1/H3 use a magnified scale. All 50-chain endpoints match the statistics table.'),
+        ('H1–H4 metrics versus context count', sources[5],
+         'A context is one fresh model conversation containing the three conditions. Curves average the first k reviewed contexts in chronological order. Astra and Sol stop at two reviewed contexts, Luna at three. No unobserved contexts are plotted. The final means and p-values match the statistics table.'),
     ]
     for title, path, caption in figures:
         story.extend([NextPageTemplate('landscape'), PageBreak(), Paragraph(title, st['heading']),
@@ -223,7 +226,7 @@ def main():
     assert fingerprint == {str(p.relative_to(ROOT)): sha(p) for p in sources}, 'A source changed during PDF export'
     receipt = dict(created_utc=datetime.now(timezone.utc).isoformat(), sources=fingerprint,
                    pdf_sha256=sha(PDF), pages=len(reader.pages), reportlab_version=reportlab.Version,
-                   figures_embedded=3, scientific_values_recomputed=False, api_calls=0,
+                   figures_embedded=4, scientific_values_recomputed=False, api_calls=0,
                    validation='PDF parses; text includes all five hypotheses, measurement definitions and final statistics; source hashes unchanged.',
                    page_sizes=[list(p.mediabox)[2:] for p in reader.pages])
     RECEIPT.write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')

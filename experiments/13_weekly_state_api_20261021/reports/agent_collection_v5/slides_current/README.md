@@ -14,13 +14,19 @@
 
 [PNG](MODEL_COMPARISON_REVIEWED.png) · [SVG](MODEL_COMPARISON_REVIEWED.svg) · [PDF](MODEL_COMPARISON_REVIEWED.pdf)
 
-**Caption:** Small dots show individual reviewed runs; diamonds show model means. Bars show the observed minimum–maximum across reviewed runs, and the labels give raw two-sided p-values. Astra uses two reviewed contexts, Sol two, and Luna three. These are exactly the observations used in the statistics table.
+**Caption:** All five outcomes are shown in one clean slide: H1, H2, H3, H4a and H4b. Dots show model means; labels show mean differences and raw p-values. H1/H3 axes use ×10⁻⁴. Reviewed contexts: Astra2, Sol2, Luna3.
 
 ## Slide 3 — H1–H4 effects versus chain count
 
-[PNG](../chain_size_stability/H1_H4_CHAIN_SIZE_REVIEWED.png) · [SVG](../chain_size_stability/H1_H4_CHAIN_SIZE_REVIEWED.svg) · [PDF](../chain_size_stability/H1_H4_CHAIN_SIZE_REVIEWED.pdf)
+[PNG](../size_stability/CHAIN_SIZE.png) · [SVG](../size_stability/CHAIN_SIZE.svg) · [PDF](../size_stability/CHAIN_SIZE.pdf)
 
-**Caption:** Bold curves show equal-context model means, recalculated using the first 5–50 chains per condition in each reviewed run. Faint curves show the individual reviewed runs. Independent sample counts stay at 2/2/3; the 50-chain endpoints match the statistics table. H1/H3 axes magnify very small differences.
+**Caption:** Each curve shows the model mean using the first 5–50 chains per condition in each reviewed run. Independent context counts stay at 2/2/3. All five outcomes are shown, and the 50-chain endpoints match the statistics table.
+
+## Slide 4 — H1–H4 effects versus context count
+
+[PNG](../size_stability/CONTEXT_COUNT.png) · [SVG](../size_stability/CONTEXT_COUNT.svg) · [PDF](../size_stability/CONTEXT_COUNT.pdf)
+
+**Caption:** Curves average the first k reviewed fresh contexts in chronological order. Astra and Sol end at two reviewed contexts; Luna ends at three. Every context includes all three conditions. The final endpoints and p-values match the statistics table. [Exact means and prefix p-values](../size_stability/context_count_values.csv).
 
 ## Supplementary: all recorded non-excluded contexts
 

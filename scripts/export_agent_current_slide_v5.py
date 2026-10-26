@@ -74,51 +74,52 @@ def hypothesis_slide(evidence):
 
 
 def reviewed_model_slide(evidence, contrasts):
-    """Match the primary statistics sample; separate runs are individual dots."""
+    """Minimal five-panel presentation slide: model means and raw p-values."""
     stats=pd.read_csv(SOURCE/'current_context_inference.csv')
     models=['gpt_astra','gpt_sol','gpt_luna']
-    labels=['Astra','Sol','Luna']
+    labels=['GPT-6 Astra','GPT-6.1 Sol','GPT-6 Luna']
     colors_=['#245B8A','#9467AA','#B57222']
     reviewed=[r for r in evidence['evidence'] if r['eligible']]
-    fig,axes=plt.subplots(1,3,figsize=(16,9))
-    fig.subplots_adjust(left=.065,right=.97,bottom=.29,top=.73,wspace=.36)
-    fig.text(.045,.925,'Model comparison: final reviewed results',fontsize=29,weight='bold')
-    fig.text(.045,.865,'Small dots = separate runs   ·   Diamonds = model means   ·   Bars = observed minimum–maximum across runs',fontsize=14.5,color='#536473')
+    fig,axes=plt.subplots(1,5,figsize=(16,9),sharey=True)
+    fig.subplots_adjust(left=.13,right=.97,bottom=.25,top=.77,wspace=.46)
+    fig.text(.055,.925,'H1–H4: Final results',fontsize=32,weight='bold')
+    fig.text(.055,.865,'Mean differences and raw p-values',fontsize=17,color='#536473')
     plotted=[]
-    for ax,h,title,ylabel,direction in zip(axes,['H2','H4a','H4b'],
-        ['H2  Total cost','H4a  Order variance','H4b  Bullwhip ratio'],
-        ['B − A: cost units / chain','C − B: variance (cases²)','C − B: bullwhip difference'],[1,-1,-1]):
-        allvals=[]
-        ticks=[]
+    panels=[('H1','Pipeline use','B − A (×10⁻⁴)',10000),
+            ('H2','Total cost','B − A (cost)',1),
+            ('H3','Pipeline use','C − B (×10⁻⁴)',10000),
+            ('H4a','Order variance','C − B (cases²)',1),
+            ('H4b','Bullwhip','C − B (ratio)',1)]
+    for ax,(h,title,xlabel,factor) in zip(axes,panels):
+        values_for_limits=[]
         for i,(m,label,color) in enumerate(zip(models,labels,colors_)):
             row=stats[(stats.model==m)&(stats.hypothesis==h)].iloc[0]
             runs=[r for r in reviewed if r['model']==m]
             values=[float(contrasts[(contrasts.model==m)&(contrasts.run==r['run'])&(contrasts.hypothesis==h)].difference.iloc[0]) for r in runs]
             assert len(values)==int(row.reviewed_contexts)
             assert np.isclose(np.mean(values),row.mean_difference,rtol=1e-12,atol=1e-12)
-            offsets=np.linspace(-.1,.1,len(values)) if len(values)>1 else [0]
-            ax.scatter(i+offsets,values,color=color,s=62,alpha=.5,zorder=3)
             mean=float(row.mean_difference)
-            ax.errorbar(i,mean,yerr=[[mean-min(values)],[max(values)-mean]],
-                color=color,capsize=6,lw=2.5,zorder=4)
-            ax.scatter(i,mean,color=color,marker='D',s=100,edgecolor='white',linewidth=1,zorder=5)
-            ax.annotate(f'{mean:+.2f}',(i,mean),xytext=(0,13),textcoords='offset points',
-                ha='center',fontsize=12,weight='bold',color=color,zorder=6)
-            ticks.append(f'{label}\nn = {len(values)}\np = {row.p_two_sided:.2f}')
-            allvals.extend(values)
+            displayed=mean*factor
+            y=2-i
+            ax.scatter(displayed,y,color=color,s=95,edgecolor='white',linewidth=1,zorder=4)
+            value_text='0' if abs(displayed)<1e-12 else f'{displayed:+.3g}'
+            ax.annotate(f'{value_text}\np={row.p_two_sided:.2f}',(displayed,y),xytext=(9,-1),
+                textcoords='offset points',ha='left',va='center',fontsize=12.5,color=color,zorder=5)
+            values_for_limits.append(displayed)
             plotted.append(dict(model=m,hypothesis=h,reviewed_runs=[r['run'] for r in runs],
-                mean_difference=mean,observed_min=min(values),observed_max=max(values),
+                mean_difference=mean,display_multiplier=factor,displayed_mean=displayed,
                 p_two_sided=float(row.p_two_sided),p_holm_20=float(row.p_holm_20)))
-        lo=min(0,min(allvals));hi=max(0,max(allvals));pad=max(hi-lo,.1)*.25
-        ax.set_ylim(lo-pad,hi+pad);ax.set_xlim(-.45,2.45)
-        ax.axhspan(0,hi+pad if direction>0 else lo-pad,color='#EDF6EF',zorder=0)
-        ax.axhline(0,color='#667986',lw=1,ls='--')
-        ax.set_xticks(range(3),ticks,fontsize=12);ax.set_title(title,fontsize=18,weight='bold',pad=20)
-        ax.set_ylabel(ylabel,fontsize=12);ax.yaxis.grid(True,alpha=.13)
-        ax.text(.03,.97,'Predicted '+('above' if direction>0 else 'below')+' zero',transform=ax.transAxes,va='top',fontsize=11,color='#477654')
-    fig.text(.045,.15,'Same reviewed runs as the statistics table: Astra 2, Sol 2, Luna 3. No lines connect independent rounds.',fontsize=12)
-    fig.text(.045,.098,'A = control + revision     B = control + one decision     C = causal education + one decision',fontsize=11.5)
-    fig.text(.045,.045,'Printed p-values are raw, two-sided exact tests; all Holm-adjusted p-values = 1.00. Bars show run-to-run range.',fontsize=11,color='#536473')
+        lo=min(0,min(values_for_limits));hi=max(0,max(values_for_limits));span=max(hi-lo,.1)
+        ax.set_xlim(lo-span*.30,hi+span*.95);ax.set_ylim(-.55,2.55)
+        ax.axvline(0,color='#A8B4BC',lw=1,ls='--',zorder=1)
+        ax.set_title(h+'\n'+title,fontsize=17,weight='bold',pad=22)
+        ax.set_xlabel(xlabel,fontsize=12,labelpad=12)
+        ax.set_yticks([2,1,0],labels,fontsize=14)
+        ax.tick_params(axis='y',length=0,pad=16);ax.tick_params(axis='x',labelsize=11)
+        ax.xaxis.set_major_locator(plt.MaxNLocator(3))
+        ax.spines['left'].set_visible(False);ax.spines['bottom'].set_color('#C2CBD1')
+        ax.grid(axis='x',alpha=.08)
+    fig.text(.055,.115,'Reviewed n: Astra 2 · Sol 2 · Luna 3       |       All Holm-adjusted p = 1.00',fontsize=12,color='#536473')
     save_figure(fig,'MODEL_COMPARISON_REVIEWED')
     plt.close(fig)
     (OUT/'plotted_reviewed_model_comparison.json').write_text(json.dumps(plotted,indent=2)+'\n',encoding='utf-8')
@@ -188,10 +189,13 @@ def main():
         '**Caption:** H1/H3 measure response to outstanding orders, H2 measures total cost, and H4 measures order variance and bullwhip. The table reports signed mean differences, raw two-sided p-values and Holm-adjusted p-values. Values average reviewed contexts only; review counts remain explicit.','',
         '## Slide 2 — Model comparison, same reviewed sample as the statistics','',
         '[PNG](MODEL_COMPARISON_REVIEWED.png) · [SVG](MODEL_COMPARISON_REVIEWED.svg) · [PDF](MODEL_COMPARISON_REVIEWED.pdf)','',
-        '**Caption:** Small dots show individual reviewed runs; diamonds show model means. Bars show the observed minimum–maximum across reviewed runs, and the labels give raw two-sided p-values. Astra uses two reviewed contexts, Sol two, and Luna three. These are exactly the observations used in the statistics table.','',
+        '**Caption:** All five outcomes are shown in one clean slide: H1, H2, H3, H4a and H4b. Dots show model means; labels show mean differences and raw p-values. H1/H3 axes use ×10⁻⁴. Reviewed contexts: Astra2, Sol2, Luna3.','',
         '## Slide 3 — H1–H4 effects versus chain count','',
-        '[PNG](../chain_size_stability/H1_H4_CHAIN_SIZE_REVIEWED.png) · [SVG](../chain_size_stability/H1_H4_CHAIN_SIZE_REVIEWED.svg) · [PDF](../chain_size_stability/H1_H4_CHAIN_SIZE_REVIEWED.pdf)','',
-        '**Caption:** Bold curves show equal-context model means, recalculated using the first 5–50 chains per condition in each reviewed run. Faint curves show the individual reviewed runs. Independent sample counts stay at 2/2/3; the 50-chain endpoints match the statistics table. H1/H3 axes magnify very small differences.','',
+        '[PNG](../size_stability/CHAIN_SIZE.png) · [SVG](../size_stability/CHAIN_SIZE.svg) · [PDF](../size_stability/CHAIN_SIZE.pdf)','',
+        '**Caption:** Each curve shows the model mean using the first 5–50 chains per condition in each reviewed run. Independent context counts stay at 2/2/3. All five outcomes are shown, and the 50-chain endpoints match the statistics table.','',
+        '## Slide 4 — H1–H4 effects versus context count','',
+        '[PNG](../size_stability/CONTEXT_COUNT.png) · [SVG](../size_stability/CONTEXT_COUNT.svg) · [PDF](../size_stability/CONTEXT_COUNT.pdf)','',
+        '**Caption:** Curves average the first k reviewed fresh contexts in chronological order. Astra and Sol end at two reviewed contexts; Luna ends at three. Every context includes all three conditions. The final endpoints and p-values match the statistics table. [Exact means and prefix p-values](../size_stability/context_count_values.csv).','',
         '## Supplementary: all recorded non-excluded contexts','',
         '[All-recorded run chart](CURRENT_REPLICATION_RESULTS.png) and [all-recorded chain-prefix curves](../chain_size_stability/H1_H4_VS_CHAIN_SIZE.png) retain the earlier views, including pending-review runs. They use a broader descriptive sample than the primary statistics.','',
         '## What the quantities mean','',

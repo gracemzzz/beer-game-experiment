@@ -1,5 +1,15 @@
 # Beer Game agent handoff
 
+## Latest: clean chain and context size plots
+
+User asked chain-size/context plots match minimal all-hypothesis style. New `scripts/export_agent_size_slides_v5.py` writes reports/agent_collection_v5/size_stability/CHAIN_SIZE and CONTEXT_COUNT inPNG/SVG/PDF, plus90chainmeanrows/35reviewedcontextprefixrows. Fivehorizontalpanels H1/H2/H3/H4a/H4b,3modelmeancurves,shortlabels. Chainx=5..50percondition/run,contextx=cumulativeREVIEWEDcontexts1..2Astra/Sol,1..3Luna. ActualrunIDs recorded; n1p unavailable. No extrapolatedcontexts orchainpvalues. Final30meansand15raw/Holm p endpointchecksmatchunchangedstatisticalCSV. SIZE_SLIDES_VALIDATION.json. Slideindexupdated;REPORT.pdfnow8pagesincludingbothsizecharts. Collectionclosed,noAPIcalls. Earlierplots/sourcebytespreserved.
+
+
+## Latest presentation: all H1-H4, fewer words
+
+User requested final-reviewed plot include all hypotheses and minimal presentation text. MODEL_COMPARISON_REVIEWED.png/pdf/svg now has5horizontalfacets(H1,H2,H3,H4a,H4b),3modelmeanrows,rawp labels; no rangebars/per-run dots/longparagraphs. H1/H3axislabelsx1e-4explicit. Reviewedn2/2/3onefooter;allHolmp1. FifteenpointsvalidatedagainstunchangedstatisticsCSV. Prior3panelchartarchivedbyexporter. ReportPDFrebuiltwithnewall-hypothesesfigure. ALL_HYPOTHESES_SLIDE_VALIDATION.json. Collection remainsclosed;nonewAPIorrounds.
+
+
 ## Current primary figures - reviewed sample aligned with inference
 
 User said plots look strange. Verified data were final, but prior charts mixed pending-review runs with reviewed inference and joined independent runs. New primary MODEL_COMPARISON_REVIEWED.png/pdf/svg (dots=reviewedruns, diamonds=means, bars=observed min/max, rawp labels) and H1_H4_CHAIN_SIZE_REVIEWED.png/pdf/svg (bold equal-context model means, faint reviewedruns) use Astra2/Sol2/Luna3, exactly as p table. Fifteen50chainendpoints and9comparisonmeans/rawp match unchanged current_context_inference.csv. H1/H3 axis ?1e-4 clearly labeled; actual meanAstra?.0002083; Sol/Luna0. Prior CURRENT_REPLICATION_RESULTS and H1_H4_VS_CHAIN_SIZE remain supplementary all-recorded views, not primary inferential sample. PDFreport rebuilt with new reviewed charts. Raw results/eligibility/stats untouched, collectionstillclosed. See PLOT_PRESENTATION_REVIEW.json and PLOT_PRESENTATION_VALIDATION.json.
