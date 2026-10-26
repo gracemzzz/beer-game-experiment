@@ -45,8 +45,64 @@ def classify(value, direction):
     return 'Predicted direction' if value*direction > 0 else 'Opposite direction'
 
 
+def reviewed_mean_figure(table):
+    """Primary curves use the exact reviewed-context sample of the p-value table."""
+    reviewed=table[table.adherence_review_passed.eq(True)].copy()
+    stats=pd.read_csv(SOURCE/'current_context_inference.csv')
+    means=reviewed.groupby(['model','hypothesis','chains_per_condition'],sort=False).agg(
+        effect_difference=('effect_difference','mean'),reviewed_contexts=('run','nunique')).reset_index()
+    for _,row in means[means.chains_per_condition==50].iterrows():
+        expected=stats[(stats.model==row.model)&(stats.hypothesis==row.hypothesis)].iloc[0]
+        assert row.reviewed_contexts==expected.reviewed_contexts
+        assert np.isclose(row.effect_difference,expected.mean_difference,rtol=1e-12,atol=1e-12)
+    means.to_csv(OUT/'plotted_reviewed_model_means.csv',index=False)
+    fig,axes=plt.subplots(2,3,figsize=(18,10.125))
+    fig.subplots_adjust(left=.075,right=.975,top=.815,bottom=.16,wspace=.33,hspace=.55)
+    fig.text(.04,.944,'How estimates change with chains per condition',fontsize=27,weight='bold')
+    fig.text(.04,.893,'Bold: reviewed model means   ·   Faint: individual reviewed runs   ·   At 50 chains: same means as the statistics table',
+        fontsize=14,color='#536473')
+    for ax,(name,metric,plus,minus,direction) in zip(axes.flat,ENDPOINTS):
+        factor=10000 if name in ('H1','H3') else 1
+        sub=reviewed[reviewed.hypothesis==name]
+        values=sub.effect_difference.to_numpy()*factor
+        lo=min(0,float(values.min()));hi=max(0,float(values.max()));pad=max(hi-lo,.05)*.2
+        ax.set_ylim(lo-pad,hi+pad)
+        ax.axhspan(0,hi+pad if direction>0 else lo-pad,color='#EDF6EF',zorder=0)
+        ax.axhline(0,color='#60717D',lw=1.1,ls='--',zorder=1)
+        for (model,run),part in sub.groupby(['model','run'],sort=False):
+            part=part.sort_values('chains_per_condition')
+            ax.plot(part.chains_per_condition,part.effect_difference*factor,color=COLORS[model],lw=1.2,alpha=.23,zorder=2)
+        for model in LABELS:
+            part=means[(means.model==model)&(means.hypothesis==name)].sort_values('chains_per_condition')
+            ax.plot(part.chains_per_condition,part.effect_difference*factor,color=COLORS[model],
+                marker=MARKERS[model],markersize=7,markerfacecolor='white',markeredgewidth=1.7,lw=2.6,zorder=3)
+        ax.set_title(TITLES[name],loc='left',fontsize=15,weight='bold',pad=22)
+        ax.text(0,1.035,'Predicted: '+('above' if direction>0 else 'below')+' zero',transform=ax.transAxes,fontsize=10,color='#477654')
+        ax.set_ylabel(('Sensitivity difference (×10⁻⁴): '+plus+' − '+minus) if factor>1 else UNITS[name],fontsize=10.5)
+        ax.set_xlabel('Chains per condition in each run',fontsize=10.5,labelpad=5)
+        ax.set_xticks(SIZES);ax.set_xlim(3,52);ax.grid(axis='y',alpha=.13)
+        ax.ticklabel_format(axis='y',style='plain',useOffset=False)
+    key=axes.flat[-1];key.axis('off')
+    key.text(0,1.05,'Same sample as the statistics',fontsize=14,weight='bold')
+    handles=[]
+    for model,label in LABELS.items():
+        n=reviewed[reviewed.model==model].run.nunique()
+        handles.append(Line2D([0],[0],color=COLORS[model],marker=MARKERS[model],markerfacecolor='white',
+            lw=2.6,label=f'{label} (n = {n} contexts)'))
+    key.legend(handles=handles,loc='upper left',bbox_to_anchor=(-.02,.99),frameon=False,fontsize=12)
+    key.text(0,.59,'How to read the axes',fontsize=13,weight='bold')
+    key.text(0,.48,'X: first k chains in each run\nIndependent n stays at 2 / 2 / 3\nGreen: predicted effect direction\nH1 / H3: magnified ×10⁻⁴ scale',fontsize=11.5,va='top',linespacing=1.55)
+    fig.text(.04,.077,'A = control + revision     B = control + one decision     C = causal education + one decision',fontsize=12)
+    fig.text(.04,.035,'Reviewed runs only. H1/H3 differences are tiny in absolute terms. Chain prefixes describe subset stability; no extra independent rounds are added.',fontsize=11,color='#536473')
+    for ext in ('png','svg','pdf'):
+        temporary=OUT/f'.H1_H4_CHAIN_SIZE_REVIEWED.new.{ext}'
+        fig.savefig(temporary,dpi=240,facecolor='white',format=ext)
+        temporary.replace(OUT/f'H1_H4_CHAIN_SIZE_REVIEWED.{ext}')
+    plt.close(fig)
+
+
 def main():
-    sources = ('RESULTS.json','per_chain_results.csv','context_arm_results.csv','within_context_chain_prefixes.csv')
+    sources = ('RESULTS.json','per_chain_results.csv','context_arm_results.csv','within_context_chain_prefixes.csv','current_context_inference.csv')
     inputs = {name:sha(SOURCE/name) for name in sources}
     evidence = json.loads((SOURCE/'RESULTS.json').read_text(encoding='utf-8'))
     selected = [r for r in evidence['evidence'] if not r['review'].startswith('Excluded:')]
@@ -174,7 +230,8 @@ def main():
     handles=[Line2D([0],[0],color=COLORS[r['model']],marker=MARKERS[r['model']],
         markerfacecolor='white',markeredgewidth=1.6,lw=2.4,ls=styles[(r['model'],r['run'])],
         label=LABELS[r['model']]+' / '+r['run']+(' (reviewed)' if r['eligible'] else ' (review pending)')) for r in selected]
-    key.legend(handles=handles,loc='upper left',bbox_to_anchor=(-.02,1.12),frameon=False,fontsize=10.5)
+    key.legend(handles=handles,loc='upper left',bbox_to_anchor=(-.02,1.12),frameon=False,
+               fontsize=9 if len(handles)>7 else 10.5,labelspacing=.35)
     key.text(0,.38,'Read both kinds of stability',fontsize=13,weight='bold')
     key.text(0,.28,'Along a curve: sensitivity to chain count\nAcross curves: repeatability across contexts\nZero = no observed condition difference',
              fontsize=11,va='top',linespacing=1.55)
@@ -184,12 +241,15 @@ def main():
     for ext in ('png','svg','pdf'):
         fig.savefig(OUT/f'H1_H4_VS_CHAIN_SIZE.{ext}',dpi=240,facecolor='white')
     plt.close(fig)
+    reviewed_mean_figure(table)
     lines=['# H1–H4: chain count versus conclusion stability','',
         '1. **The x-axis is 5, 10, 20, 30, 40 and 50 chains per condition.** Each point uses the same first-k chain IDs in A, B and C.',
         '2. **The y-axis is the effect relevant to each hypothesis:** B−A for H1/H2; C−B for H3/H4a/H4b. Green marks the predicted direction; zero means no observed difference.',
         '3. **These are descriptive direction checks.** The chains in a curve share one context; adding chains to a prefix does not add independent model replications. No chain-level p-values or confidence intervals are computed.','',
-        '[Presentation PNG](H1_H4_VS_CHAIN_SIZE.png) · [Scalable SVG](H1_H4_VS_CHAIN_SIZE.svg) · [PDF](H1_H4_VS_CHAIN_SIZE.pdf)','',
-        '![H1–H4 versus chain count](H1_H4_VS_CHAIN_SIZE.png)','',
+        '**Primary slide: same reviewed sample as the statistics.** [PNG](H1_H4_CHAIN_SIZE_REVIEWED.png) · [SVG](H1_H4_CHAIN_SIZE_REVIEWED.svg) · [PDF](H1_H4_CHAIN_SIZE_REVIEWED.pdf). Bold curves are equal-context model means; faint curves are individual reviewed runs. The 50-chain means match the reported estimates to 1e-12. H1/H3 axes use a clearly labeled ×10⁻⁴ scale because those differences are tiny.','',
+        '![Reviewed model means versus chain count](H1_H4_CHAIN_SIZE_REVIEWED.png)','',
+        '[Exact reviewed means](plotted_reviewed_model_means.csv). Independent context counts remain Astra2 / Sol2 / Luna3 at every chain prefix.','',
+        '**Supplementary all-recorded view:** [PNG](H1_H4_VS_CHAIN_SIZE.png) · [SVG](H1_H4_VS_CHAIN_SIZE.svg) · [PDF](H1_H4_VS_CHAIN_SIZE.pdf). This broader descriptive sample retains pending-review runs and is not the primary inference sample.','',
         '## What the observed curves say','',
         '| Model / context | Hypothesis | Direction at 50 chains | Same direction at all six sizes? |',
         '|---|---|---|---|']
@@ -207,7 +267,7 @@ def main():
         'Rebuild after new completed results: first run `scripts/report_agent_collection_v5.py`, then `scripts/plot_agent_chain_size_stability_v5.py`, using `.venv/Scripts/python.exe`. Previous chart versions are preserved in `history/`. No API calls or order decisions are made. All calculated prefix means are checked against the report, and the 50-chain endpoints against full condition summaries.','']
     (OUT/'README.md').write_text('\n'.join(lines),encoding='utf-8')
     manifest=dict(version=version,fingerprint=fingerprint,created_utc=datetime.now(timezone.utc).isoformat(),
-        selected=provenance,excluded=excluded,source_evidence_id=evidence['evidence_id'],
+        selected=provenance,primary_reviewed_contexts=[r for r in provenance if r['eligible']],excluded=excluded,source_evidence_id=evidence['evidence_id'],
         validation='150 chain rows/context; identical first-k indices in each condition; every prefix matches published data; 50-chain endpoints match full summaries, tolerances1e-12',
         interpretation='Descriptive sign stability, not significance or independent-chain inference',
         artifacts={p.name:sha(p) for p in OUT.iterdir() if p.is_file() and p.name!='MANIFEST.json'})

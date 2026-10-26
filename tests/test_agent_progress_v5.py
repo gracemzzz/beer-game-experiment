@@ -80,6 +80,17 @@ class ProgressTests(unittest.TestCase):
                 self.assertTrue(monitor['state']['closed'])
         asyncio.run(run())
 
+    def test_three_round_stop_supersedes_timebox_target(self):
+        self.status()
+        (self.collection/'STOP_AFTER_THREE_04.json').write_text(json.dumps({
+            'complete_nonexcluded_contexts_per_model':3}))
+        s=progress.snapshot(self.root)
+        self.assertEqual(s['target_contexts_per_model'],3)
+        rendered=progress.html(s)
+        self.assertIn('stop after 3 complete non-excluded contexts',rendered)
+        self.assertIn('No more contexts will be launched',rendered)
+        self.assertNotIn('Collection finished:',rendered)
+
 
 if __name__ == '__main__':
     unittest.main()

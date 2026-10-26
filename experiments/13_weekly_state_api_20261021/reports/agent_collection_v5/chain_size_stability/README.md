@@ -4,9 +4,13 @@
 2. **The y-axis is the effect relevant to each hypothesis:** B−A for H1/H2; C−B for H3/H4a/H4b. Green marks the predicted direction; zero means no observed difference.
 3. **These are descriptive direction checks.** The chains in a curve share one context; adding chains to a prefix does not add independent model replications. No chain-level p-values or confidence intervals are computed.
 
-[Presentation PNG](H1_H4_VS_CHAIN_SIZE.png) · [Scalable SVG](H1_H4_VS_CHAIN_SIZE.svg) · [PDF](H1_H4_VS_CHAIN_SIZE.pdf)
+**Primary slide: same reviewed sample as the statistics.** [PNG](H1_H4_CHAIN_SIZE_REVIEWED.png) · [SVG](H1_H4_CHAIN_SIZE_REVIEWED.svg) · [PDF](H1_H4_CHAIN_SIZE_REVIEWED.pdf). Bold curves are equal-context model means; faint curves are individual reviewed runs. The 50-chain means match the reported estimates to 1e-12. H1/H3 axes use a clearly labeled ×10⁻⁴ scale because those differences are tiny.
 
-![H1–H4 versus chain count](H1_H4_VS_CHAIN_SIZE.png)
+![Reviewed model means versus chain count](H1_H4_CHAIN_SIZE_REVIEWED.png)
+
+[Exact reviewed means](plotted_reviewed_model_means.csv). Independent context counts remain Astra2 / Sol2 / Luna3 at every chain prefix.
+
+**Supplementary all-recorded view:** [PNG](H1_H4_VS_CHAIN_SIZE.png) · [SVG](H1_H4_VS_CHAIN_SIZE.svg) · [PDF](H1_H4_VS_CHAIN_SIZE.pdf). This broader descriptive sample retains pending-review runs and is not the primary inference sample.
 
 ## What the observed curves say
 
@@ -22,6 +26,11 @@
 | GPT-6 Astra / run002 | H3 | Zero difference | Yes |
 | GPT-6 Astra / run002 | H4a | Predicted direction | Yes |
 | GPT-6 Astra / run002 | H4b | Predicted direction | Yes |
+| GPT-6 Astra / run003 | H1 | Predicted direction | No |
+| GPT-6 Astra / run003 | H2 | Predicted direction | No |
+| GPT-6 Astra / run003 | H3 | Predicted direction | No |
+| GPT-6 Astra / run003 | H4a | Predicted direction | Yes |
+| GPT-6 Astra / run003 | H4b | Predicted direction | Yes |
 | GPT-6.1 Sol / run001 | H1 | Zero difference | Yes |
 | GPT-6.1 Sol / run001 | H2 | Predicted direction | Yes |
 | GPT-6.1 Sol / run001 | H3 | Zero difference | Yes |
@@ -47,6 +56,11 @@
 | GPT-6 Luna / run004 | H3 | Zero difference | Yes |
 | GPT-6 Luna / run004 | H4a | Opposite direction | Yes |
 | GPT-6 Luna / run004 | H4b | Opposite direction | Yes |
+| GPT-6 Luna / run005 | H1 | Zero difference | Yes |
+| GPT-6 Luna / run005 | H2 | Zero difference | Yes |
+| GPT-6 Luna / run005 | H3 | Zero difference | Yes |
+| GPT-6 Luna / run005 | H4a | Zero difference | Yes |
+| GPT-6 Luna / run005 | H4b | Zero difference | Yes |
 
 **Suggested slide caption:** Within each completed AI context, H1–H4 effects were recalculated using the first 5–50 chains per condition. A consistently signed curve indicates descriptive directional stability; a zero crossing indicates sensitivity to the included chains. These curves do not establish statistical significance or student-level replication.
 
@@ -56,11 +70,13 @@ A = control reading + separate revision; B = control + one committed decision; C
 
 - GPT-6 Astra / run001: Pending: incomplete orchestration record. Complete physical replay passed.
 - GPT-6 Astra / run002: Reviewed. Complete physical replay passed.
+- GPT-6 Astra / run003: Reviewed. Complete physical replay passed.
 - GPT-6.1 Sol / run001: Pending: incomplete orchestration record. Complete physical replay passed.
 - GPT-6.1 Sol / run002: Reviewed. Complete physical replay passed.
 - GPT-6.1 Sol / run003: Reviewed. Complete physical replay passed.
 - GPT-6 Luna / run003: Reviewed. Complete physical replay passed.
 - GPT-6 Luna / run004: Reviewed. Complete physical replay passed.
+- GPT-6 Luna / run005: Reviewed. Complete physical replay passed.
 - Excluded and preserved: GPT-6 Luna / run001: Excluded: Public state fields omitted before decisions.
 - Excluded and preserved: GPT-6 Luna / run002: Excluded: Code generated current-page choices.
 - Claude has no collected local-agent results.

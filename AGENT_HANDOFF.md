@@ -1,5 +1,37 @@
 # Beer Game agent handoff
 
+## Current primary figures - reviewed sample aligned with inference
+
+User said plots look strange. Verified data were final, but prior charts mixed pending-review runs with reviewed inference and joined independent runs. New primary MODEL_COMPARISON_REVIEWED.png/pdf/svg (dots=reviewedruns, diamonds=means, bars=observed min/max, rawp labels) and H1_H4_CHAIN_SIZE_REVIEWED.png/pdf/svg (bold equal-context model means, faint reviewedruns) use Astra2/Sol2/Luna3, exactly as p table. Fifteen50chainendpoints and9comparisonmeans/rawp match unchanged current_context_inference.csv. H1/H3 axis ?1e-4 clearly labeled; actual meanAstra?.0002083; Sol/Luna0. Prior CURRENT_REPLICATION_RESULTS and H1_H4_VS_CHAIN_SIZE remain supplementary all-recorded views, not primary inferential sample. PDFreport rebuilt with new reviewed charts. Raw results/eligibility/stats untouched, collectionstillclosed. See PLOT_PRESENTATION_REVIEW.json and PLOT_PRESENTATION_VALIDATION.json.
+
+
+## Final collection status - 25 October 2026, approximately 10:58 p.m. Eastern
+
+ALL COLLECTION STOPPED at user-requested3complete nonexcluded contexts PER GPTmodel. Immutable close receipt: experiment13data/assistant_v5_20261025/COLLECTION_CLOSED.json. No new agents or contexts; prepguardrejectslaunches due STOP_AFTER_THREE_04.json. Allthreeworkers completed. Astra1/Sol1pendingoriginalorchestrationreceipts; Luna1/2excluded. Inference uses Astra2+3(n2),Sol2+3(n2),Luna3+4+5(n3). Total11completedattempts,9nonexcluded,7reviewed.
+
+Final observed means (Astra,Sol,Luna): H1(-.000208333,0,0);H2(+38.305,-13.825,+6.433333);H3(+.000208333,0,0);H4a(-20.442613,+11.484384,+1.473255);H4b(-3.164959,+1.774322,+.214793). RawpAstra(H1=1,H2=.5,H3=1,H4a=.5,H4b=.5),Solall1,LunaH2=.5others1;Holm20all1. User explicitly wants trends/effects/p-values, no verbal verdict substitution. Definitions per hypothesis are now directly before the results table, including units/comparisons/sign meanings, actual probe8vs32formula and bullwhipdenominator.
+
+Astra3review passed after documenting a failed mistyped show, malformed toolcall containing spurious inline output text (NOT real tooloutput), rejected wrong-page attempt and fullshow recovery. All224successful literalsteps match fullpublicstates. OldTRACE_AUDIT greedymatchingfails270vs290; fullPAGE_EXPOSURE_REVIEWsuccessmappingcorrect. Reviewoperatorattested; no parentbodydecryption/provideridentityclaim. No source/private/codeorders. Frozen scientificsources/prompts/transport and APIledger unchanged.
+
+Current human entry: reports/agent_collection_v5/README.md -> REPORT.md, slides_current/README.md (three slides), current_context_inference.csv and per_chain_results.csv. Final rebuild complete. FINAL_THREE_ROUND_VALIDATION.json passes15estimate/p rows, all publication hashes/links, unchanged result bytes, transport and shared ledger. Three final figure layouts visually inspected. No work remains in this closed collection. All prior publication/source/navigationbytes archived. Earlier notes below are historical and superseded.
+
+
+## Latest presentation preference - numeric effects and p-values
+
+User: "do not say not established ... just show the p value ... statistics". Frozen additive REPORTING_FORMAT_05.json. Current REPORT.md now shows short observed trends and a complete table: signed mean, reviewed n, pointwise bootstrap CI, raw exact two-sided p, Holm20 p. Do not substitute verbal verdict labels for the numbers. All available adjusted p currently1; Luna H2 rawp.5, other availablep1. Astra reviewedn1 pendingfinalrunreview. Stop at3nonexcluded/model unchanged.
+
+New current slide HYPOTHESIS_CONCLUSIONS.png/pdf/svg now shows actual p andHolm in each model cell. Exporter writes images to finished temporary files and replaces atomically; a direct-write failure on the open PNG was recovered, failed intermediate bytes preserved in slides_current/history/interrupted_export_*. The current complete export has its own manifest. Chain legend reduced for8/9contextcurves. Final regenerate and visually inspect afterAstra3review. New scripts/report_generator changes preserve scientific calculations.
+
+
+## Latest instruction - stop at three completed rounds
+
+User: "update reports ... conclusion of different hypothesis ... stop after 3 rounds completes". Frozen amendment STOP_AFTER_THREE_04.json supersedes the continue-after-checkpoint instruction. NO NEW CONTEXTS. Finish Astra run003 only, then stop collection; Sol3 and Luna5 complete. Earlier hard cutoff 03:07:34 UTC remains. Preparation script refuses all new launches. Monitor displays three-round final stage. Preserve original excluded Luna1/2 and pending-review Astra1/Sol1; do not replace those based on outcomes.
+
+Luna5 now completed/reviewed: 224 literal accepted pages, full before/after state verified, all constant4 choices; 40 rejected/unmatched attempts retained, one harmless RESULT existence Test-Path check. Client requested Luna/high throughout. One launch receipt matches sole encrypted parent header. No hidden reasoning/private state exported. All constant choices remain valid.
+
+REPORT.md generator now puts separate H1/H2/H3/H4a/H4b conclusions first and extracts hypothesis_conclusions.csv plus absolute_pipeline_sensitivity.csv. The report currently has Astra2, Sol3, Luna3 non-excluded contexts; need final regenerate after Astra3 review, then both figure scripts and visually inspect nine-curve legend. 11 focused tests pass. Need final answer with short hypothesis conclusions and current report/slide links. No significance guarantee; three contexts minimum two-sided exact p is .25 before adjustment. No more collection despite that limit.
+
+
 ## Current update - 2026-10-26 02:26 UTC
 
 Urgent user request: report and presentation figures now, without waiting for all three rounds. Sol run003 just completed and passed procedure review (224 literal choices/full public displays, 3 parent-message receipts, no deviations). Astra run003 and Luna run005 continue. Do not launch more Astra/Sol: less than 45 minutes remain before collection cutoff. Luna can launch only while at least 30 minutes remain. Keep the 03:07:34 UTC collection cutoff and 03:27:34 UTC final publication deadline.

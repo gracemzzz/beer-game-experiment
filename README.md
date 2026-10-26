@@ -1,10 +1,12 @@
 # Beer Game experiments
 
+**Collection complete and stopped: three complete non-excluded rounds per GPT model. No further contexts will start. [Read the explicit H1-H4 conclusions](experiments/13_weekly_state_api_20261021/reports/agent_collection_v5/REPORT.md).**
+
 ## Current: live agent collection and 50-chain manual batches
 
 **[Open the live progress notebook](experiments/13_weekly_state_api_20261021/notebooks/AGENT_PROGRESS.ipynb). Run all cells; tick Auto-refresh (10 s) if a checkbox appears. Without ipywidgets, HTML auto-refresh starts automatically.** It shows saved pages, completed weeks and H1-H4 status for GPT-6 Astra, GPT-6.1 Sol and GPT-6 Luna. It monitors collection; it does not launch agents or call an API.
 
-For your own website collection: [four prompts + helper](experiments/13_weekly_state_api_20261021/prompts/LARGE_SAMPLE_V5/README.md), [manual analysis notebook](experiments/13_weekly_state_api_20261021/notebooks/LARGE_SAMPLE_V5.ipynb), [manual report / sample-size plan](experiments/13_weekly_state_api_20261021/reports/large_sample_v5/REPORT.md). V5 uses 50 chains per condition, three conditions and 24 weeks per fresh context. Agent and website samples remain separate. One context is one replication; the 50 chains are dependent. Current agent collection is ongoing, not an established significance result.
+For your own website collection: [four prompts + helper](experiments/13_weekly_state_api_20261021/prompts/LARGE_SAMPLE_V5/README.md), [manual analysis notebook](experiments/13_weekly_state_api_20261021/notebooks/LARGE_SAMPLE_V5.ipynb), [manual report / sample-size plan](experiments/13_weekly_state_api_20261021/reports/large_sample_v5/REPORT.md). V5 uses 50 chains per condition, three conditions and 24 weeks per fresh context. Agent and website samples remain separate. One context is one replication; the 50 chains are dependent. The agent collection is closed at three complete non-excluded rounds per model; read the current report for signed effects and raw/adjusted p-values.
 
 [Current agent report and extracted results](experiments/13_weekly_state_api_20261021/reports/agent_collection_v5/REPORT.md). The user has replaced the ten-run target with a 90-minute maximum: collection stops at 11:07 p.m. Eastern on 25 October; report deadline 11:27 p.m. Three-round review/plots after three complete non-excluded contexts per model, followed by a final update within that cap. The live notebook shows completion and review status.
 

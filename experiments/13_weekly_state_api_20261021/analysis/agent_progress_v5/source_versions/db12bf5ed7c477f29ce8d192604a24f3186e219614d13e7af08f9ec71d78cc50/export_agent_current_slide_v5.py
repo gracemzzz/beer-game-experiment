@@ -1,0 +1,92 @@
+"""Current descriptive replication slide; freeze prior exports before replacing."""
+from pathlib import Path
+from datetime import datetime, timezone
+import hashlib
+import json
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+ROOT=Path(__file__).resolve().parents[1]
+SOURCE=ROOT/'experiments/13_weekly_state_api_20261021/reports/agent_collection_v5'
+OUT=SOURCE/'slides_current'
+
+
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+def main():
+    evidence=json.loads((SOURCE/'RESULTS.json').read_text(encoding='utf-8'))
+    selected=[r for r in evidence['evidence'] if not r['review'].startswith('Excluded:')]
+    table=pd.read_csv(SOURCE/'descriptive_context_contrasts.csv')
+    fingerprint=dict(source_sha256=sha(SOURCE/'RESULTS.json'),table_sha256=sha(SOURCE/'descriptive_context_contrasts.csv'),generator_sha256=sha(Path(__file__)))
+    version=hashlib.sha256(json.dumps(fingerprint,sort_keys=True).encode()).hexdigest()[:16]
+    OUT.mkdir(parents=True,exist_ok=True)
+    if (OUT/'MANIFEST.json').exists():
+        previous=json.loads((OUT/'MANIFEST.json').read_text(encoding='utf-8'))
+        if previous['fingerprint']==fingerprint:
+            print(OUT/'README.md');return
+        archive=OUT/'history'/previous['version'];archive.mkdir(parents=True,exist_ok=True)
+        for p in OUT.iterdir():
+            if p.is_file():
+                q=archive/p.name
+                if q.exists():assert q.read_bytes()==p.read_bytes()
+                else:q.write_bytes(p.read_bytes())
+    styles={'gpt_astra':('GPT-6 Astra','#245B8A','o'),'gpt_sol':('GPT-6.1 Sol','#9467AA','s'),'gpt_luna':('GPT-6 Luna','#B57222','D')}
+    plt.rcParams.update({'font.family':'DejaVu Sans','font.size':14,'text.color':'#173044',
+        'axes.labelcolor':'#173044','axes.spines.top':False,'axes.spines.right':False,'svg.fonttype':'none','pdf.fonttype':42})
+    fig,axes=plt.subplots(1,3,figsize=(16,9))
+    fig.subplots_adjust(left=.065,right=.97,bottom=.3,top=.72,wspace=.36)
+    fig.text(.045,.925,'Repeat runs reveal instability in the early findings',fontsize=28,weight='bold')
+    fig.text(.045,.865,'One point = one completed context, with 50 chains per condition and 24 weeks.',fontsize=16,color='#536473')
+    plotted=[]
+    for ax,h,title,ylabel,direction in zip(axes,['H2','H4a','H4b'],
+        ['H2  Cost difference','H4a  Order-variance difference','H4b  Bullwhip difference'],
+        ['B − A: game cost units / chain','C − B: variance (units²)','C − B: bullwhip ratio'],[1,-1,-1]):
+        allvals=[];maxn=0
+        for m,(label,color,marker) in styles.items():
+            runs=[r for r in selected if r['model']==m]
+            vals=[]
+            for n,r in enumerate(runs,1):
+                value=float(table[(table.model==m)&(table.run==r['run'])&(table.hypothesis==h)].difference.iloc[0])
+                vals.append(value)
+                ax.scatter(n,value,color=color,marker=marker,s=85,facecolors=color if r['eligible'] else 'white',linewidths=2,zorder=4)
+                plotted.append(dict(model=m,run=r['run'],completion_index_excluding_excluded=n,hypothesis=h,value=value,review=r['review'],reviewed=r['eligible']))
+            if vals:ax.plot(range(1,len(vals)+1),vals,color=color,lw=2.8,label=label,zorder=3)
+            maxn=max(maxn,len(vals));allvals.extend(vals)
+        lo=min(0,min(allvals));hi=max(0,max(allvals));pad=max(hi-lo,.1)*.18
+        ax.set_ylim(lo-pad,hi+pad);ax.axhspan(0,hi+pad if direction>0 else lo-pad,color='#EDF6EF',zorder=0)
+        ax.axhline(0,color='#667986',lw=1,ls='--')
+        ax.set_xticks(range(1,maxn+1),[f'Context {n}' for n in range(1,maxn+1)])
+        ax.set_xlim(.7,maxn+.3);ax.set_title(title,fontsize=17,weight='bold',pad=20)
+        ax.set_ylabel(ylabel,fontsize=12);ax.yaxis.grid(True,alpha=.15)
+        ax.text(.03,.97,'Predicted '+('above' if direction>0 else 'below')+' zero',transform=ax.transAxes,va='top',fontsize=11,color='#477654')
+    fig.legend(*axes[0].get_legend_handles_labels(),loc='lower center',bbox_to_anchor=(.5,.19),ncol=3,frameon=False,fontsize=15)
+    fig.text(.045,.145,'Filled markers: procedure reviewed. Open markers: provenance review incomplete. Excluded runs are omitted.',fontsize=11.5,color='#536473')
+    fig.text(.045,.098,'A = control + revision     B = control + one decision     C = causal education + one decision',fontsize=11.5)
+    fig.text(.045,.045,'Descriptive AI simulation. No statistically established H1–H4 result; independent replication and review remain limited.',fontsize=11.5,color='#536473')
+    for ext in ('png','svg','pdf'):fig.savefig(OUT/f'CURRENT_REPLICATION_RESULTS.{ext}',dpi=240,facecolor='white')
+    plt.close(fig)
+    pd.DataFrame(plotted).to_csv(OUT/'plotted_replication_values.csv',index=False)
+    lines=['# Current figures for your slides','',
+        '1. **Use this current export rather than the frozen first-run slides for the latest evidence.**',
+        '2. **H1–H4 are not statistically established.** Full tables, eligible counts and available adjusted p-values are in the [current report](../REPORT.md).',
+        '3. **Both review status and individual repeats are visible.** Opposite or zero results are retained.','',
+        '## Slide 1 — Replication stability','',
+        '[PNG](CURRENT_REPLICATION_RESULTS.png) · [SVG](CURRENT_REPLICATION_RESULTS.svg) · [PDF](CURRENT_REPLICATION_RESULTS.pdf)','',
+        '**Caption:** Each point is one complete AI context with 50 chains per condition. The H2 and H4 contrasts vary across repeated contexts; the early Sol directions reverse in its second completed run. Open markers have incomplete provenance review, and filled markers passed the recorded procedure review. These are descriptive observations.','',
+        '## Slide 2 — H1–H4 effects versus chain count','',
+        '[PNG](../chain_size_stability/H1_H4_VS_CHAIN_SIZE.png) · [SVG](../chain_size_stability/H1_H4_VS_CHAIN_SIZE.svg) · [PDF](../chain_size_stability/H1_H4_VS_CHAIN_SIZE.pdf)','',
+        '**Caption:** Each curve recomputes a context\'s H1–H4 contrast using its first 5–50 chains per condition. Green marks the predicted direction. Stability along a curve describes sensitivity to chain count; agreement across separate curves describes repeatability across contexts. Neither substitutes for an independent-context significance test.','',
+        '[Exact slide data](plotted_replication_values.csv) · [Current report and all extracted results](../REPORT.md) · [Export hashes](MANIFEST.json).','',
+        'Model labels/settings are client-requested, all high effort. A/B/C share one context; the intervention changes revision opportunities rather than enforcing a clock deadline. No real-student validation is available.','',
+        'Rebuild: `.venv/Scripts/python.exe scripts/export_agent_current_slide_v5.py` after refreshing the report. Prior exports are preserved in history/.','']
+    (OUT/'README.md').write_text('\n'.join(lines),encoding='utf-8')
+    (OUT/'MANIFEST.json').write_text(json.dumps(dict(version=version,created_utc=datetime.now(timezone.utc).isoformat(),fingerprint=fingerprint,contexts=selected,
+        artifacts={p.name:sha(p) for p in OUT.iterdir() if p.is_file() and p.name!='MANIFEST.json'}),indent=2),encoding='utf-8')
+    print(OUT/'README.md')
+
+
+if __name__=='__main__':main()

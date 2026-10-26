@@ -20,6 +20,8 @@ def main():
     p.add_argument('--replicate', type=int, required=True)
     p.add_argument('--model', choices=['gpt_astra', 'gpt_sol', 'gpt_luna'], required=True)
     args = p.parse_args()
+    if (BASE / 'STOP_AFTER_THREE_04.json').exists():
+        raise ValueError('User stopped new collection: finish only the existing third non-excluded contexts; no new runs are authorized.')
     if not 2 <= args.replicate <= 10:
         raise ValueError('This extension prepares attempted contexts 2 through 10 only.')
     timebox_path = BASE / 'TIMEBOX_AMENDMENT_02.json'

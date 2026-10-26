@@ -35,7 +35,7 @@ def main():
     # every original model response and frozen game protocol remains unchanged.
     report_source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     evidence_id=hashlib.sha256(json.dumps(dict(observations=evidence,report_source_sha256=report_source_sha256,
-        timebox=state.get('timebox')),sort_keys=True).encode()).hexdigest()[:16]
+        timebox=state.get('timebox'),stopping=state.get('stopping')),sort_keys=True).encode()).hexdigest()[:16]
     OUT.mkdir(parents=True,exist_ok=True)
     pointer=OUT/'RESULTS.json'
     if pointer.exists() and json.loads(pointer.read_text())['evidence_id']==evidence_id:
@@ -124,14 +124,90 @@ def main():
         analysis.save_figure(fig,OUT,'DESCRIPTIVE_H1_H4')
 
     def fmt(x): return 'pending' if x is None else f'{x:.4g}'
-    collection_text=(f'User time cap: collection stops {state["timebox"]["collection_cutoff_local"]}; '
+    final_stage=state.get('stopping')
+    stopped=bool(final_stage) and all(sum(r['model']==m and not r['review'].startswith('Excluded:')
+        for r in completed)>=final_stage['complete_nonexcluded_contexts_per_model'] for m in state['models'])
+    collection_text=(('Collection stopped after three complete non-excluded contexts per GPT model. No further rounds will run.'
+        if stopped else 'Final round still collecting; stop after three complete non-excluded contexts per GPT model. No additional contexts will start.')
+        if final_stage else (f'User time cap: collection stops {state["timebox"]["collection_cutoff_local"]}; '
         f'report deadline {state["timebox"]["delivery_deadline_local"]}. The ten-run target is superseded.'
-        if state.get('timebox') else 'Collection target: 10 attempted fresh contexts per GPT model.')
+        if state.get('timebox') else 'Collection target: 10 attempted fresh contexts per GPT model.'))
+    conclusion_rows=[]
+    for name,metric,plus,minus,direction in ENDPOINTS:
+        reviewed_effects=[e['difference'] for e in effects if e['hypothesis']==name and e['eligible'] and e['difference'] is not None]
+        estimates=[e for e in state['estimates'] if e['hypothesis']==name and e['reviewed_contexts'] and e['mean_difference'] is not None]
+        if not reviewed_effects:
+            observation='No reviewed observations yet.'
+        elif all(abs(v)<1e-10 for v in reviewed_effects):
+            observation='No observed difference in any reviewed context.'
+        else:
+            up,down={'H1':('higher pipeline sensitivity','lower pipeline sensitivity'),
+                'H2':('higher costs','lower costs'),'H3':('higher pipeline sensitivity','lower pipeline sensitivity'),
+                'H4a':('higher order variance','lower order variance'),
+                'H4b':('higher bullwhip','lower bullwhip')}[name]
+            short={'gpt_astra':'Astra','gpt_sol':'Sol','gpt_luna':'Luna'}
+            observation='; '.join(short[e['model']]+': '+('no mean difference' if abs(e['mean_difference'])<1e-10 else
+                (up if e['mean_difference']>0 else down)+(f' ({e["mean_difference"]:+.4g})' if name in ('H1','H3') else '')) for e in estimates)+'.'
+        values='; '.join(f'{MODEL_LABELS[e["model"]]} {e["mean_difference"]:+.4g} (n={e["reviewed_contexts"]}, p={fmt(e["p_two_sided"])})' for e in estimates)
+        conclusion_rows.append(dict(hypothesis=name,observation=observation,reviewed_model_statistics=values))
+    write_csv(conclusion_rows,OUT/'hypothesis_conclusions.csv')
+    descriptions={'H1':'Constraint increases underweighting','H2':'Constraint increases holding + backlog costs',
+        'H3':'Education reduces underweighting','H4a':'Education reduces individual order variance','H4b':'Education reduces bullwhip ratio'}
     lines=['# Agent Beer Game results (v5)','',
         f'1. **{len(completed)} complete agent contexts received; {sum(r["eligible"] for r in completed)} have passed the recorded procedure review.** '+collection_text,
-        '2. **H1-H4 are not established by incomplete collection or a single context.** The table below contains observed differences only; null and opposite results are retained.',
-        '3. **Fifty chains inside one context are dependent.** Additional fresh contexts provide replication; increasing a within-context prefix does not create independent students.',
-        '4. **This tests decision opportunities in fictional students.** It does not establish binding human clock pressure, normative underweighting, or real student behavior.','',
+        '2. **H1:** '+next(r['observation'] for r in conclusion_rows if r['hypothesis']=='H1')+' **H3:** '+next(r['observation'] for r in conclusion_rows if r['hypothesis']=='H3'),
+        '3. **H2:** '+next(r['observation'] for r in conclusion_rows if r['hypothesis']=='H2'),
+        '4. **H4a and H4b:** Education effects vary across models and contexts. Negative values mean lower order variance or bullwhip after education.',
+        '5. **Read the effect and p-value together.** The tables show signed means, reviewed context counts, raw two-sided p-values and Holm-adjusted p-values.','',
+        '## What each hypothesis measures','',
+        '**Groups:** A = control reading with a separate revision opportunity; B = control reading with one committed decision; C = causal education with one committed decision. All groups share inventory information. In this AI task, fewer decision opportunities represent the proposed time constraint.','',
+        '| Hypothesis | Quantity in plain language | Reported comparison and meaning |','|---|---|---|',
+        '| **H1** | How much the model reduces its new order for each extra case already ordered but still on the way. This is **pipeline sensitivity**, a proxy for attending to outstanding orders. | **B−A** sensitivity. A negative difference means the constrained group reacts less to outstanding orders, the predicted underweighting pattern. |',
+        '| **H2** | The chain\'s **total holding and backlog cost over 24 weeks**, summed across all four roles, then averaged across chains. Holding costs 0.5 per case/week; backlog costs 1 per case/week. Units: game cost units per chain. | **B−A** cost. A positive difference means the constrained group costs more. |',
+        '| **H3** | The **same pipeline sensitivity as H1**, comparing educated and control groups while both have one decision opportunity. | **C−B** sensitivity. A positive difference means educated participants respond more to outstanding orders. |',
+        '| **H4a** | How much each role\'s orders fluctuate across the 24 weeks: **weekly order variance**, averaged over roles and chains. Units: cases squared. | **C−B** variance. A negative difference means education produces steadier orders. |',
+        '| **H4b** | **Weekly order variance divided by external customer-demand variance**, averaged over roles and chains. This is the dimensionless bullwhip ratio. | **C−B** ratio. A negative difference means education reduces demand amplification. |','',
+        '**Reading the scales:** A pipeline sensitivity of 1 means 24 more cases on the way produces 24 fewer cases ordered; 0 means the order does not change. The probes compare 8 versus 32 outstanding cases with other displayed facts fixed: sensitivity = (order at 8 − order at 32) / 24. This is a response measure, not an independently identified optimal order rule. A bullwhip ratio of 2 means order variance is twice customer-demand variance.','',
+        '## H1-H4 trends','',
+        '| Hypothesis | Observed trend |','|---|---|']
+    for row in conclusion_rows:
+        lines.append(f'| {row["hypothesis"]}: {descriptions[row["hypothesis"]]} | {row["observation"]} |')
+    lines += ['','## Effect sizes and p-values','',
+        '| Outcome | Model | Reviewed n | Mean difference | 95% bootstrap interval | Raw p | Holm p (20 tests) | Direction |',
+        '|---|---|---:|---:|---|---:|---:|---|']
+    for name,metric,plus,minus,direction in ENDPOINTS:
+        for model in state['models']:
+            r=next(e for e in state['estimates'] if e['model']==model and e['hypothesis']==name)
+            mean=r['mean_difference']
+            trend=('No difference' if mean is not None and abs(mean)<1e-10 else
+                'Predicted direction' if mean is not None and mean*direction>0 else
+                'Opposite direction' if mean is not None else 'Pending')
+            interval='—' if r['ci95_low'] is None else f'[{fmt(r["ci95_low"])}, {fmt(r["ci95_high"])}]'
+            p='— (n < 2)' if r['p_two_sided'] is None else fmt(r['p_two_sided'])
+            adjusted='—' if r.get('p_holm_20') is None else fmt(r['p_holm_20'])
+            lines.append(f'| {name} | {MODEL_LABELS[model]} | {r["reviewed_contexts"]} | {fmt(mean)} | {interval} | {p} | {adjusted} | {trend} |')
+    lines += ['','Here n is reviewed fresh contexts, not chains. Values are condition differences: H1/H2 = B−A; H3/H4 = C−B. Predicted signs are H1 negative, H2 positive, H3 positive, H4a/b negative. H1/H3 use outstanding-order sensitivity as a proxy for underweighting. A zero contrast means no treatment difference in this measurement.','',
+        'P-values use the preselected two-sided exact paired sign-flip test. With three independent contexts its smallest possible p-value is 0.25. Bootstrap intervals are pointwise and descriptive in this small pilot. Collection ends at the requested three rounds regardless of the p-values.','',
+        'Absolute sensitivity puts the H1/H3 differences in context. The table below averages each arm over reviewed contexts. Equal sensitivity across arms means no measured treatment difference; small differences should be read relative to these levels. These probe slopes are measures of response to outstanding orders.','',
+        '| Model | A: control + revision | B: control, one decision | C: education, one decision |','|---|---:|---:|---:|']
+    sensitivity=[]
+    for model in state['models']:
+        row={'model':model}
+        for arm in 'ABC':
+            values=[r['pipeline_sensitivity'] for r in aggregates if r['model']==model and r['arm']==arm and r['adherence_review_passed']]
+            row[arm]=sum(values)/len(values) if values else None
+        sensitivity.append(row)
+        lines.append('| '+' | '.join([MODEL_LABELS[model],*[('pending' if row[a] is None else f'{row[a]:.6f}') for a in 'ABC']])+' |')
+    write_csv(sensitivity,OUT/'absolute_pipeline_sensitivity.csv')
+    lines += ['',
+        '## Collection status','',
+        '| Model | Complete non-excluded contexts | Reviewed for inference | Complete excluded attempts |','|---|---:|---:|---:|']
+    for model in state['models']:
+        rows=[r for r in completed if r['model']==model]
+        lines.append(f'| {MODEL_LABELS[model]} | {sum(not r["review"].startswith("Excluded:") for r in rows)}/3 | {sum(r["eligible"] for r in rows)} | {sum(r["review"].startswith("Excluded:") for r in rows)} |')
+    lines += ['',
+        '**Fifty chains inside one context are dependent.** Additional fresh contexts provide replication; increasing a within-context prefix does not create independent students.',
+        '**This tests decision opportunities in fictional students.** It does not establish binding human clock pressure, normative underweighting, or real student behavior.','',
         '## Observed H1-H4 differences','',
         '| Requested model | Run | H1: B-A sensitivity | H2: B-A cost | H3: C-B sensitivity | H4a: C-B variance | H4b: C-B bullwhip | Review |',
         '|---|---|---:|---:|---:|---:|---:|---|']
@@ -141,6 +217,8 @@ def main():
     if not completed:lines.append('| No complete three-condition contexts yet | | | | | | | Pending |')
     lines += ['','Expected directions are H1 negative, H2 positive, H3 positive, and H4a/b negative. A difference in that direction alone is not significance. H1/H3 use pipeline sensitivity as a proxy.','',
         '## Open these files','',
+        '- [Current presentation figures, PDF/SVG exports and short captions](slides_current/README.md).',
+        '- [Short extracted hypothesis conclusions](hypothesis_conclusions.csv).',
         '- [Live notebook](../../notebooks/AGENT_PROGRESS.ipynb): run all cells and tick Auto-refresh (10 s).',
         '- [Per-context / condition results](context_arm_results.csv) and [per-chain extracted results](per_chain_results.csv).',
         '- [Current reviewed-context estimates, intervals and adjusted p-values](current_context_inference.csv). Missing p-values mean replication or review is insufficient.',
@@ -157,9 +235,18 @@ def main():
         '', 'No new direct API calls are made by this monitor, analysis or local transport. The shared API ledger is unchanged; agent-service usage is separate.',
         '',f'Report generated UTC: {datetime.now(timezone.utc).isoformat()}. Evidence ID: `{evidence_id}`. Earlier current-report bytes are preserved in `history/` before changed evidence is published.']
     (OUT/'REPORT.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    (OUT/'README.md').write_text('# Current agent Beer Game results\n\n'
+        '1. [Report: H1-H4 trends, effect sizes, confidence intervals and p-values](REPORT.md).\n'
+        '2. [Presentation figures and short captions](slides_current/README.md): numeric summary, repeated runs, and effects versus chain count.\n'
+        '3. [Extracted statistics](current_context_inference.csv) and [weekly-game measurements](per_chain_results.csv).\n'
+        '4. [Exact per-run prompts, original decisions and public procedure reviews](../../data/assistant_v5_20261025/).\n\n'
+        'The current stopping rule is three complete non-excluded contexts per GPT model; review eligibility is separate. '
+        'Earlier reports and figures remain unchanged in history/. '
+        'Website/API samples are separate from this agent collection.\n',encoding='utf-8')
     (OUT/'RESULTS.json').write_text(json.dumps(dict(evidence_id=evidence_id,evidence=evidence,completed_contexts=len(completed),
         reviewed_contexts=sum(r['eligible'] for r in completed),contrasts=effects,source_kind='local_assistant_agents',
-        report_source_sha256=report_source_sha256,timebox=state.get('timebox')),indent=2,allow_nan=False),encoding='utf-8')
+        report_source_sha256=report_source_sha256,timebox=state.get('timebox'),stopping=state.get('stopping'),
+        collection_stopped=stopped,hypothesis_conclusions=conclusion_rows),indent=2,allow_nan=False),encoding='utf-8')
     print(OUT/'REPORT.md')
 
 

@@ -68,6 +68,10 @@ def snapshot(repository):
     timebox = read_json(timebox_path) if timebox_path.exists() else None
     if timebox:
         target_contexts = None  # User's elapsed-time cap supersedes ten runs.
+    stopping_path = root / 'STOP_AFTER_THREE_04.json'
+    stopping = read_json(stopping_path) if stopping_path.exists() else None
+    if stopping:
+        target_contexts = stopping['complete_nonexcluded_contexts_per_model']
     runs = []
     for model in models:
         for folder in sorted((root / model).glob('run*')):
@@ -140,7 +144,7 @@ def snapshot(repository):
             indexed[key]['p_holm_20'] = p
     return dict(refreshed_utc=datetime.now(timezone.utc).isoformat(), runs=runs,
                 models=models, estimates=estimates, collection=str(root), target_contexts_per_model=target_contexts,
-                timebox=timebox)
+                timebox=timebox, stopping=stopping)
 
 
 def number(value):
@@ -155,7 +159,16 @@ def html(snapshot):
         'The running agents save a checkpoint after each decision page.</p>',
         f'<p>Last refresh (UTC): {escape(s["refreshed_utc"])}. '
         '50 chains per condition, 24 weeks, three conditions per fresh context.</p>']
-    if s.get('timebox'):
+    if s.get('stopping'):
+        target=s['stopping']['complete_nonexcluded_contexts_per_model']
+        finished=all(sum(r['complete'] and not r['review'].startswith('Excluded:')
+                         for r in s['runs'] if r['model']==m)>=target for m in s['models'])
+        chunks.append(f'<p><b>{"Collection finished" if finished else "Final collection stage"}: stop after {target} complete non-excluded contexts per GPT model.</b> '
+            'No more contexts will be launched. Procedure-review eligibility is counted separately. '
+            'Earlier excluded attempts remain visible below.</p>')
+        if s.get('timebox'):
+            chunks.append(f'<p>Earlier hard collection cutoff still applies: {escape(s["timebox"]["collection_cutoff_local"])}.</p>')
+    elif s.get('timebox'):
         t = s['timebox']
         chunks.append('<p><b>User-set 90-minute maximum; ten-run target superseded.</b><br>'
             f'Collection stops: {escape(t["collection_cutoff_local"])}.<br>'
@@ -186,13 +199,13 @@ def html(snapshot):
         '<p>A = control + separate revision; B = control + one decision; '
         'C = causal education + one decision. H4 has two outcomes.</p>'
         '<table style="border-collapse:collapse;width:100%"><thead><tr>')
-    headers = ['Model', 'Hypothesis / contrast', 'Difference', '95% CI', 'Adjusted p', 'Reviewed contexts', 'Status']
+    headers = ['Model', 'Hypothesis / contrast', 'Difference', '95% CI', 'Raw p', 'Holm p (20)', 'Reviewed contexts', 'Status']
     chunks.extend(f'<th style="text-align:left;border-bottom:1px solid #999;padding:6px">{h}</th>' for h in headers)
     chunks.append('</tr></thead><tbody>')
     for r in s['estimates']:
         interval = 'pending' if r['ci95_low'] is None else f'{number(r["ci95_low"])} to {number(r["ci95_high"])}'
         values = [MODEL_LABELS.get(r['model'],r['model']), r['hypothesis'] + ': ' + r['label'],
-                  number(r['mean_difference']), interval, number(r.get('p_holm_20')),
+                  number(r['mean_difference']), interval, number(r.get('p_two_sided')), number(r.get('p_holm_20')),
                   str(r['reviewed_contexts']), r['status']]
         chunks.append('<tr>' + ''.join(f'<td style="padding:6px;border-bottom:1px solid #ddd">{escape(v)}</td>' for v in values) + '</tr>')
     chunks.append('</tbody></table><p><b>How to read this:</b> pending means not enough completed, '
