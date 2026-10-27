@@ -1,3 +1,28 @@
+# Collection closed: experiment14 student-framing v3
+
+All10assignedmainblocks/30contexts are complete and independently reviewed. No further participant launches, replacements, or extra responses belong in this sample. The immutable close receipt is data/student_framing_v3/COLLECTION_CLOSED.json. All33cases including3development have distinct sessions and actual literal choices, no defaults. Model/Astra-xhigh, fictional A120/B,C8 seconds, unlimited actualruntime. Block6 service-limited contexts resumed after explicitusercontinue, samecontexts/preservedprefixes/settings; receipts documentthis. All5maincontrasts predicted signs, exactrawp0.001953125 andHolm5p0.009765625; do not interpretasactualhumanstudent evidence. Currentone-pageconclusions/slides/fullPDF andnumericCSV linksareinexperimentREADME. Reproduceoffline; newscientificworkneedsanewprospectiveversion, preserveclosedrawdata/sources/publications. Earlierstatusnotesbelowarehistorical.
+
+# Latest user clarification: fictional student pressure, no model timer
+
+The current experiment14 protocol is `student_framing_v3`. The user explicitly rejected physical-world timeouts and wants the agent to portray a student with insufficient versus adequate time. Use only the new `exp14_framing.py` implementation and its separate plan/sample. Actual model runtime is unlimited, model is GPT-6 Astra/xhigh for every arm, fictional student allowance A120seconds/B,C8seconds. No software fallback or random/default answer is permitted in this current study; each order is an actual model choice. This supersedes the earlier requested carry-forward proposal, which was never collected or frozen as a participant study.
+
+Preserve original16strict-deadline cases and all unused design drafts. Keep development sf3_d001 separate from ten planned mainblocks c3m001..010. Use completion/provenance/knowledge gates, fixed sampling and Holm5; no desired-direction prompts, p-value tuning, fabricated answers or favorable replacements. Current entry point is experiment14 README; reports/student_framing_v3 and notebooks/STUDENT_PRESSURE.ipynb. These are model framing responses, not validated human behavior or enforced model thinking-time constraints.
+
+Earlier maintenance instructions follow; newer current-design statements above supersede older status/mechanics descriptions.
+
+# Current experiment amendment ? 26 October 2026
+
+The user authorized **experiment 14**, superseding the older statement that new work belongs only in experiment 13. Current work lives in `experiments/14_deadline_student_20261026/`; read its README and `AGENT_HANDOFF.md` first. Experiment 13 collection remains closed.
+
+- Requested participant model: `gpt-6-astra`, effort `xhigh`, fresh isolated local contexts. No provider API requests; existing shared API budget and ledger stay in force.
+- Main target: ten matched chain blocks, one four-role chain per fresh arm context, three arms and 24 weeks. Roles/weeks are repeated measurements, not additional independent student samples.
+- Development is separate. Sixteen fixed-plan cases finished; strict-deadline feasibility completion is A4/4, B1/4, C0/4. Neither V1 nor V2 qualifies; no MAIN_PLAN.json and no main collection. Do not bypass the gate or silently extend deadlines/default missing orders.
+- A scientific change needs separately frozen materials and protocol. Preserve current source snapshots, prompts, all accepted decisions, failed cases and prior publications. No p-value-driven prompt selection or significance-based stopping.
+- Clarification is pending between fictional student time-pressure framing and actual model response deadlines. Do not equate these. The tested clock includes service/transport/scheduling time; hidden reasoning time and temperature are not exposed.
+- Current outputs always start at the experiment README: `reports/REPORT.pdf`, `reports/REPORT.md`, `reports/figures/README.md`, `analysis/tables/` and `notebooks/EXPERIMENT_14.ipynb`.
+
+The instructions below are preserved historical maintenance requirements and remain applicable except where this newer experiment amendment supersedes navigation/status.
+
 # Project maintenance instructions
 
 ## Current organization — 20 October 2026

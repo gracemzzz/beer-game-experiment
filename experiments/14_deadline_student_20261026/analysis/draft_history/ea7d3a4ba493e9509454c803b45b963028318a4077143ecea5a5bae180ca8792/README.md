@@ -1,0 +1,13 @@
+# Carry-forward version 2 participant materials
+
+This is the new common participant prompt for the user-selected timeout policy. It preserves the original [STUDENT_V1.md](../STUDENT_V1.md) classroom framing, role information, objectives and decision constraints while adding the published continuation consequences. The old V1/V2 prompts and all old cases remain unchanged. The scientific contract is [CARRY_FORWARD_V2.md](../../hypotheses/CARRY_FORWARD_V2.md).
+
+Prepare each exact participant prompt by appending only its assigned unchanged 170-word reading to [STUDENT.md](STUDENT.md): [CONTROL.md](../CONTROL.md) for A/B, [EDUCATION.md](../EDUCATION.md) for C. Do not append this README, the protocol, the other reading, hypothesis signs, private probe pairing, quiz scoring keys or correct-answer guidance. Freeze exact combined prompt bytes before collection.
+
+All arms receive the same timeout explanation. A timely valid four-order packet is applied unchanged. On a true game timeout, all four model decisions are missing and the software repeats each role's previous applied order, initialized to 4 in week 1. Late submissions remain rejected evidence. A timed-out probe page receives four missing answers and advances. The actor continues after these normal timeout acknowledgments, reads the next complete public display and selects literal current-state orders. Invalid on-time submissions and terminal procedure errors stop the case without repairs or retries.
+
+The original [probe and quiz display allowlists](../README.md) still apply: 32 fixed scenarios in eight pages of four, and four untimed post-behavior quiz items. Never display private pair labels or scoring keys. This folder does not change those fixtures or assign a preferred order, maximum, answer or hypothesis direction. It provides no order-generation algorithm to the participant.
+
+Deadlines remain A 30.0 seconds for game/probes, B/C 4.0 seconds for game and 3.8 seconds for probes. The public controller supplies its actual current deadline and immutable decision ID. Separate display and submission interactions preserve exposure and timing. Full-public-display and literal-choice review must accompany the new controller's source/material fingerprint; private analysis files are not participant input.
+
+The authorized next collection is one separately frozen A/B/C development block, 24 weeks per fresh context, with a new disjoint seed. It is not a main sample. Successful game continuation alone cannot supply missing H1/H3 probe endpoints or qualify the held-out study. Revisions to readings, probe format, time limits or missingness rules require a new prospective scientific version.

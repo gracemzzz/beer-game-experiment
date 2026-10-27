@@ -1,0 +1,13 @@
+# Beer Game handoff: experiment14 student-pressure framing
+
+Latest user clarification: no physical/model deadlines. Have Astra/xhigh portray fictional second-year UB students under insufficient8seconds versus adequate120seconds. All orders must be actual literal model choices; no fallback, random filler or missing-answer imputation. The earlier carry-forward request is superseded and unrun. Do not return to either clocked proposal.
+
+Current files: exp14 README -> reports/student_framing_v3/REPORT.pdf, REPORT.md, figures/README.md, notebooks/STUDENT_PRESSURE.ipynb. Implementation: exp14_framing.py, run_exp14_framing.py, prepare_exp14_framing.py, qualify_exp14_framing.py, exp14_framing_analysis.py/report_exp14_framing.py. Physics unchanged. All model limits null; timestamps observational. One accepted choice per opportunity,24weeks/32probes/4quizitems. No revision pass.
+
+Prospective bounded development sf3_d001 seed1440001, orderB,C,A, all3armsfull24wk. After technical tests/sourcefreeze, prepareisolatedcases, launch actual gpt-6-astra/xhigh fork-none participants, recordexactORCHESTRATORmessages. Export only public projection with audit_exp14_agent.py; never hidden reasoning. Review full literal choices, displays, sources, clientmetadata and actuallaunch receipts; provideridentity is unverified/operatorattested. Development gate allcompleteactualchoices+reviews+quiz C>=75%, no Hsign/p selection. Main remainsblocked until a separate STUDENT_FRAMING_V3_MAIN_PLAN.json qualifies/freezes. Then collect all10matched mainblocks c3m001..010 seeds1450001..10,30contexts; no favorable replacement or significant-crossing stop. One chain percontext; infer10pairedblocks, not40students/960orders.
+
+Read actualsavedfiles/status to determine collectionprogress; this handoff was written during softwarefinalization. Reports/monitor are read-only. Use D:/beergame/.venv/Scripts/python.exe explicitly. Fixedxhigh launcher exposes no temperature/token cap. Newprompt wording cases differ onlyfictionalstudentallowance; unchangedmatched170wordreadings.
+
+Original16strict-clock cases remain unchanged and separate. Unusedcarrydraftsources/reports mustbe archived intact with a move/hashmap; no participant sample existsforcarry. Historicalsamplesclosed. No directproviderAPIcalls, keys or ledgerchanges. Shared$5 ledger spent$1.179072025, unchangedSHA81f75f9fb53f87f3ef979b11f086a7ac787c15c2cf6d9b2e8acb69f6a0efa7c3.
+
+Earlier handoff preserved: [historical handoff](experiments/14_deadline_student_20261026/analysis/navigation_history/d6fb5e9356cb2817a884cabc41344528f8047d07cd761fc4c9d09afffd3f6e30/AGENT_HANDOFF.md).

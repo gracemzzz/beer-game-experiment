@@ -1,0 +1,6 @@
+Business documents communicate information to readers through words and visual presentation. A document has an author and an intended audience, while its format determines how readers encounter the material. These features can differ across organizations. Common document formats include letters, posters, brochures, and presentations used in different settings.
+
+For example, a student society prepares a brochure about an open evening, and visitors receive copies at the entrance. Its title identifies the subject, while the sections describe the location, activities, and organizers. A printed version and an electronic version can present the same event in different arrangements. The relationship between a document and its audience therefore depends on the purpose and presentation.
+
+Each organization develops conventions for its public materials. Those conventions can differ from the preferences of individual authors. A heading can identify a topic, and a caption can describe an illustration. Readers then encounter text and images within that arrangement. Familiar design choices include lettering, spacing, and alignment. This reading explains ordinary document presentation without specifying an ordering rule.
+

@@ -1,0 +1,6 @@
+A supply chain connects businesses through requests and deliveries. A request records a decision, while a delivery changes the goods physically available. These events can occur in different weeks. Outstanding replenishment includes earlier requests that have not yet arrived, including quantities in transit and quantities awaiting upstream fulfillment.
+
+For example, a shop requests six cases in week one, and those cases arrive in week four. A shortage observed in weeks two and three does not change the date of that earlier request. Further requests create additional commitments, whose arrivals may overlap later. The relationship between present conditions and later receipts therefore depends on earlier decisions and delivery delays.
+
+Each business receives requests from its immediate customer. Those requests can differ from purchases by final consumers. A temporary change in purchases can lead several businesses to revise their requests at different times. Their deliveries then reflect those separate decisions. Shared records can distinguish goods currently available, customer obligations, and replenishment already requested. This reading explains relationships without specifying an ordering rule.
+
