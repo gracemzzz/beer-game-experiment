@@ -1,0 +1,219 @@
+{
+  "conditions": {
+    "A": "120 seconds + control reading",
+    "B": "8 seconds + control reading"
+  },
+  "n_chains_per_condition": 10,
+  "paired_blocks": 10,
+  "weeks": 24,
+  "data_displayed": "Actual measured levels and condition-mean intervals, with existing H1/H2 paired p-values annotated",
+  "markers": "Overview: colored band width spans each mean's 95% CI; center mark and printed number show the mean. Shared colors identify conditions. Individual figures additionally show unconnected chain dots and mean ± CI half-width.",
+  "confidence_interval": {
+    "method": "Pointwise 95% Student t interval for a condition mean: mean ± t(0.975, n−1) × SD / sqrt(n).",
+    "confidence_level": 0.95,
+    "degrees_of_freedom": 9,
+    "critical_t": 2.2621571627409915,
+    "simultaneous": false,
+    "note": "Intervals describe individual condition means, not paired differences; their overlap does not determine the paired p-value."
+  },
+  "p_values": {
+    "source": "reports/tables/HYPOTHESIS_COMPARISONS.csv",
+    "displayed_hypotheses": [
+      "H1",
+      "H2"
+    ],
+    "test": "Exact two-sided paired sign-flip",
+    "n_pairs": 10,
+    "adjustment": "Holm across the original five planned tests",
+    "display": "p < 0.01; exact values retained in TEST_ANNOTATIONS.csv",
+    "newly_computed_tests": false
+  },
+  "connecting_lines": false,
+  "typography": {
+    "overview_primary_title_pt": 22,
+    "overview_primary_mean_pt": 19,
+    "overview_primary_axis_labels_pt": 17,
+    "overview_primary_ticks_pt": 15,
+    "overview_secondary_title_pt": 17,
+    "overview_secondary_mean_pt": 15,
+    "overview_secondary_axis_labels_pt": 14,
+    "overview_secondary_ticks_pt": 13,
+    "single_axis_labels_pt": 22,
+    "single_ticks_pt": 22,
+    "overview_figure_size_inches": [
+      16,
+      9
+    ],
+    "single_figure_size_inches": [
+      16,
+      9
+    ]
+  },
+  "no_education_condition_plotted": true,
+  "no_new_hypothesis_tests": true,
+  "figures": [
+    {
+      "file": "00_ALL_MEASURED_OUTCOMES",
+      "title": "Hypotheses and results",
+      "variables": [
+        "pipeline_sensitivity",
+        "chain_total_cost",
+        "complete_holding_cost",
+        "complete_backlog_cost",
+        "mean_role_order_variance",
+        "mean_role_bullwhip"
+      ],
+      "display": "H1/H2 prediction and observed percentage change above primary mean/CI panels; four descriptive panels below; shared legend",
+      "hypotheses": [
+        {
+          "hypothesis": "H1",
+          "prediction": "H1: Tight deadlines increase pipeline underweighting",
+          "result_label": "Response −38.5%  ·  Holm p < 0.01",
+          "measured_quantity": "Pipeline response (proxy)",
+          "percent_change": -38.52436700245031,
+          "mean_difference": -0.12282986111111112,
+          "p_holm_family_5": 0.009765625,
+          "comparison": "8 s + control reading minus 120 s + control reading"
+        },
+        {
+          "hypothesis": "H2",
+          "prediction": "H2: Tight deadlines increase total holding and backlog costs.",
+          "result_label": "Cost +11.9%  ·  Holm p < 0.01",
+          "measured_quantity": "Total holding and backlog cost",
+          "percent_change": 11.924449473409338,
+          "mean_difference": 68.50000000000001,
+          "p_holm_family_5": 0.009765625,
+          "comparison": "8 s + control reading minus 120 s + control reading"
+        }
+      ],
+      "axes": [
+        {
+          "title": "H1: Tight deadlines increase pipeline underweighting",
+          "x_label": "Response proxy (cases/case)",
+          "y_label": "Condition identified by shared legend: blue 120 s, orange 8 s"
+        },
+        {
+          "title": "H2: Tight deadlines increase total holding and backlog costs.",
+          "x_label": "Cost units / chain",
+          "y_label": "Condition identified by shared legend: blue 120 s, orange 8 s"
+        },
+        {
+          "title": "Inventory-holding cost",
+          "x_label": "Cost units / chain",
+          "y_label": "Condition identified by shared legend: blue 120 s, orange 8 s"
+        },
+        {
+          "title": "Backlog cost",
+          "x_label": "Cost units / chain",
+          "y_label": "Condition identified by shared legend: blue 120 s, orange 8 s"
+        },
+        {
+          "title": "Weekly order variance",
+          "x_label": "Cases²",
+          "y_label": "Condition identified by shared legend: blue 120 s, orange 8 s"
+        },
+        {
+          "title": "Bullwhip ratio",
+          "x_label": "Ratio",
+          "y_label": "Condition identified by shared legend: blue 120 s, orange 8 s"
+        }
+      ]
+    },
+    {
+      "file": "01_PIPELINE_RESPONSE",
+      "title": "Pipeline response",
+      "variables": [
+        "pipeline_sensitivity"
+      ],
+      "calculation": "Within each chain, average the 8 matched probe slopes: (order with low outstanding replenishment − order with high outstanding replenishment) / increase in outstanding cases. Then average 10 chains.",
+      "p_annotation": "H1 · p < 0.01 (Holm)",
+      "axes": [
+        {
+          "title": "Pipeline underweighting",
+          "x_label": "Order reduction per extra\noutstanding case",
+          "y_label": "Fictional decision allowance"
+        }
+      ]
+    },
+    {
+      "file": "02_TOTAL_COST",
+      "title": "Total holding and backlog cost",
+      "variables": [
+        "chain_total_cost"
+      ],
+      "calculation": "Sum (0.5 × remaining inventory + 1 × unfilled demand) across all 4 roles and 24 weeks for each chain. Then average 10 chain totals.",
+      "p_annotation": "H2 · p < 0.01 (Holm)",
+      "axes": [
+        {
+          "title": "Total holding and backlog cost",
+          "x_label": "24-week holding and backlog cost\n(game cost units / chain)",
+          "y_label": "Fictional decision allowance"
+        }
+      ]
+    },
+    {
+      "file": "03_HOLDING_COST",
+      "title": "Inventory-holding cost",
+      "variables": [
+        "complete_holding_cost"
+      ],
+      "calculation": "Sum 0.5 × remaining inventory across all 4 roles and 24 weeks for each chain. Then average 10 chain totals.",
+      "p_annotation": "Descriptive · no planned test",
+      "axes": [
+        {
+          "title": "Inventory-holding cost",
+          "x_label": "24-week holding cost\n(game cost units / chain)",
+          "y_label": "Fictional decision allowance"
+        }
+      ]
+    },
+    {
+      "file": "04_BACKLOG_COST",
+      "title": "Backlog cost",
+      "variables": [
+        "complete_backlog_cost"
+      ],
+      "calculation": "Sum 1 × unfilled demand across all 4 roles and 24 weeks for each chain. Then average 10 chain totals.",
+      "p_annotation": "Descriptive · no planned test",
+      "axes": [
+        {
+          "title": "Backlog cost",
+          "x_label": "24-week backlog cost\n(game cost units / chain)",
+          "y_label": "Fictional decision allowance"
+        }
+      ]
+    },
+    {
+      "file": "05_ORDER_VARIANCE",
+      "title": "Weekly order variance",
+      "variables": [
+        "mean_role_order_variance"
+      ],
+      "calculation": "For each role, calculate sample variance of its 24 weekly orders: sum of squared deviations from that role's mean divided by 23. Average the 4 role variances, then average 10 chains.",
+      "p_annotation": "Descriptive · no planned test",
+      "axes": [
+        {
+          "title": "Weekly order variance",
+          "x_label": "Mean within-role\norder variance (cases²)",
+          "y_label": "Fictional decision allowance"
+        }
+      ]
+    },
+    {
+      "file": "06_BULLWHIP",
+      "title": "Bullwhip ratio",
+      "variables": [
+        "mean_role_bullwhip"
+      ],
+      "calculation": "Within each chain, divide each role's 24-week sample order variance by that chain's 24-week sample final-consumer-demand variance. Average its 4 role ratios, then average 10 chains. Do not divide pooled means.",
+      "p_annotation": "Descriptive · no planned test",
+      "axes": [
+        {
+          "title": "Bullwhip ratio",
+          "x_label": "Order / consumer-demand\nvariance ratio (unitless)",
+          "y_label": "Fictional decision allowance"
+        }
+      ]
+    }
+  ]
+}

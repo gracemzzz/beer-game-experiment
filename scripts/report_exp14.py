@@ -14,6 +14,13 @@ def main(argv=None):
     parser.add_argument("--experiment", type=Path, default=EXPERIMENT,
                         help="Experiment 14 directory; alternate locations are useful for synthetic software checks")
     args = parser.parse_args(argv)
+    if (args.experiment / "data/student_framing_v3/COLLECTION_CLOSED.json").exists():
+        print(json.dumps(dict(
+            status="The strict-deadline pilot is historical; its publication is preserved.",
+            historical_report=str(args.experiment / "archive/before_reporting_cleanup_20261026/reports/REPORT.pdf"),
+            current_report=str(args.experiment / "reports/REPORT.pdf"),
+            current_rebuild="python scripts/report_exp14_framing.py"), indent=2))
+        return
     result = generate_report(args.experiment)
     print(json.dumps(dict(report=str(args.experiment / "reports/REPORT.md"), fingerprint=result["fingerprint"],
                           saved_attempts=len(result["runs"]), complete_main_blocks=result["main"]["complete_matched_blocks"],

@@ -1,20 +1,17 @@
 # Beer Game experiments
 
-**COMPLETE: experiment14 reached all ten matched blocks / 30 main contexts. All five planned contrasts follow the predicted direction, Holm p=0.009766 in this model-roleplay sample.**
+**Current completed study: [Experiment 14 — student time-pressure framing](experiments/14_deadline_student_20261026/README.md).**
 
-**Current: [Experiment14 - simulated student time pressure](experiments/14_deadline_student_20261026/README.md).** GPT-6 Astra / extra-high portrays fictional students with8seconds versus120seconds per decision. There is no physical model deadline or software fallback.
+- [Human H1/H2 recruitment power analysis](experiments/15_human_time_pressure_planning_20261115/README.md) — prospective scenarios and missing human inputs; no human data collected
+- [Current report: PDF](experiments/14_deadline_student_20261026/reports/REPORT.pdf) · [Markdown](experiments/14_deadline_student_20261026/reports/REPORT.md)
+- [Every measured value in one workbook](experiments/14_deadline_student_20261026/reports/tables/ALL_VALUES.xlsx)
+- [Figures and explicit axis/calculation descriptions](experiments/14_deadline_student_20261026/reports/figures/README.md)
+- [Variable dictionaries and CSV tables](experiments/14_deadline_student_20261026/reports/tables/README.md)
+- [Results notebook](experiments/14_deadline_student_20261026/notebooks/STUDENT_PRESSURE.ipynb)
+- [All experiments](experiments/README.md) · [Agent handoff](AGENT_HANDOFF.md)
 
-- [One-page conclusions PDF](experiments/14_deadline_student_20261026/reports/student_framing_v3/slides/CONCLUSIONS.pdf)
-- [Full PDF report](experiments/14_deadline_student_20261026/reports/student_framing_v3/REPORT.pdf)
-- [Current report text](experiments/14_deadline_student_20261026/reports/student_framing_v3/REPORT.md)
-- [Current figures](experiments/14_deadline_student_20261026/reports/student_framing_v3/slides/README.md)
-- [Progress notebook](experiments/14_deadline_student_20261026/notebooks/STUDENT_PRESSURE.ipynb)
-- [Exact prompts](experiments/14_deadline_student_20261026/prompts/student_framing_v3/README.md)
-- [All experiments](experiments/README.md)
-- [Agent handoff](AGENT_HANDOFF.md)
+Experiment 14's three conditions are **120 s + control reading**, **8 s + control reading**, and **8 s + causal education**. The seconds describe fictional students; the requested Astra/xhigh model had unrestricted actual runtime. The completed sample contains ten matched blocks and thirty fresh chain contexts. The report shows each condition's values before the named comparisons.
 
-Experiment14 completed its three-context development block and all ten held-out matched main blocks/30 contexts; collection is closed. Every order must be a literal model choice. Ten chain contrasts are the inferential sample, not40students or960weeklyorders per condition. This is a study of simulated student-pressure framing; it does not enforce or measure a model thinking-time restriction. No significance is guaranteed or selected for.
+Each experiment owns its hypotheses, prompts, data, analysis, reports and notebooks. Shared code remains under `src/`, `scripts/` and `tests/`. Experiment 14 has one current report pair under `reports/`; previous publications live in its clearly marked [archive](experiments/14_deadline_student_20261026/archive/README.md).
 
-Experiment13 collection is closed. Its [final report](experiments/13_weekly_state_api_20261021/reports/agent_collection_v5/REPORT.md) and [slide figures](experiments/13_weekly_state_api_20261021/reports/agent_collection_v5/slides_current/README.md) remain separate and unchanged. Earlier experiment14 strict-clock cases are also preserved outside the current sample. No direct provider API requests are made for the current collection.
-
-Each experiment owns its hypotheses, prompts, data, analysis, reports and notebooks. Shared source/commands/tests live under `src/`, `scripts/` and `tests/`. [Maintenance](maintenance/README.md) explains historical reorganization, portability and saved integrity limitations. Historical hash mismatches included line-ending-only differences; do not claim a clean historical byte baseline or rewrite frozen records to repair it. Previous navigation bytes remain archived in experiment14 analysis/navigation_history.
+Experiment 13 remains closed and separate: [final report](experiments/13_weekly_state_api_20261021/reports/agent_collection_v5/REPORT.md) · [figures](experiments/13_weekly_state_api_20261021/reports/agent_collection_v5/slides_current/README.md). The current work has not collected new observations or made API requests. [Maintenance](maintenance/README.md) retains the earlier reorganization and historical line-ending integrity limitations.

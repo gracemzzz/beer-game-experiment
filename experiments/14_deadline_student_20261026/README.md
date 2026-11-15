@@ -1,66 +1,89 @@
-# Experiment 14: simulated student time pressure
+# Experiment 14 — student time-pressure framing
 
-**COMPLETE: 10/10 matched main blocks, 30/30 actual-response contexts, all procedure reviews passed. All five planned contrasts have the predicted sign and Holm-adjusted p=0.009766 in this AI-roleplay sample.**
+**Complete and closed: 10 matched blocks, 30 main chain contexts, 24 weeks. Start with the report or values workbook below.**
 
-**Current study:** GPT-6 Astra / extra-high (`xhigh`) portrays fictional second-year University at Buffalo business students. The agent supplies every order. **There is no actual model timer, rejection for slow responses, random filler or software fallback.**
-
-| Open | Contents |
+| Open | What you will see |
 |---|---|
-| [One-page conclusions PDF](reports/student_framing_v3/slides/CONCLUSIONS.pdf) | Start here: numeric H1-H4 findings |
-| [Full PDF report](reports/student_framing_v3/REPORT.pdf) | Results, methods and detailed checks |
-| [Text report](reports/student_framing_v3/REPORT.md) | Findings with extracted-data links |
-| [Slide figures and plotting data](reports/student_framing_v3/slides/README.md) | H1-H4 and statistics versus chain count, PNG/SVG/PDF/CSV |
-| [Progress notebook](notebooks/STUDENT_PRESSURE.ipynb) | Saved progress, 10-second refresh, no widgets |
-| [Exact prompts](prompts/student_framing_v3/README.md) | Common student prompt, timing framings and readings |
-| [Protocol](hypotheses/STUDENT_FRAMING_V3.md) | Sampling, quantities, gates and limitations |
+| [REPORT.pdf](reports/REPORT.pdf) · [REPORT.md](reports/REPORT.md) | Conclusions first; independent variables; every measured outcome and diagnostic with values, units and calculations; fully named comparisons |
+| [H1–H2 slide table](reports/figures/conclusions/H1_H2_TABLE.png) · [PDF](reports/figures/conclusions/H1_H2_TABLE.pdf) | Four columns: hypothesis, mean difference, 95% CI and adjusted p < 0.01; exact p-values remain in the source tables |
+| [ALL_VALUES.xlsx](reports/tables/ALL_VALUES.xlsx) | All current tables in one workbook, including every weekly order, state, probe answer and quiz answer |
+| [Recorded variables and sources](reports/tables/RECORDED_VARIABLES_AND_SOURCES.xlsx) | Excel guide to settings, game records, outcomes and technical fields; labels Beer Game, proposal, added measurement, analysis and software origins, with saved condition values |
+| [Figures](reports/figures/README.md) | Condition values, pressure comparison, education comparison, sample-prefix effects and p-values; PNG/SVG/PDF with explicit axis definitions |
+| [Additional figures: control reading only](reports/figures/control_reading_only/README.md) | Six measured quantities for 120 seconds + control reading and 8 seconds + control reading; one overview plus individual PNG/SVG/PDF plots; existing figures unchanged |
+| [CSV files and variable dictionaries](reports/tables/README.md) | Exact numeric values and definitions of all reported measurements and original exported fields |
+| [Notebook](notebooks/STUDENT_PRESSURE.ipynb) | Open the saved results, view named-condition tables, refresh the publication and display figures |
 
-## Three conditions
+## Exactly what A, B and C mean
 
-| Arm | Fictional student's time per decision | Reading |
-|---|---|---|
-| A | 120 seconds, adequate time | Matched control |
-| B | 8 seconds, insufficient time | Matched control |
-| C | 8 seconds, insufficient time | Causal supply-chain education |
+These are **three conditions in one study** (`student_framing_v3`).
 
-The model's actual effort and available runtime are the same in every arm. There is one submitted decision, with no second thinking/revision round. The prompts ask it to portray ordinary novices rather than replace them with an expert optimizer. The time allowance is a fictional student circumstance; this tests model responses to that framing, not a measured reduction in model thinking or validated human behavior.
+| Condition | Assigned fictional time allowance | Assigned reading |
+|---|---:|---|
+| A — 120 s + control | 120 seconds per fictional student decision | 170-word control reading |
+| B — 8 s + control | 8 seconds per fictional student decision | Same control reading |
+| C — 8 s + education | 8 seconds per fictional student decision | 170-word causal supply-chain education |
 
-## Measurements and sample size
+The two independent variables are the **fictional allowance** and **reading**. Requested model/effort is GPT-6 Astra/xhigh in every condition. Actual model runtime is unrestricted; every decision is submitted once. There is no revision round or enforced model timer.
 
-| Hypothesis | What is measured |
-|---|---|
-| H1 | Response to outstanding replenishment: mean order decrease per extra case already on the way; B-A |
-| H2 | Total four-role inventory-holding and backlog costs over 24 weeks; B-A |
-| H3 | The same replenishment-response measure; C-B |
-| H4a | Mean role-level weekly order variance; C-B |
-| H4b | Order variance divided by external customer-demand variance; C-B |
+- **Pressure comparison (H1/H2): 8 s + control minus 120 s + control.** This changes the fictional allowance while holding reading fixed.
+- **Education comparison (H3/H4a/H4b): 8 s + education minus 8 s + control.** This changes the reading while holding the 8-second framing fixed.
+- Positive difference = the first named condition is higher. Negative = lower. A minus B would reverse B minus A.
 
-The pipeline response is a proxy, not an identified optimal weighting coefficient. All choices come from the model. Per condition, ten chains x four roles x 24 weeks gives 960 weekly orders, plus 320 probe answers. **The inferential sample is ten matched chain comparisons**, not 40 independent students. Each chain/arm has its own fresh context. Fixed main target: 30 contexts; no significance-based stopping or favorable replacement. Two-sided paired tests and Holm correction cover the five endpoints. More observations do not guarantee significance.
+| Dependent variable: mean across 10 chains | 120 s + control | 8 s + control | 8 s + education |
+|---|---:|---:|---:|
+| Pipeline response: order decrease per additional outstanding case | 0.318837 | 0.196007 | 0.270122 |
+| Total 24-week holding + backlog cost (game units/chain) | 574.45 | 642.95 | 538.45 |
+| Within-role weekly order variance, averaged over roles (cases²) | 12.450091 | 17.829438 | 10.104529 |
+| Bullwhip: role order variance / external-demand variance | 1.831036 | 2.601594 | 1.484146 |
 
-**Validation:** 24 software/analysis/preparation tests passed. The progress setup ran in a real .venv Jupyter kernel without widgets. All three development contexts passed the independent procedure/knowledge gate. The fixed main collection is now complete and closed at ten blocks. Independent arithmetic checks reproduced all five means, exact raw p-values and Holm corrections from the raw cases. [Verification receipt](analysis/student_framing_v3/FINAL_VERIFICATION.json).
+The report also shows cost components, all weekly state variables, final inventories/backlogs/outstanding orders, probe and ordering diagnostics, comprehension, recall, timing and completeness. H1/H3 reuse the pipeline-response measure for different comparisons. Pipeline response is a responsiveness proxy; no optimal behavioral beta was estimated.
 
-The separate A/B/C development block completed 24 weeks, 32 probes and four quiz items per case. Main qualification used completion, actual-choice provenance and comprehension, never H1-H4 signs or p-values. After qualification the ten held-out blocks were collected to the fixed stopping point. Development never enters main tests. No further responses belong in this closed sample.
+**Consistent presentation terminology:** H1 is **pipeline underweighting**, measured through the **pipeline-response proxy**: order decrease per additional outstanding case in matched probes. These terms are not synonyms. The H1 difference of −0.1228 describes lower response under time constraint, consistent with greater underweighting; it is not a decrease in an underweighting score, and no optimal-response benchmark was estimated. H2 is **total holding and backlog cost**; “total cost” was shorthand for this same outcome. Both H1/H2 presentation images now state these distinctions, with all numerical results unchanged.
 
-## Run and files
+All five planned contrasts have the predicted direction and Holm-adjusted p=0.009766 in this sample. These are model portrayals, not validated human-student outcomes. The statistical unit is 10 matched block differences; four roles and 24 weeks are repeated observations. Development (one three-context block) stays separate.
 
-Open the progress notebook, select `D:/beergame/.venv/Scripts/python.exe`, and run its setup cell. It monitors saved records; the report/display cells also show the final conclusions and both figures inline. It launches no new collection. Refresh the report offline:
+## One current location
 
-```powershell
-.venv/Scripts/python.exe -X utf8 scripts/report_exp14_framing.py
-.venv/Scripts/python.exe -X utf8 scripts/export_exp14_framing_slides.py
-.venv/Scripts/python.exe -X utf8 scripts/verify_exp14_framing_results.py
+```text
+14_deadline_student_20261026/
+  reports/
+    REPORT.md                 current full report
+    REPORT.pdf                same content as the Markdown report
+    figures/                  current labeled plots, captions, PDF/SVG/PNG
+    tables/                   all measured values, dictionaries and workbook
+    PUBLICATION.json          publication checks and hashes
+  data/student_framing_v3/     preserved raw contexts and closed-collection receipt
+  analysis/student_framing_v3/ preserved original numerical analysis and verification
+  hypotheses/                 frozen protocols and plans
+  prompts/                    frozen exact instructions and readings
+  notebooks/                  saved-result notebook
+  archive/                    old publications and presentation versions
 ```
 
-- `data/student_framing_v3/development/` and `main/`: exact prompts, cases, literal model choices, states, transcripts and reviews.
-- `analysis/student_framing_v3/tables/`: extracted numeric results.
-- `reports/student_framing_v3/`: the current PDF/text report and figures.
-- `hypotheses/STUDENT_FRAMING_V3_PLAN.json`: prospective frozen plan; the separate main plan exists only after qualification.
+[Exact prompts](prompts/student_framing_v3/README.md) · [Frozen protocol](hypotheses/STUDENT_FRAMING_V3.md) · [Original statistical verification](analysis/student_framing_v3/FINAL_VERIFICATION.json) · [Archive index](archive/README.md).
 
-## Preserved earlier work
+The earlier strict-deadline pilot report has moved into the archive. It is not another current report or part of these data. The unrun carry-forward draft remains under `analysis/design_history/`.
 
-The earlier strict-clock development remains unchanged at16cases; its [report](reports/REPORT.pdf) describes the failed real-time mechanism. It is not the current student-framing sample. The carry-forward proposal was superseded before any participant run or plan freeze; it is an [archived unused design draft](analysis/design_history/carry_forward_unrun/README.md). The user clarified that time pressure must be a student circumstance in the prompt. No earlier sample is pooled with the new one.
+## Rebuild offline
 
-[Shared project context and review limitations](reports/student_framing_v3/CONTEXT.md) are recorded separately.
+Rebuild the variable inventory with `python scripts/export_exp14_variable_inventory.py` (requires `openpyxl`). It checks all 243 copied condition-summary values and preserves the existing report and input tables. The workbook distinguishes the H1 response proxy from underweighting and fictional time allowances from observed packet latency.
 
-The observed fixed-prefix Holm p-values first fall below0.05 at eight chains for all five outcomes. This is a property of these completed data, not a guaranteed required sample size for another run.
+For the enlarged original two-row table, run `python scripts/export_exp14_h1_h2_table.py`. PNG, PDF and SVG are saved as `reports/figures/conclusions/H1_H2_TABLE.*`.
 
-No direct provider API calls or keys are used. Local agents consume the account allowance; the shared API budget remains unchanged. Model/persona observations are not independent real University at Buffalo students.
+For the H1/H2-only presentation image, run `python scripts/export_exp14_h1_h2.py`. The presentation labels map “No time constraint” to the 120-second fictional scenario and “Time constraint” to the 8-second fictional scenario; both retain unrestricted actual model runtime. The slide footnote states this mapping. Original hypothesis tests and the five-test Holm adjustment are preserved.
+
+From the repository root, using a Python environment with `requirements.txt` installed:
+
+```bash
+python scripts/report_exp14_framing.py
+```
+
+This single command publishes the report, all five figures and every table. `scripts/export_exp14_framing_slides.py` uses the same publisher, so it cannot create a second competing report folder. The historical `scripts/report_exp14.py` points to its archive when the current collection is closed.
+
+All original analysis values and raw files are preserved; the current publisher checks hashes and replays the saved games. It makes no model calls. [Publication and preservation checks](reports/PUBLICATION.json).
+
+The additional two-condition figures are generated separately with `python scripts/export_exp14_control_figures.py`. This reads the saved values and verifies that the existing publication remains unchanged. [Open their combined PDF](reports/figures/control_reading_only/ALL_CONTROL_FIGURES.pdf).
+
+The overview and individual H1/H2 panels use the same terminology as the conclusions images: **Pipeline underweighting**, explicitly identified as measured through a response proxy, and **Total holding and backlog cost** in full. Lower response is consistent with greater underweighting. Numeric values, confidence bands and tests are unchanged. Prior plot versions are archived automatically when rebuilding.
+
+The table and overview use the user's exact headings: **H1: Tight deadlines increase pipeline underweighting** and **H2: Tight deadlines increase total holding and backlog costs.** Wording is shared in `scripts/exp14_slide_labels.py`. Both images omit explanatory footer sentences. The table names the subtraction in its column header; the overview combines the hypotheses, observed response decrease (38.5%), cost increase (11.9%), means and 95% CI bands. Four descriptive panels appear below. H1/H2 retain **Holm p < 0.01**. Exact values, calculations and limitations remain in the companion README and CSV files; numerical results and individual plots are unchanged.
