@@ -1,5 +1,9 @@
 # Beer Game experiments
 
+**New design: [Human Beer Game study (experiment 15)](experiments/15_human_study/README.md).** Start here for the proposed human H1–H6 design, explicit pipeline-underweighting equations, Donohue literature review, sample-size calculations and editable planning notebook. Design only; no human data collected.
+
+**[Human study PDF report](experiments/15_human_study/HUMAN_STUDY_DESIGN.pdf)** — three pages: model and hypotheses; measurements and regression; brief experiment design and sample size.
+
 **Current completed study: [Experiment 14 — student time-pressure framing](experiments/14_deadline_student_20261026/README.md).**
 
 - [Human H1/H2 recruitment power analysis](experiments/15_human_time_pressure_planning_20261115/README.md) — prospective scenarios and missing human inputs; no human data collected

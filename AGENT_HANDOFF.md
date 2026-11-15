@@ -1,3 +1,13 @@
+# Current design: experiment 15 — human study
+
+Human-facing report: `experiments/15_human_study/HUMAN_STUDY_DESIGN.pdf`, rewritten at the user's request as THREE short pages in this exact order: (1) model/explanation/hypotheses, (2) measurements/regressions, (3) brief design/sample size. Its single editable source is `HUMAN_STUDY_DESIGN.md`; `scripts/export_human_study_pdf.py` renders that file directly. Keep the numbered technical notes separate; do not restore the rejected 12-page layout. Prior PDF/exporter bytes are preserved in `maintenance/human_report_history/926a8081c65b/`. No collection/network runs during export; validation is `analysis/PDF_VALIDATION.json`, current previews `analysis/pdf_review/concise/`.
+
+The new task is human experimental design, dated 14 November 2026. Start at `experiments/15_human_study/README.md`. Five numbered documents cover the four-cell time × education study, mathematical measurement model, sample size, data specification and verified literature. H5/H6 wording was found in experiment 11's saved reflection; H4 follows the newer INFORMS slides (variance/bullwhip). H5 uses a separate, explicitly described educated routine-adopter cohort, with time randomized after acquisition; H6 requires all four cells. These are proposals, not collected human results or a frozen preregistration.
+
+The core measure is G = inventory responsiveness minus pipeline responsiveness, from independently crossed usable-stock cues; report both slopes, absolute response and the relative-weight identification limitation. Donohue's 2006 Eq. (6) is adapted for supporting game regressions. H5 changes which pipeline shipment arrives before scoring, so its correct weight changes; do not mislabel correct adaptation as underweighting.
+
+Offline calculator: `scripts/plan_human_study.py`; tests: `tests/test_human_study_planning.py`; executed notebook: `experiments/15_human_study/notebooks/POWER_AND_MEASURES.ipynb`. Power uses explicit human variance/ICC assumptions, block-level contrasts and alpha .05/8. Tables/plots and arithmetic examples are synthetic planning checks, not human or AI participant findings. No API calls or new agents were launched. Timing pilot, meaningful effects, lecture scripts, platform and human-research arrangements need finalization before collection. Prior navigation bytes are preserved in `maintenance/human_study_navigation_20261114/`.
+
 # Experiment 14: COMPLETE and CLOSED
 
 All ten assigned matched main chain blocks/30 contexts completed and passed independent hash-bound procedure review. Three separate development contexts are excluded from main inference. No more participant responses, replacements or significance-based extensions belong in this closed sample.
