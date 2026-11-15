@@ -1,11 +1,14 @@
 # Experiment index
 
-**Current: [Experiment14 - simulated student time pressure](14_deadline_student_20261026/README.md).** One Astra/xhigh model, fictional8seconds versus120seconds, unlimited actual model runtime and no fallback. Complete: three development contexts and ten held-out matched main blocks; all five Holm-adjusted p=0.009766 in the AI-roleplay study. [Report](14_deadline_student_20261026/reports/student_framing_v3/REPORT.pdf) | [Figures](14_deadline_student_20261026/reports/student_framing_v3/slides/README.md) | [Notebook](14_deadline_student_20261026/notebooks/STUDENT_PRESSURE.ipynb).
+**New design: [Experiment 15 — Human Beer Game study](15_human_study/README.md).** H1–H6, explicit underweighting measurements, Donohue equation adaptation and reproducible sample-size planning. Draft design; zero human participants collected.
+
+**Completed AI study: [Experiment14 - simulated student time pressure](14_deadline_student_20261026/README.md).** One Astra/xhigh model, fictional8seconds versus120seconds, unlimited actual model runtime and no fallback. Complete: three development contexts and ten held-out matched main blocks; all five Holm-adjusted p=0.009766 in the AI-roleplay study. [Report](14_deadline_student_20261026/reports/student_framing_v3/REPORT.pdf) | [Figures](14_deadline_student_20261026/reports/student_framing_v3/slides/README.md) | [Notebook](14_deadline_student_20261026/notebooks/STUDENT_PRESSURE.ipynb).
 
 Every experiment has its own hypotheses, prompts, raw data, extracted results, reports and notebooks. Previous studies are preserved and their samples stay separate.
 
 | Experiment | Design / status |
 |---|---|
+| [15 — Human study design](15_human_study/README.md) | Proposed four-cell human study plus separate H5 routine-transfer task; measurement equations and power notebook; no human data |
 | [14 ? Student decisions and deadlines](14_deadline_student_20261026/README.md) | Current. Complete student-pressure framing; Astra/xhigh, ten matched main blocks; previous clocked pilot separate |
 | [13 ? Weekly-state study](13_weekly_state_api_20261021/README.md) | Closed. API, manual and separately recorded agent workflows; use its final agent report and slide index |
 | [12 ? Whole-cohort API feasibility](12_pressure_framing_api_20261020/README.md) | Four models; one joint response per model; preserved feasibility collection and shared API ledger |

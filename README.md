@@ -1,8 +1,12 @@
 # Beer Game experiments
 
+**New design: [Human Beer Game study (experiment 15)](experiments/15_human_study/README.md).** Start here for the proposed human H1–H6 design, explicit pipeline-underweighting equations, Donohue literature review, sample-size calculations and editable planning notebook. Design only; no human data collected.
+
+**Completed AI study:**
+
 **COMPLETE: experiment14 reached all ten matched blocks / 30 main contexts. All five planned contrasts follow the predicted direction, Holm p=0.009766 in this model-roleplay sample.**
 
-**Current: [Experiment14 - simulated student time pressure](experiments/14_deadline_student_20261026/README.md).** GPT-6 Astra / extra-high portrays fictional students with8seconds versus120seconds per decision. There is no physical model deadline or software fallback.
+**[Experiment14 - simulated student time pressure](experiments/14_deadline_student_20261026/README.md).** GPT-6 Astra / extra-high portrays fictional students with8seconds versus120seconds per decision. There is no physical model deadline or software fallback.
 
 - [One-page conclusions PDF](experiments/14_deadline_student_20261026/reports/student_framing_v3/slides/CONCLUSIONS.pdf)
 - [Full PDF report](experiments/14_deadline_student_20261026/reports/student_framing_v3/REPORT.pdf)
