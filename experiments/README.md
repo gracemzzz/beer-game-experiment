@@ -2,6 +2,8 @@
 
 **New design: [Experiment 15 — Human Beer Game study](15_human_study/README.md).** H1–H6, explicit underweighting measurements, Donohue equation adaptation and reproducible sample-size planning. Draft design; zero human participants collected.
 
+[Read the human-study PDF report](15_human_study/HUMAN_STUDY_DESIGN.pdf).
+
 **Completed AI study: [Experiment14 - simulated student time pressure](14_deadline_student_20261026/README.md).** One Astra/xhigh model, fictional8seconds versus120seconds, unlimited actual model runtime and no fallback. Complete: three development contexts and ten held-out matched main blocks; all five Holm-adjusted p=0.009766 in the AI-roleplay study. [Report](14_deadline_student_20261026/reports/student_framing_v3/REPORT.pdf) | [Figures](14_deadline_student_20261026/reports/student_framing_v3/slides/README.md) | [Notebook](14_deadline_student_20261026/notebooks/STUDENT_PRESSURE.ipynb).
 
 Every experiment has its own hypotheses, prompts, raw data, extracted results, reports and notebooks. Previous studies are preserved and their samples stay separate.

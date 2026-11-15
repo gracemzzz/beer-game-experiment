@@ -2,6 +2,8 @@
 
 **New design: [Human Beer Game study (experiment 15)](experiments/15_human_study/README.md).** Start here for the proposed human H1–H6 design, explicit pipeline-underweighting equations, Donohue literature review, sample-size calculations and editable planning notebook. Design only; no human data collected.
 
+**[Human study PDF report](experiments/15_human_study/HUMAN_STUDY_DESIGN.pdf)** — three pages: model and hypotheses; measurements and regression; brief experiment design and sample size.
+
 **Completed AI study:**
 
 **COMPLETE: experiment14 reached all ten matched blocks / 30 main contexts. All five planned contrasts follow the predicted direction, Holm p=0.009766 in this model-roleplay sample.**
